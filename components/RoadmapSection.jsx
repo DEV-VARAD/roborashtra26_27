@@ -256,7 +256,7 @@ export default function RoadmapSection() {
             </div>
             <h2 className="font-serifEd leading-none tracking-tight text-white font-bold flex items-center gap-1.5 text-base sm:text-2xl lg:text-3xl xl:text-4xl">
               <span className="text-white/95">ROBORASHTRA</span>
-              <span className="text-amber-400 italic">TRAJECTORY</span>
+              <span className="text-amber-400 italic">ROADMAP</span>
             </h2>
           </div>
 

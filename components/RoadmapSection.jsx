@@ -86,7 +86,8 @@ export default function RoadmapSection() {
   const updateRoverPosition = (progressVal) => {
     if (!robotOverlayRef.current || !stageRef.current) return
     const progress = typeof progressVal === 'number' ? progressVal : progressRef.current
-    const svgX = TRACK_START_X + TRACK_LENGTH * progress
+    // Rover travels only between checkpoint 1 (NODE_XS[0]) and checkpoint 3 (NODE_XS[2])
+    const svgX = NODE_XS[0] + (NODE_XS[2] - NODE_XS[0]) * progress
 
     const w = stageRef.current.clientWidth
     const h = stageRef.current.clientHeight

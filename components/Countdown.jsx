@@ -98,14 +98,14 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
       <div className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 md:px-12 flex flex-col items-center text-center">
         
         {/* TOP EDITORIAL HEADER */}
-        <div className="mb-6 sm:mb-12 max-w-2xl">
-          <span className="font-mono text-[10px] sm:text-xs tracking-[0.24em] sm:tracking-[0.28em] text-[#FF8A00] font-bold uppercase block mb-2 sm:mb-3">
+        <div className="mb-6 sm:mb-12 max-w-3xl">
+          <span className="font-mono text-xs sm:text-sm md:text-base tracking-[0.26em] sm:tracking-[0.32em] text-[#FF8A00] font-bold uppercase block mb-2 sm:mb-3">
             COUNTDOWN TO ZERO HOUR
           </span>
-          <h2 className="font-cinzel text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight mb-2 sm:mb-4">
+          <h2 className="font-cinzel text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111111] leading-tight tracking-tight mb-3 sm:mb-5">
             The Arena Awaits
           </h2>
-          <p className="font-body text-xs sm:text-base text-[#666666] leading-relaxed max-w-xl mx-auto">
+          <p className="font-body text-sm sm:text-lg md:text-xl text-[#555555] leading-relaxed max-w-2xl mx-auto">
             Autonomous kinematics, combat bots, and precision aerospace fleets calibrate for the state championship.
           </p>
         </div>

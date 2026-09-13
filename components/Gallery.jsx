@@ -17,6 +17,7 @@ import { galleryPhotos } from '@/data/galleryPhotos'
  * - Subtle camera parallax and continuous breathing float
  * - Spotlight modal with rich metadata and keyboard navigation
  * - prefers-reduced-motion accessibility support
+ * - Mobile auto-scroll button for hands-free gallery browsing
  */
 export default function Gallery() {
     const containerRef = useRef(null)
@@ -56,6 +57,7 @@ export default function Gallery() {
         handleUserInteracted()
         setSelectedPhoto(photo)
     }
+
 
     return (
         <section
@@ -97,6 +99,47 @@ export default function Gallery() {
                     onClose={() => setSelectedPhoto(null)}
                     onNavigate={(photo) => setSelectedPhoto(photo)}
                 />
+
+                {/* ── Mobile Scroll Arrow — right side, mobile only ── */}
+                <div className="sm:hidden absolute right-4 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+                    <button
+                        onClick={() => {
+                            if (!containerRef.current) return
+                            const sectionTop = containerRef.current.offsetTop
+                            const sectionEnd = sectionTop + containerRef.current.offsetHeight - window.innerHeight
+                            // Scroll down by 30% of the gallery track per tap, clamped to section end
+                            const step = containerRef.current.offsetHeight * 0.30
+                            const target = Math.min(window.scrollY + step, sectionEnd)
+                            window.scrollTo({ top: target, behavior: 'smooth' })
+                        }}
+                        aria-label="Scroll gallery"
+                        className="flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200 active:scale-90"
+                        style={{
+                            background: 'rgba(7,11,20,0.75)',
+                            border: '1px solid rgba(255,255,255,0.20)',
+                            backdropFilter: 'blur(12px)',
+                            WebkitBackdropFilter: 'blur(12px)',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.55)',
+                        }}
+                    >
+                        {/* Down chevron */}
+                        <svg
+                            width="18" height="18"
+                            viewBox="0 0 18 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <polyline
+                                points="4,7 9,12 14,7"
+                                stroke="rgba(255,255,255,0.85)"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </section>
     )

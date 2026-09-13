@@ -33,8 +33,8 @@ function CardHalf({ value, position, isDays = false }) {
         <span
           className={`font-display font-black text-[#111111] leading-none tabular-nums ${
             isThreeDigits
-              ? 'text-2xl min-[350px]:text-3xl min-[390px]:text-4xl min-[480px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[7.5rem] tracking-tighter'
-              : 'text-3xl min-[350px]:text-3.5xl min-[390px]:text-4xl min-[480px]:text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight'
+              ? 'text-3xl min-[350px]:text-4xl min-[390px]:text-5xl min-[480px]:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[9rem] tracking-tighter'
+              : 'text-4xl min-[350px]:text-5xl min-[390px]:text-5xl min-[480px]:text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[11rem] tracking-tight'
           }`}
         >
           {formatted}
@@ -77,9 +77,9 @@ export default function FlipUnit({ value, label, isDays = false }) {
       <div
         className={`relative ${
           isDaysUnit
-            ? 'w-[72px] min-[350px]:w-[78px] min-[390px]:w-[86px] min-[480px]:w-[110px] sm:w-[155px] md:w-[190px] lg:w-[230px] xl:w-[255px]'
-            : 'w-[62px] min-[350px]:w-[68px] min-[390px]:w-[76px] min-[480px]:w-[95px] sm:w-[130px] md:w-[160px] lg:w-[195px] xl:w-[215px]'
-        } h-[72px] min-[350px]:h-[78px] min-[390px]:h-[88px] min-[480px]:h-[110px] sm:h-[155px] md:h-[190px] lg:h-[230px] xl:h-[250px] rounded-lg sm:rounded-2xl border border-black/10 bg-[#FAF9F5] p-0.5 sm:p-1.5 shadow-[0_6px_20px_rgba(0,0,0,0.05),0_2px_4px_rgba(0,0,0,0.03)]`}
+            ? 'w-[82px] min-[350px]:w-[92px] min-[390px]:w-[102px] min-[480px]:w-[130px] sm:w-[175px] md:w-[215px] lg:w-[260px] xl:w-[295px]'
+            : 'w-[72px] min-[350px]:w-[80px] min-[390px]:w-[90px] min-[480px]:w-[114px] sm:w-[148px] md:w-[182px] lg:w-[222px] xl:w-[248px]'
+        } h-[82px] min-[350px]:h-[92px] min-[390px]:h-[102px] min-[480px]:h-[130px] sm:h-[175px] md:h-[215px] lg:h-[260px] xl:h-[285px] rounded-lg sm:rounded-2xl border border-black/10 bg-[#FAF9F5] p-0.5 sm:p-1.5 shadow-[0_6px_20px_rgba(0,0,0,0.05),0_2px_4px_rgba(0,0,0,0.03)]`}
         style={{ perspective: '1200px' }}
       >
         {/* Left Mechanical Pin/Hinge */}
@@ -143,7 +143,7 @@ export default function FlipUnit({ value, label, isDays = false }) {
       </div>
 
       {/* Dark Gray Label */}
-      <span className="font-mono text-[8px] min-[350px]:text-[9px] min-[480px]:text-[11px] sm:text-xs md:text-sm tracking-[0.14em] sm:tracking-[0.25em] text-[#555555] font-bold uppercase mt-2 sm:mt-4 md:mt-5">
+      <span className="font-mono text-[10px] min-[350px]:text-[11px] min-[480px]:text-[13px] sm:text-sm md:text-base tracking-[0.20em] sm:tracking-[0.30em] text-[#444444] font-bold uppercase mt-2 sm:mt-4 md:mt-5">
         {label}
       </span>
     </div>

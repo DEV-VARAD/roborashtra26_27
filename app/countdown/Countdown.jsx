@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Calendar, Clock, ArrowRight, Radio } from 'lucide-react'
+import { ArrowRight, Radio } from 'lucide-react'
 import FlipCountdown from '@/components/FlipCountdown'
 
 // Default championship event target: February 1, 2027, 00:00:00 IST
@@ -23,52 +23,6 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
     return date
   }, [targetDate])
 
-  // Generate Calendar ICS Download
-  const handleDownloadICS = () => {
-    const title = 'ROBORASHTRA — Robotics Arena Championship 2026'
-    const desc =
-      'Maharashtra State Flagship Robotics Arena Championship. Autonomous rovers, 15kg combat bots, and high-speed drone racing.'
-    const location = 'Robotics Arena, Engineering Ground, Pune, Maharashtra, India'
-
-    const formatDate = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-    const startStr = formatDate(resolvedTarget)
-    const endDate = new Date(resolvedTarget.getTime() + 2 * 24 * 60 * 60 * 1000)
-    const endStr = formatDate(endDate)
-
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//Roborashtra//Championship 2026//EN',
-      'CALSCALE:GREGORIAN',
-      'BEGIN:VEVENT',
-      `SUMMARY:${title}`,
-      `DESCRIPTION:${desc}`,
-      `LOCATION:${location}`,
-      `DTSTART:${startStr}`,
-      `DTEND:${endStr}`,
-      'STATUS:CONFIRMED',
-      'SEQUENCE:0',
-      'BEGIN:VALARM',
-      'TRIGGER:-P1D',
-      'ACTION:DISPLAY',
-      'DESCRIPTION:ROBORASHTRA Arena starts in 24 hours!',
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR',
-    ].join('\r\n')
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' })
-    const link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.setAttribute('download', 'ROBORASHTRA_2026.ics')
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  // Google Calendar URL
-  const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=ROBORASHTRA+Robotics+Arena+Championship&dates=20261018T033000Z/20261020T123000Z&details=Maharashtra+State+Flagship+Robotics+Arena+Championship.+Autonomous+rovers,+15kg+combat+bots,+and+FPV+fleet+races.&location=Robotics+Arena,+Pune,+Maharashtra,+India`
-
   const handleShareLink = () => {
     if (typeof window !== 'undefined') {
       navigator.clipboard.writeText(window.location.href)
@@ -81,7 +35,7 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
     <section
       id="countdown"
       aria-label="Event Countdown"
-      className="relative w-full bg-[#F7F4ED] text-[#111111] border-y border-black/10 overflow-hidden py-12 sm:py-20 md:py-32 select-none"
+      className="relative w-full h-full min-h-screen flex flex-col justify-center items-center bg-[#F7F4ED] text-[#111111] select-none overflow-hidden pt-16 sm:pt-20 pb-6 px-4 sm:px-6 md:px-12"
     >
       {/* Subtle Editorial Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:44px_44px] pointer-events-none opacity-80" />
@@ -95,14 +49,13 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
         }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 md:px-12 flex flex-col items-center text-center">
-        
+      <div className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 md:px-12 flex flex-col items-center text-center my-auto">
         {/* TOP EDITORIAL HEADER */}
-        <div className="mb-6 sm:mb-12 max-w-3xl">
+        <div className="mb-6 sm:mb-10 max-w-3xl">
           <span className="font-mono text-xs sm:text-sm md:text-base tracking-[0.26em] sm:tracking-[0.32em] text-[#FF8A00] font-bold uppercase block mb-2 sm:mb-3">
             COUNTDOWN TO ZERO HOUR
           </span>
-          <h2 className="font-cinzel text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111111] leading-tight tracking-tight mb-3 sm:mb-5">
+          <h2 className="font-cinzel text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111111] leading-tight tracking-tight mb-3 sm:mb-4">
             The Arena Awaits
           </h2>
           <p className="font-body text-sm sm:text-lg md:text-xl text-[#555555] leading-relaxed max-w-2xl mx-auto">
@@ -111,17 +64,17 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
         </div>
 
         {/* MECHANICAL FLIP-CLOCK CARDS (DAYS - HOURS - MINUTES - SECONDS) */}
-        <div className="w-full my-2 sm:my-6 flex justify-center">
+        <div className="w-full my-3 sm:my-6 flex justify-center">
           <FlipCountdown targetDate={targetDate} />
         </div>
 
         {/* BOTTOM ACTION & CALENDAR STRIP */}
-        <div className="mt-6 sm:mt-10 md:mt-14 pt-4 sm:pt-6 border-t border-black/8 w-full flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 max-w-4xl bg-white/70 backdrop-blur-md rounded-2xl p-3.5 sm:p-6 border border-black/6 shadow-sm text-center sm:text-left">
-          <div>
+        <div className="mt-6 sm:mt-8 w-full flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 max-w-4xl bg-white/70 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-black/6 shadow-sm">
+          <div className="text-center sm:text-left">
             <h4 className="font-serifEd text-base sm:text-xl md:text-2xl text-[#111111] font-medium leading-tight">
               Ready to deploy your machine?
             </h4>
-            <p className="font-mono text-[9px] sm:text-[11px] text-[#777777] tracking-wider mt-0.5">
+            <p className="font-mono text-[10px] sm:text-xs text-[#777777] tracking-wider mt-1">
               Registrations for Combat, Autonomous SLAM, and FPV fleets are open.
             </p>
           </div>
@@ -135,7 +88,7 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
               <span>REGISTER TEAM</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            
+
             {/* Quick Share Link */}
             <button
               onClick={handleShareLink}
@@ -147,7 +100,6 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
             </button>
           </div>
         </div>
-
       </div>
     </section>
   )

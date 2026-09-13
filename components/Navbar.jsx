@@ -2,15 +2,34 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import FullscreenMenu from './FullscreenMenu'
 
 export default function Navbar() {
+  const pathname = usePathname()
+  const isConstantNav =
+    pathname === '/gallery' ||
+    pathname === '/event' ||
+    pathname === '/problem-statements' ||
+    pathname === '/sponsor' ||
+    pathname === '/sponsors'
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
   const lastScrollYRef = useRef(0)
 
+  // Reset hidden state on route changes
   useEffect(() => {
+    setHidden(false)
+  }, [pathname])
+
+  useEffect(() => {
+    // Keep navbar constant on fullscreen single-page routes
+    if (isConstantNav) {
+      setHidden(false)
+      return
+    }
+
     const handleScroll = () => {
       // Don't hide navbar if fullscreen menu is open
       if (open) return
@@ -37,15 +56,28 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [open])
+  }, [open, isConstantNav])
+
+  const isHidden = !isConstantNav && hidden
+
+  // Dispatch custom event for child sections/HUDs that react to navbar visibility
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('nav-visibility-change', {
+          detail: { hidden: isHidden },
+        })
+      )
+    }
+  }, [isHidden])
 
   return (
     <>
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{
-          y: hidden ? -110 : 0,
-          opacity: hidden ? 0 : 1,
+          y: isHidden ? -110 : 0,
+          opacity: isHidden ? 0 : 1,
         }}
         transition={{
           duration: 0.35,
@@ -62,10 +94,10 @@ export default function Navbar() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-9 font-mono text-[11px] tracking-widest2 text-textDark/80">
-            <Link href="#gallery" className="hover:text-rust transition-colors">
+            <Link href="/gallery" className="hover:text-rust transition-colors">
               ABOUT
             </Link>
-            <Link href="#events" className="hover:text-rust transition-colors">
+            <Link href="/event" className="hover:text-rust transition-colors">
               EVENTS
             </Link>
             <a

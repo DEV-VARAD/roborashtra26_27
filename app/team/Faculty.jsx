@@ -14,24 +14,6 @@ function LinkedInIcon({ className = 'w-4 h-4' }) {
   )
 }
 
-function InstagramIcon({ className = 'w-4 h-4' }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
-  )
-}
-
-function XTwitterIcon({ className = 'w-4 h-4' }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  )
-}
-
 /**
  * 3D Flippable Faculty Member Card (Responsive Frame & Portrait Sizing)
  */
@@ -159,7 +141,6 @@ function FacultyCard({ faculty, index }) {
 
           {/* Clickable Social Media Links */}
           <div className="space-y-1 my-auto">
-            {/* LinkedIn */}
             <a
               href={faculty.socials?.linkedin || 'https://linkedin.com'}
               target="_blank"
@@ -222,7 +203,6 @@ export default function Faculty() {
   })
 
   // Unified "ROBORASHTRA" Text Movement:
-  // Starts centered at initial size, then smoothly fades out completely before cards emerge
   const titleY = useTransform(smoothProgress, [0.1, 0.38], ['0vh', '-22vh'])
   const titleScale = useTransform(smoothProgress, [0.1, 0.38], [1, 0.7])
   const titleOpacity = useTransform(smoothProgress, [0.1, 0.34], [0.85, 0])
@@ -263,25 +243,18 @@ export default function Faculty() {
     >
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden flex flex-col justify-center items-center select-none bg-[#070707]">
-        
         {/* Atmospheric Background Grid & Subtle Vignette */}
         <div className="absolute inset-0 bg-blueprintGrid bg-grid opacity-15 pointer-events-none" />
-        <div 
+        <div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(255, 159, 28, 0.08), transparent 60%)'
+            background: 'radial-gradient(circle at 50% 50%, rgba(255, 159, 28, 0.08), transparent 60%)',
           }}
         />
 
         {/* Top Header */}
-        <div className="absolute top-4 sm:top-8 left-4 sm:left-8 md:left-12 right-4 sm:right-8 md:right-12 z-30 flex items-center justify-between pointer-events-none">
-          <div>
-            <div className="flex items-center gap-1.5 mb-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber animate-pulse" />
-              <span className="font-mono text-[8px] sm:text-[10px] uppercase tracking-widest text-amber/80 font-bold">
-                // COUNCIL & ADVISORY
-              </span>
-            </div>
+        <div className="absolute top-20 sm:top-24 left-6 md:left-12 right-6 md:right-12 z-30 flex items-center justify-between pointer-events-none">
+          <div className="flex items-center gap-2">
             <h2
               className="font-serifEd leading-[0.9] text-textLight"
               style={{ fontSize: 'clamp(1.5rem, 3.8vw, 3.5rem)' }}
@@ -337,7 +310,6 @@ export default function Faculty() {
             ↓ Scroll to reveal faculty council
           </p>
         </motion.div>
-
       </div>
     </section>
   )

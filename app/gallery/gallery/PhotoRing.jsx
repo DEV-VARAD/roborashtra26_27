@@ -25,8 +25,8 @@ export default function PhotoRing({
   selectedPhoto = null,
   onSelectPhoto,
   onUserInteracted,
-  scrollProgress = 0,
   reducedMotion = false,
+  ringControlRef = null,
 }) {
   const ringRef = useRef()
   const { gl } = useThree()
@@ -151,13 +151,23 @@ export default function PhotoRing({
     window.addEventListener('pointerup', handlePointerUp)
     window.addEventListener('pointercancel', handlePointerUp)
 
+    if (ringControlRef) {
+      ringControlRef.current = {
+        rotate: (direction = 1) => {
+          velocity.current.x -= direction * 0.045
+          ringRotation.current.y -= direction * 0.45
+          onUserInteracted?.()
+        },
+      }
+    }
+
     return () => {
       domElement.removeEventListener('pointerdown', handlePointerDown)
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
       window.removeEventListener('pointercancel', handlePointerUp)
     }
-  }, [gl, onUserInteracted])
+  }, [gl, onUserInteracted, ringControlRef])
 
   // Frame animation loop for physics inertia, mouse parallax, and ambient rotation
   useFrame((state, delta) => {
@@ -177,9 +187,6 @@ export default function PhotoRing({
       }
     }
 
-    // Scroll influence: seamlessly rotates the full ring across the 2-3 pinned page scrolls
-    const scrollAngle = scrollProgress * Math.PI * 2.8
-
     // Clamp vertical tilt
     ringRotation.current.x = THREE.MathUtils.clamp(
       ringRotation.current.x,
@@ -195,7 +202,7 @@ export default function PhotoRing({
 
     // Target combined Euler rotation
     targetRotation.current.x = ringRotation.current.x + parallaxOffset.current.y
-    targetRotation.current.y = ringRotation.current.y + parallaxOffset.current.x + scrollAngle
+    targetRotation.current.y = ringRotation.current.y + parallaxOffset.current.x
 
     // Smooth lerp into the 3D group
     const lerpFactor = Math.min(1, delta * 12)

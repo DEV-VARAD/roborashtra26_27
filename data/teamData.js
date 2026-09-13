@@ -46,7 +46,7 @@ export const teamData = {
           id: 'workshop-head-1',
           name: 'Dhananjay',
           role: 'Workshop & Fabrication Head',
-          image: '/team/workshop/dhananjay.png',
+          image: 'https://res.cloudinary.com/hlrhjabh/image/upload/v1789165000/dhananjay.png' || '/team/workshop/dhananjay.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -394,22 +394,23 @@ export const teamData = {
       heads: [
         {
           id: 'web-head-1',
-          name: 'Yadnesh Borole',
+          name: 'Riddhi Sonawane',
           role: 'Web & Systems Head',
-          image: '/team/web/yadnesh.png',
+          image: '/team/web/riddhi.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
         },
         {
           id: 'web-head-2',
-          name: 'Riddhi Sonawane',
+          name: 'Yadnesh Borole',
           role: 'Web & Systems Co-Head',
-          image: '/team/web/riddhi.png',
+          image: '/team/web/yadnesh.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
         },
+        
       ],
       members: [
         {

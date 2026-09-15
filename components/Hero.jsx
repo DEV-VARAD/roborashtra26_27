@@ -182,7 +182,7 @@ export default function Hero() {
             dpr={isMobile ? [1, 1] : [1, 1.5]}
           >
             <ambientLight intensity={1.4} />
-            <directionalLight position={[4, 8, 5]} intensity={7.0} color="#ffffff" castShadow={!isMobile} />
+            <directionalLight position={[4, 8, 5]} intensity={9.0} color="#ffffff" castShadow={!isMobile} />
             <directionalLight position={[-4, -2, -3]} intensity={2} color="#c84b27" />
 
             <ResponsiveRig>

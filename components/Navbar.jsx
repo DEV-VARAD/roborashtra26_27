@@ -16,7 +16,36 @@ export default function Navbar() {
     pathname === '/sponsors'
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
+  const [introFinished, setIntroFinished] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isHome = window.location.pathname === '/' || window.location.pathname === ''
+      if (isHome) {
+        return !!sessionStorage.getItem('roborashtra_intro_shown')
+      }
+      return true
+    }
+    return false
+  })
   const lastScrollYRef = useRef(0)
+
+  // Listen for intro completion on the home page
+  useEffect(() => {
+    if (introFinished) return
+
+    const checkIntro = () => {
+      if (
+        document.documentElement.classList.contains('intro-done') ||
+        sessionStorage.getItem('roborashtra_intro_shown')
+      ) {
+        setIntroFinished(true)
+      }
+    }
+
+    checkIntro()
+    const observer = new MutationObserver(checkIntro)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [introFinished])
 
   // Reset hidden state on route changes
   useEffect(() => {
@@ -76,11 +105,11 @@ export default function Navbar() {
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{
-          y: isHidden ? -110 : 0,
-          opacity: isHidden ? 0 : 1,
+          y: !introFinished || isHidden ? -110 : 0,
+          opacity: !introFinished || isHidden ? 0 : 1,
         }}
         transition={{
-          duration: 0.35,
+          duration: 0.5,
           ease: [0.16, 1, 0.3, 1],
         }}
         className="fixed top-3 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none"

@@ -34,10 +34,10 @@ export default function FullscreenMenu({ open, onClose }) {
           animate={{ clipPath: 'inset(0 0 0% 0)' }}
           exit={{ clipPath: 'inset(0 0 100% 0)' }}
           transition={{ duration: 0.6, ease: [0.83, 0, 0.17, 1] }}
-          className="fixed inset-0 z-[90] bg-black text-ivory flex flex-col"
+          className="fixed inset-0 z-[90] bg-black text-ivory flex flex-col overflow-hidden"
         >
-          <div className="flex items-center justify-between px-6 md:px-12 h-20">
-            <span className="font-serifEd text-2xl tracking-wide">Roborashtra</span>
+          <div className="flex items-center justify-between px-5 md:px-12 h-16 sm:h-20 shrink-0">
+            <span className="font-serifEd text-xl sm:text-2xl tracking-wide">Roborashtra</span>
             <button
               onClick={onClose}
               aria-label="Close menu"
@@ -51,7 +51,7 @@ export default function FullscreenMenu({ open, onClose }) {
             variants={listVariants}
             initial="hidden"
             animate="show"
-            className="flex-1 flex flex-col justify-center px-6 md:px-12 gap-2"
+            className="flex-1 flex flex-col justify-center px-5 md:px-12 gap-0.5 sm:gap-1 overflow-hidden"
           >
             {links.map((l) => (
               <motion.div key={l.label} variants={itemVariants} className="overflow-hidden">
@@ -61,7 +61,7 @@ export default function FullscreenMenu({ open, onClose }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={onClose}
-                    className="block font-serifEd text-5xl sm:text-6xl md:text-7xl leading-[1.15] hover:text-rust transition-colors"
+                    className="block font-serifEd text-[2rem] min-[380px]:text-[2.4rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] hover:text-rust transition-colors"
                   >
                     {l.label}
                   </a>
@@ -69,7 +69,7 @@ export default function FullscreenMenu({ open, onClose }) {
                   <Link
                     href={l.href}
                     onClick={onClose}
-                    className="block font-serifEd text-5xl sm:text-6xl md:text-7xl leading-[1.15] hover:text-rust transition-colors"
+                    className="block font-serifEd text-[2rem] min-[380px]:text-[2.4rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] hover:text-rust transition-colors"
                   >
                     {l.label}
                   </Link>

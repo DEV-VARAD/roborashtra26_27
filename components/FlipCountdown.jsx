@@ -46,7 +46,7 @@ export default function FlipCountdown({ targetDate = DEFAULT_TARGET_DATE }) {
   const seconds = Math.floor((diff % (1000 * 60)) / 1000)
 
   return (
-    <div className="flex items-center justify-center gap-1.5 min-[350px]:gap-2 min-[380px]:gap-2.5 min-[480px]:gap-4 sm:gap-6 md:gap-7 lg:gap-8 xl:gap-10 flex-nowrap w-full max-w-5xl mx-auto px-1 sm:px-4">
+    <div className="flex items-center justify-center gap-1.5 min-[350px]:gap-2 min-[390px]:gap-2.5 min-[480px]:gap-4 sm:gap-6 md:gap-7 lg:gap-8 xl:gap-10 flex-nowrap w-full max-w-5xl mx-auto px-1 sm:px-4">
       <FlipUnit value={days} label="DAYS" isDays />
       <FlipUnit value={hours} label="HOURS" />
       <FlipUnit value={minutes} label="MINUTES" />

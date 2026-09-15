@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Calendar, Clock, ArrowRight, Radio } from 'lucide-react'
+import { ArrowRight, Radio } from 'lucide-react'
 import FlipCountdown from '@/components/FlipCountdown'
 
 // Default championship event target: February 1, 2027, 00:00:00 IST
@@ -23,52 +23,6 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
     return date
   }, [targetDate])
 
-  // Generate Calendar ICS Download
-  const handleDownloadICS = () => {
-    const title = 'ROBORASHTRA — Robotics Arena Championship 2026'
-    const desc =
-      'Maharashtra State Flagship Robotics Arena Championship. Autonomous rovers, 15kg combat bots, and high-speed drone racing.'
-    const location = 'Robotics Arena, Engineering Ground, Pune, Maharashtra, India'
-
-    const formatDate = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-    const startStr = formatDate(resolvedTarget)
-    const endDate = new Date(resolvedTarget.getTime() + 2 * 24 * 60 * 60 * 1000)
-    const endStr = formatDate(endDate)
-
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//Roborashtra//Championship 2026//EN',
-      'CALSCALE:GREGORIAN',
-      'BEGIN:VEVENT',
-      `SUMMARY:${title}`,
-      `DESCRIPTION:${desc}`,
-      `LOCATION:${location}`,
-      `DTSTART:${startStr}`,
-      `DTEND:${endStr}`,
-      'STATUS:CONFIRMED',
-      'SEQUENCE:0',
-      'BEGIN:VALARM',
-      'TRIGGER:-P1D',
-      'ACTION:DISPLAY',
-      'DESCRIPTION:ROBORASHTRA Arena starts in 24 hours!',
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR',
-    ].join('\r\n')
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' })
-    const link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.setAttribute('download', 'ROBORASHTRA_2026.ics')
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  // Google Calendar URL
-  const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=ROBORASHTRA+Robotics+Arena+Championship&dates=20261018T033000Z/20261020T123000Z&details=Maharashtra+State+Flagship+Robotics+Arena+Championship.+Autonomous+rovers,+15kg+combat+bots,+and+FPV+fleet+races.&location=Robotics+Arena,+Pune,+Maharashtra,+India`
-
   const handleShareLink = () => {
     if (typeof window !== 'undefined') {
       navigator.clipboard.writeText(window.location.href)
@@ -81,7 +35,7 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
     <section
       id="countdown"
       aria-label="Event Countdown"
-      className="relative w-full h-full min-h-screen flex flex-col justify-center items-center bg-[#F7F4ED] text-[#111111] select-none overflow-hidden pt-16 sm:pt-20 pb-4 px-4 sm:px-6 md:px-12"
+      className="relative w-full h-full min-h-screen flex flex-col justify-center items-center bg-[#F7F4ED] text-[#111111] select-none overflow-hidden pt-16 sm:pt-20 pb-6 px-4 sm:px-6 md:px-12"
     >
       {/* Subtle Editorial Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:44px_44px] pointer-events-none opacity-80" />
@@ -95,51 +49,50 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
         }}
       />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-2 sm:px-6 flex flex-col items-center text-center my-auto">
-        
+      <div className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 md:px-12 flex flex-col items-center text-center my-auto">
         {/* TOP EDITORIAL HEADER */}
-        <div className="mb-4 sm:mb-6 max-w-2xl">
-          <span className="font-mono text-[10px] sm:text-xs tracking-[0.28em] text-[#FF8A00] font-bold uppercase block mb-1.5 sm:mb-2">
+        <div className="mb-6 sm:mb-10 max-w-3xl">
+          <span className="font-mono text-xs sm:text-sm md:text-base tracking-[0.26em] sm:tracking-[0.32em] text-[#FF8A00] font-bold uppercase block mb-2 sm:mb-3">
             COUNTDOWN TO ZERO HOUR
           </span>
-          <h2 className="font-cinzel text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#111111] leading-tight tracking-tight mb-2">
+          <h2 className="font-cinzel text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#111111] leading-tight tracking-tight mb-3 sm:mb-4">
             The Arena Awaits
           </h2>
-          <p className="font-body text-xs sm:text-sm md:text-base text-[#666666] leading-relaxed max-w-xl mx-auto">
+          <p className="font-body text-sm sm:text-lg md:text-xl text-[#555555] leading-relaxed max-w-2xl mx-auto">
             Autonomous kinematics, combat bots, and precision aerospace fleets calibrate for the state championship.
           </p>
         </div>
 
         {/* MECHANICAL FLIP-CLOCK CARDS (DAYS - HOURS - MINUTES - SECONDS) */}
-        <div className="w-full my-2 sm:my-4 flex justify-center">
+        <div className="w-full my-3 sm:my-6 flex justify-center">
           <FlipCountdown targetDate={targetDate} />
         </div>
 
         {/* BOTTOM ACTION & CALENDAR STRIP */}
-        <div className="mt-4 sm:mt-6 w-full flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 max-w-4xl bg-white/70 backdrop-blur-md rounded-2xl p-3.5 sm:p-5 border border-black/6 shadow-sm">
-          <div className="text-left">
-            <h4 className="font-serifEd text-base sm:text-xl text-[#111111] font-medium leading-tight">
+        <div className="mt-6 sm:mt-8 w-full flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 max-w-4xl bg-white/70 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-black/6 shadow-sm">
+          <div className="text-center sm:text-left">
+            <h4 className="font-serifEd text-base sm:text-xl md:text-2xl text-[#111111] font-medium leading-tight">
               Ready to deploy your machine?
             </h4>
-            <p className="font-mono text-[10px] sm:text-xs text-[#777777] tracking-wider mt-0.5">
+            <p className="font-mono text-[10px] sm:text-xs text-[#777777] tracking-wider mt-1">
               Registrations for Combat, Autonomous SLAM, and FPV fleets are open.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 shrink-0">
             {/* Registration CTA */}
             <Link
               href="https://unstop.com/"
-              className="inline-flex items-center gap-2 bg-[#FF8A00] hover:bg-[#E67C00] text-black font-mono text-xs font-bold tracking-widest uppercase px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl shadow-[0_4px_16px_rgba(255,138,0,0.25)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-[#FF8A00] hover:bg-[#E67C00] text-black font-mono text-xs font-bold tracking-widest uppercase px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-[0_4px_16px_rgba(255,138,0,0.25)] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>REGISTER TEAM</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            
+
             {/* Quick Share Link */}
             <button
               onClick={handleShareLink}
-              className="inline-flex items-center gap-1.5 bg-[#FAF9F5] hover:bg-[#F3EFE6] text-[#222222] border border-black/10 font-mono text-xs tracking-wider uppercase px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl transition-colors"
+              className="inline-flex items-center gap-1.5 bg-[#FAF9F5] hover:bg-[#F3EFE6] text-[#222222] border border-black/10 font-mono text-xs tracking-wider uppercase px-3 sm:px-3.5 py-2.5 sm:py-3 rounded-xl transition-colors"
               title="Copy event link"
             >
               <Radio className="w-3.5 h-3.5 text-[#666666]" />
@@ -147,7 +100,6 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
             </button>
           </div>
         </div>
-
       </div>
     </section>
   )

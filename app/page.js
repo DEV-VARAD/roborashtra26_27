@@ -14,6 +14,10 @@ export default function Home() {
     if (hasSeenIntro) {
       setLoaded(true)
       setShouldPlayIntro(false)
+      document.documentElement.classList.remove('intro-pending')
+      document.documentElement.classList.add('intro-done')
+      const blackout = document.getElementById('initial-blackout')
+      if (blackout) blackout.style.display = 'none'
     } else {
       setShouldPlayIntro(true)
     }
@@ -36,8 +40,15 @@ export default function Home() {
   const handleLoadingFinish = useCallback(() => {
     setLoaded(true)
     sessionStorage.setItem('roborashtra_intro_shown', 'true')
+    document.documentElement.classList.remove('intro-pending')
+    document.documentElement.classList.add('intro-done')
+    const blackout = document.getElementById('initial-blackout')
+    if (blackout) blackout.style.display = 'none'
 
     if (typeof window !== 'undefined') {
+      if (window.location.hash && window.location.hash !== '#hero') {
+        history.replaceState(null, '', window.location.pathname + window.location.search)
+      }
       if (window.lenis) {
         window.lenis.scrollTo(0, { immediate: true, force: true })
       }
@@ -58,4 +69,3 @@ export default function Home() {
     </>
   )
 }
-

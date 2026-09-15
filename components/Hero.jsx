@@ -122,17 +122,6 @@ function LoadingFallback() {
   )
 }
 
-const lines = ['ROBORASHTRA', 'ROBOHAWK']
-
-const lineVariants = {
-  hidden: { opacity: 0, y: '100%' },
-  show: (i) => ({
-    opacity: 1,
-    y: '0%',
-    transition: { duration: 0.8, delay: 0.3 + i * 0.1, ease: [0.16, 1, 0.3, 1] },
-  }),
-}
-
 import RightNav from './RightNav'
 
 export default function Hero() {
@@ -166,13 +155,12 @@ export default function Hero() {
         }}
       />
 
-
       {/* 3D GLTF Metal Robot Scene*/}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-auto will-change-transform">
         {mounted && (
           <Canvas
             shadows={!isMobile}
-            camera={{ position: [0, 0.7, 5.8], fov: 20, near: 0.5}}
+            camera={{ position: [0, 0.7, 5.8], fov: 20, near: 0.5 }}
             gl={{
               antialias: true,
               alpha: true,
@@ -187,18 +175,18 @@ export default function Hero() {
 
             <ResponsiveRig>
               <group position={[0, -0.3, 0]}>
-              <ContactShadows
-                position={[0, -0.75, 0]}
-                opacity={isMobile ? 0.25 : 0.4}
-                scale={7}
-                blur={1.6}
-                far={2.5}
-                resolution={isMobile ? 128 : 256}
-                color="#000000"
-              />
-              <Suspense fallback={<LoadingFallback />}>
-                <CustomGLTFModel />
-              </Suspense>
+                <ContactShadows
+                  position={[0, -0.75, 0]}
+                  opacity={isMobile ? 0.25 : 0.4}
+                  scale={7}
+                  blur={1.6}
+                  far={2.5}
+                  resolution={isMobile ? 128 : 256}
+                  color="#000000"
+                />
+                <Suspense fallback={<LoadingFallback />}>
+                  <CustomGLTFModel />
+                </Suspense>
               </group>
             </ResponsiveRig>
           </Canvas>

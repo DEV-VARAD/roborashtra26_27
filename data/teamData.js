@@ -10,7 +10,7 @@ export const teamData = {
       id: 'lead-1',
       name: 'Shivraj Patil',
       role: 'Club President & Lead',
-      image: '/team/lead/shivrajpatil.png',
+      image: '/team/shivrajpatil.png',
       socials: {
         linkedin: 'https://linkedin.com',
       },
@@ -19,7 +19,7 @@ export const teamData = {
       id: 'lead-2',
       name: 'Sarthak Gadhave',
       role: 'Management & Ops Lead',
-      image: '/team/lead/sarthakgadhave.png',
+      image: '/team/sarthakgadhave.png',
       socials: {
         linkedin: 'https://linkedin.com',
       },
@@ -28,7 +28,7 @@ export const teamData = {
       id: 'lead-3',
       name: 'Rushikesh Sonaje',
       role: 'Finance & Treasury Lead',
-      image: '/team/lead/rushikeshsonaje.png',
+      image: '/team/rushikeshsonaje.png',
       socials: {
         linkedin: 'https://www.linkedin.com/in/rushikesh-sonaje-a752b232b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
       },
@@ -46,7 +46,7 @@ export const teamData = {
           id: 'workshop-head-1',
           name: 'Dhananjay',
           role: 'Workshop & Fabrication Head',
-          image: 'https://res.cloudinary.com/hlrhjabh/image/upload/v1789165000/dhananjay.png' || '/team/workshop/dhananjay.png',
+          image: '/team/dhananjay.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -122,7 +122,7 @@ export const teamData = {
           id: 'pr-head-1',
           name: 'Saloni Sinha',
           role: 'Public Relations Head',
-          image: '/team/pr/saloni.png',
+          image: '/team/saloni.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -206,7 +206,7 @@ export const teamData = {
           id: 'event-head-1',
           name: 'Devika Chaudhari',
           role: 'Event Management Head',
-          image: '/team/event/devika.png',
+          image: '/team/devika.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -215,7 +215,7 @@ export const teamData = {
           id: 'event-head-2',
           name: 'Parth Khade',
           role: 'Event Management Co-Head',
-          image: '/team/event/parth.png',
+          image: '/team/parth.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -307,7 +307,7 @@ export const teamData = {
           id: 'ps-head-1',
           name: 'Albin Biju',
           role: 'Problem Statement Head',
-          image: '/team/ps/albin.png',
+          image: '/team/albin.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -351,7 +351,7 @@ export const teamData = {
           id: 'design-head-1',
           name: 'Prachi Gareja',
           role: 'Design Head',
-          image: '/team/design/prachi.png',
+          image: '/team/prachi.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -360,7 +360,7 @@ export const teamData = {
           id: 'design-head-2',
           name: 'Soham Sejwal',
           role: 'Design Co-Head',
-          image: '/team/design/soham.png',
+          image: '/team/soham.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -396,7 +396,7 @@ export const teamData = {
           id: 'web-head-1',
           name: 'Riddhi Sonawane',
           role: 'Web & Systems Head',
-          image: '/team/web/riddhi.png',
+          image: '/team/riddhi.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -405,7 +405,7 @@ export const teamData = {
           id: 'web-head-2',
           name: 'Yadnesh Borole',
           role: 'Web & Systems Co-Head',
-          image: '/team/web/yadnesh.png',
+          image: '/team/yadnesh.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -440,18 +440,9 @@ export const teamData = {
       heads: [
         {
           id: 'content-head-1',
-          name: 'Suyash Shinde',
-          role: 'Content Head',
-          image: '/team/content/suyash.png',
-          socials: {
-            linkedin: 'https://linkedin.com',
-          },
-        },
-        {
-          id: 'content-head-2',
           name: 'Tanaj Manyar',
           role: 'Social Media Lead',
-          image: '/team/content/tanaj.png',
+          image: '/team/tanaj.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -487,7 +478,7 @@ export const teamData = {
           id: 'doc-head-1',
           name: 'Rajat Poddar',
           role: 'Documentation Head',
-          image: '/team/docs/rajat.png',
+          image: '/team/rajat.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -515,7 +506,7 @@ export const teamData = {
           id: 'cad-head-1',
           name: 'Sarthak Thete',
           role: 'CAD Head',
-          image: '/team/cad/sarthak.png',
+          image: '/team/sarthak.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },

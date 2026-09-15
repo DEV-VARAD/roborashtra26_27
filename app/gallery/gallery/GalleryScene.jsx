@@ -109,6 +109,7 @@ export default function GalleryScene({
   onSelectPhoto,
   onUserInteracted,
   reducedMotion = false,
+  ringControlRef = null,
 }) {
   // Screen size detection for responsive 3D ring tuning
   const [screenSize, setScreenSize] = useState({
@@ -209,6 +210,7 @@ export default function GalleryScene({
             onSelectPhoto={onSelectPhoto}
             onUserInteracted={onUserInteracted}
             reducedMotion={reducedMotion}
+            ringControlRef={ringControlRef}
           />
         </Suspense>
       </Canvas>

@@ -668,7 +668,7 @@ function MarsExplorationRover({ progressRef, reducedMotion }) {
     // Martian terrain: vertical bounce + pitch/roll/yaw to simulate active driving & turning
     if (rig.current) {
       // Vertical bounce — rover drives over rocky Martian terrain
-      rig.current.position.y = -0.32 + Math.sin(time * 2.4) * 0.022 + Math.sin(time * 1.1) * 0.012
+      rig.current.position.y = -0.136 + Math.sin(time * 2.4) * 0.022 + Math.sin(time * 1.1) * 0.012
       // Pitch (nose up/down) from terrain undulation
       rig.current.rotation.x = 0.04 + Math.cos(time * 1.6) * 0.018
       // Smooth Y rotation for 180° turn when reversing direction
@@ -715,7 +715,7 @@ function MarsExplorationRover({ progressRef, reducedMotion }) {
       // Y rotation of Math.PI/2 points the rover's nose out of screen-right
       // Small X tilt keeps it grounded; slight Y offset for ground contact
       rotation={[0.04, Math.PI / 2 - 0.15, 0]}
-      position={[0, -0.32, 0]}
+      position={[0, -0.136, 0]}
     >
       {/* 1. Rocker-Bogie Suspension Linkages */}
       <RockerBogieSuspension />

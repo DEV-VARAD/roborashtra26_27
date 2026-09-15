@@ -26,6 +26,7 @@ export default function PhotoRing({
   onSelectPhoto,
   onUserInteracted,
   reducedMotion = false,
+  ringControlRef = null,
 }) {
   const ringRef = useRef()
   const { gl } = useThree()
@@ -150,13 +151,23 @@ export default function PhotoRing({
     window.addEventListener('pointerup', handlePointerUp)
     window.addEventListener('pointercancel', handlePointerUp)
 
+    if (ringControlRef) {
+      ringControlRef.current = {
+        rotate: (direction = 1) => {
+          velocity.current.x -= direction * 0.045
+          ringRotation.current.y -= direction * 0.45
+          onUserInteracted?.()
+        },
+      }
+    }
+
     return () => {
       domElement.removeEventListener('pointerdown', handlePointerDown)
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
       window.removeEventListener('pointercancel', handlePointerUp)
     }
-  }, [gl, onUserInteracted])
+  }, [gl, onUserInteracted, ringControlRef])
 
   // Frame animation loop for physics inertia, mouse parallax, and ambient rotation
   useFrame((state, delta) => {

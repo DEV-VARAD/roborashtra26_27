@@ -15,7 +15,7 @@ export default function GalleryControls({
       {/* Top Editorial Header */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
-          <h2 className="font-serifEd text-4xl sm:text-5xl md:text-6xl text-paperWhite tracking-tight leading-[0.95] max-w-xl">
+          <h2 className="font-serifEd text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-paperWhite tracking-tight leading-[0.95] max-w-xl">
             Orbiting the build.
           </h2>
         </div>

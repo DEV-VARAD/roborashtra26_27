@@ -230,89 +230,94 @@ function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
 }
 
 /**
- * Compact, Elegant Team Head Card (Smaller Size)
+ * Compact, Elegant Team Head Card (Responsive Framing)
  */
 function HeadCard({ head, index }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.35, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="group bg-white rounded-2xl p-4 border border-black/8 shadow-[0_3px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.07)] transition-all duration-300 flex flex-col justify-between select-none"
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ duration: 0.35, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+      className="group bg-white rounded-xl sm:rounded-2xl p-2.5 min-[360px]:p-3 sm:p-4 border border-black/8 shadow-[0_3px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:border-[#FF8A00]/30 transition-all duration-300 flex flex-col justify-between select-none"
     >
       <div>
-        {/* Compact Image */}
-        <div className="relative aspect-[2/2] w-full rounded-xl overflow-hidden mb-3 bg-[#F7F4ED] border border-black/5">
+        {/* Compact Responsive Portrait */}
+        <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
           <img
             src={head.image}
             alt={head.name}
-            className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+            className="w-full h-full object-cover object-top sm:object-center transition-transform duration-500 ease-out group-hover:scale-105"
             loading="lazy"
           />
         </div>
 
         {/* Compact Head Info */}
-        <h4 className="font-serifEd text-lg sm:text-xl font-medium text-[#111111] leading-tight mb-0.5 group-hover:text-[#FF8A00] transition-colors">
+        <h4 className="font-serifEd text-[13px] min-[360px]:text-[15px] sm:text-lg md:text-xl font-semibold text-[#111111] leading-tight mb-0.5 group-hover:text-[#FF8A00] transition-colors line-clamp-1">
           {head.name}
         </h4>
-        <p className="font-mono text-[10px] text-[#FF8A00] tracking-widest2 uppercase font-semibold mb-1.5">
+        <p className="font-mono text-[7.5px] min-[360px]:text-[8.5px] sm:text-[10px] text-[#FF8A00] tracking-wider uppercase font-bold mb-1 sm:mb-1.5 line-clamp-1">
           {head.role}
         </p>
       </div>
 
-      {/* Social / Contact Links (LinkedIn & Instagram for Unit Heads and Leads) */}
-      <div className="pt-2.5 border-t border-black/6 flex items-center gap-2 text-[#555555]">
+      {/* Social / Contact Links */}
+      <div className="pt-1.5 sm:pt-2 border-t border-black/6 flex items-center justify-between text-[#555555]">
+        <span className="font-mono text-[7px] min-[360px]:text-[8px] sm:text-[9px] uppercase tracking-wider text-[#888888]">
+          CONNECT
+        </span>
         <a
           href={head.socials?.linkedin || 'https://linkedin.com'}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-7 h-7 rounded-lg bg-[#FAF8F5] hover:bg-[#FF8A00]/15 hover:text-[#FF8A00] flex items-center justify-center transition-colors"
+          className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#FAF8F5] hover:bg-[#FF8A00]/15 hover:text-[#FF8A00] flex items-center justify-center transition-colors"
           aria-label={`${head.name} LinkedIn`}
         >
-          <LinkedInIcon className="w-3.5 h-3.5" />
+          <LinkedInIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
         </a>
-        
       </div>
     </motion.div>
   )
 }
 
 /**
- * More Prominent Member Card with Rounded Rectangle Avatar
+ * Prominent Member Card with Clean Spacing
  */
 function MemberCard({ member, index }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
+      exit={{ opacity: 0, y: -6 }}
       transition={{
-        duration: 0.35,
-        delay: 0.08 + index * 0.04,
+        duration: 0.32,
+        delay: 0.05 + index * 0.03,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="group w-full bg-white rounded-2xl p-2 sm:p-2.5 border border-black/6 shadow-[0_3px_14px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-between gap-2 select-none"
+      className="group w-full bg-white rounded-xl sm:rounded-2xl p-2 min-[360px]:p-2.5 sm:p-3 border border-black/6 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_6px_22px_rgba(0,0,0,0.06)] hover:border-[#FF8A00]/30 transition-all duration-200 flex items-center justify-between gap-2 select-none"
     >
       {/* Member Details */}
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="min-w-0">
-          <h5 className="font-serifEd text-lg sm:text-xl font-medium text-[#111111] leading-snug truncate group-hover:text-[#FF8A00] transition-colors">
-            {member.name}
-          </h5>
-        </div>
+      <div className="min-w-0 pr-1">
+        <h5 className="font-serifEd text-[13px] min-[360px]:text-[14.5px] sm:text-base md:text-lg font-medium text-[#111111] leading-snug truncate group-hover:text-[#FF8A00] transition-colors">
+          {member.name}
+        </h5>
+        {member.role && (
+          <p className="font-mono text-[7.5px] min-[360px]:text-[8px] sm:text-[9.5px] text-[#777777] tracking-wider uppercase truncate">
+            {member.role}
+          </p>
+        )}
       </div>
 
       {/* LinkedIn */}
-      <div className="flex items-center gap-1 text-[#666666] shrink-0">
+      <div className="flex items-center shrink-0">
         <a
           href={member.socials?.linkedin || "https://linkedin.com"}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`${member.name} LinkedIn`}
-          className="w-8 h-8 rounded-xl bg-[#FAF8F5] hover:bg-[#FF8A00]/15 hover:text-[#FF8A00] flex items-center justify-center transition-colors"
+          className="w-6 h-6 min-[360px]:w-7 min-[360px]:h-7 sm:w-8 sm:h-8 rounded-lg bg-[#FAF8F5] hover:bg-[#FF8A00]/15 hover:text-[#FF8A00] flex items-center justify-center transition-colors text-[#666666]"
         >
-          <LinkedInIcon className="w-4 h-4" />
+          <LinkedInIcon className="w-3.5 h-3.5" />
         </a>
       </div>
     </motion.div>
@@ -380,11 +385,10 @@ export default function Team() {
       id="team"
       ref={sectionRef}
       aria-label="Roborashtra Crew Directory"
-      className="relative w-full bg-[#F7F4ED] text-[#111111]"
-      style={{ height: '200vh' }}
+      className="relative w-full bg-[#F7F4ED] text-[#111111] min-h-screen py-8 sm:py-12 lg:py-0 lg:h-[200vh]"
     >
-      {/* Sticky 100svh Viewport Container — Stops screen at Team for 2 scrolls */}
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden flex flex-col justify-center items-center border-t border-b border-black/10">
+      {/* Sticky 100svh Viewport Container for desktop, natural container for mobile */}
+      <div className="relative lg:sticky top-0 min-h-screen lg:h-[100svh] w-full overflow-visible lg:overflow-hidden flex flex-col justify-start lg:justify-center items-center py-4 lg:py-0 border-t border-b border-black/10">
         {/* Subtle Editorial Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:44px_44px] pointer-events-none opacity-70" />
 
@@ -398,11 +402,47 @@ export default function Team() {
         />
 
         <div className="relative z-10 w-full max-w-[1600px] mx-auto px-2 sm:px-4">
+          {/* MOBILE: Sticky Section Label & Horizontal scrollable unit pills (shown below lg) */}
+          <div className="lg:hidden sticky top-2 z-40 bg-[#F7F4ED]/95 backdrop-blur-md py-1.5 w-full mb-3 rounded-xl border border-black/5 shadow-xs">
+            <div className="flex items-center justify-between px-2 mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF8A00] animate-pulse" />
+                <span className="font-cinzel text-[9px] sm:text-[10px] tracking-widest text-[#FF8A00] font-bold uppercase">
+                  CREW SQUADS
+                </span>
+              </div>
+              <span className="font-mono text-[8px] sm:text-[9px] text-[#777777] tracking-wider uppercase">
+                {allUnits.length} SQUADS ACTIVE
+              </span>
+            </div>
+
+            <div className="w-full overflow-x-auto no-scrollbar">
+              <div className="flex gap-1.5 sm:gap-2 px-1 pb-1 min-w-max mx-auto justify-start">
+                {allUnits.map((unit) => {
+                  const isActive = unit.id === selectedUnitId
+                  return (
+                    <button
+                      key={unit.id}
+                      onClick={() => setSelectedUnitId(unit.id)}
+                      className={`shrink-0 rounded-full px-3 py-1 font-cinzel text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] tracking-wider font-bold uppercase transition-all duration-200 min-h-[32px] sm:min-h-[36px] touch-manipulation ${
+                        isActive
+                          ? 'bg-[#FF8A00] text-[#111111] shadow-[0_4px_14px_rgba(255,138,0,0.35)]'
+                          : 'bg-white text-[#111111] border border-black/8'
+                      }`}
+                    >
+                      {unit.shortName || unit.name}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+
           {/* TWO-AREA SPATIAL COMPOSITION (ROULETTE ON LEFT + CONTENT ON RIGHT) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-10 items-start lg:items-center">
             
-            {/* LEFT: PARTIALLY HIDDEN CIRCULAR ROULETTE (Touches Left Edge) */}
-            <div className="lg:col-span-5 xl:col-span-4 w-full flex flex-col justify-center">
+            {/* LEFT: PARTIALLY HIDDEN CIRCULAR ROULETTE (Touches Left Edge) — desktop only */}
+            <div className="hidden lg:flex lg:col-span-5 xl:col-span-4 w-full flex-col justify-center">
               <LeftEdgeRoulette
                 units={allUnits}
                 selectedId={selectedUnitId}
@@ -412,46 +452,51 @@ export default function Team() {
             </div>
 
             {/* RIGHT: SELECTED TEAM CONTENT & MEMBER CARDS */}
-            <div className="lg:col-span-7 xl:col-span-8 px-4 sm:px-6 md:px-8 lg:pr-10 lg:pl-2 max-h-[88svh] overflow-y-auto">
+            <div className="lg:col-span-7 xl:col-span-8 px-1.5 sm:px-4 md:px-8 lg:pr-10 lg:pl-2 w-full max-h-none lg:max-h-[86svh] overflow-visible lg:overflow-y-auto overscroll-contain no-scrollbar">
               {/* Header Bar: Active Squad Title */}
-              <div className="sticky top-0 z-30 bg-[#F7F4ED]/95 backdrop-blur-sm pt-2 pb-3 mb-4 sm:mb-6 border-b border-black/8 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <span className="font-cinzel text-xs sm:text-sm font-bold text-[#FF8A00] tracking-widest px-2.5 py-1 rounded-md bg-[#FF8A00]/10 border border-[#FF8A00]/20">
+              <div className="relative lg:sticky top-0 z-30 bg-[#F7F4ED]/95 backdrop-blur-md pt-1 pb-2 sm:pb-3 mb-3 sm:mb-5 border-b border-black/8">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="font-cinzel text-[10px] sm:text-xs font-bold text-[#FF8A00] tracking-widest px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-[#FF8A00]/10 border border-[#FF8A00]/20">
                     {activeUnit.number || '01'}
                   </span>
                   <motion.h2
                     key={activeUnit.id}
-                    initial={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-none"
+                    transition={{ duration: 0.25 }}
+                    className="font-cinzel text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-[#111111] leading-none"
                   >
                     {activeUnit.name}
                   </motion.h2>
                 </div>
+                {activeUnit.tagline && (
+                  <p className="font-mono text-[8px] min-[360px]:text-[9px] sm:text-[11px] text-[#777777] tracking-wide mt-1 line-clamp-1">
+                    // {activeUnit.tagline}
+                  </p>
+                )}
               </div>
 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeUnit.id}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="space-y-6 sm:space-y-8"
+                  exit={{ opacity: 0, x: -16 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-4 sm:space-y-6 md:space-y-8 pb-4"
                 >
 
-                  {/* 1. UNIT HEADS SECTION (Smaller, Compact Cards) */}
+                  {/* 1. UNIT HEADS SECTION */}
                   {activeUnit.heads && activeUnit.heads.length > 0 && (
                     <div>
-                      <div className="flex items-center gap-4 mb-3.5">
-                        <span className="font-cinzel text-xs tracking-widest uppercase text-[#111111] font-bold shrink-0">
+                      <div className="flex items-center gap-3 mb-2.5 sm:mb-3.5">
+                        <span className="font-cinzel text-[10px] sm:text-xs tracking-widest uppercase text-[#111111] font-bold shrink-0">
                           {activeUnit.id === 'lead' ? 'EXECUTIVE LEADS' : 'UNIT HEADS'}
                         </span>
-                        <div className="h-[1.5px] bg-[#FF8A00] flex-1 opacity-85" />
+                        <div className="h-[1.5px] bg-[#FF8A00] flex-1 opacity-80" />
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 min-[360px]:gap-2.5 sm:gap-3.5">
                         {activeUnit.heads.map((head, i) => (
                           <HeadCard key={head.id} head={head} index={i} />
                         ))}
@@ -462,22 +507,22 @@ export default function Team() {
                   {/* 2. UNIT MEMBERS SECTION (Hidden for the LEAD unit, shown for squads) */}
                   {activeUnit.id !== 'lead' && activeUnit.id !== 'cad' && (
                     <div>
-                      <div className="flex items-center gap-4 mb-3.5">
-                        <span className="font-cinzel text-xs tracking-widest uppercase text-[#111111] font-bold shrink-0">
+                      <div className="flex items-center gap-3 mb-2.5 sm:mb-3.5">
+                        <span className="font-cinzel text-[10px] sm:text-xs tracking-widest uppercase text-[#111111] font-bold shrink-0">
                           UNIT MEMBERS
                         </span>
-                        <div className="h-[1.5px] bg-[#FF8A00] flex-1 opacity-85" />
+                        <div className="h-[1.5px] bg-[#FF8A00] flex-1 opacity-80" />
                       </div>
 
                       {activeUnit.members && activeUnit.members.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                        <div className="grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-2">
                           {activeUnit.members.map((member, i) => (
                             <MemberCard key={member.id} member={member} index={i} />
                           ))}
                         </div>
                       ) : (
-                        <div className="bg-white rounded-2xl p-6 border border-black/8 shadow-sm text-center">
-                          <p className="font-mono text-xs tracking-widest2 uppercase text-[#777777]">
+                        <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-black/8 shadow-sm text-center">
+                          <p className="font-mono text-[10px] sm:text-xs tracking-widest uppercase text-[#777777]">
                             [ UNIT RECRUITS CURRENTLY IN INDUCTION LAB ]
                           </p>
                         </div>

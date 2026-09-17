@@ -1,6 +1,5 @@
 import Navbar from '@/components/Navbar'
-import FooterEditorial from '@/components/FooterEditorial'
-import PSComing from '@/components/PSComing'
+import PSComing from '@/app/event/PSComing'
 
 export const metadata = {
   title: 'Problem Statements — Coming Soon | Roborashtra',
@@ -10,12 +9,11 @@ export const metadata = {
 
 export default function ProblemStatementsPage() {
   return (
-    <>
+    <div className="min-h-screen w-full bg-black text-white">
       <Navbar />
-      <main className="pt-24">
+      <main>
         <PSComing />
       </main>
-      <FooterEditorial />
-    </>
+    </div>
   )
 }

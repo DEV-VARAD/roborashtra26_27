@@ -562,18 +562,6 @@ export default function RoadmapSection() {
                   tabIndex={0}
                   aria-label={`Jump to Edition ${node.step}: ${node.phase}`}
                 >
-                  {/* Outer pulse wave */}
-                  {active && (
-                    <circle
-                      r="28"
-                      fill="none"
-                      stroke="rgba(245,158,11,0.35)"
-                      strokeWidth="1"
-                      className="animate-ping"
-                      style={{ transformOrigin: 'center', animationDuration: '2.2s' }}
-                    />
-                  )}
-
                   {/* Mid halo ring */}
                   <circle
                     r={active ? 18 : 14}

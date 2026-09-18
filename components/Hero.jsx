@@ -6,6 +6,7 @@ import { ContactShadows, useGLTF } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FileText, ArrowRight, ArrowUpRight, Compass } from 'lucide-react'
 
 function YouTubeIcon({ className = 'w-3.5 h-3.5' }) {
@@ -160,12 +161,13 @@ function LoadingFallback() {
 }
 
 import RightNav from './RightNav'
-import HomeNav from './HomeNav'
+import FullscreenMenu from './FullscreenMenu'
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [activeTab, setActiveTab] = useState('roborashtra')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -182,8 +184,59 @@ export default function Hero() {
       id="hero"
       className="relative h-[100svh] min-h-[640px] w-full bg-[#F1EDE3] text-textDark select-none overflow-hidden border-b border-black/10 flex flex-col justify-between"
     >
-      {/* Home Navigation */}
-      <HomeNav />
+      {/* Header Navigation with Logo Emblem, ROBORASHTRA Brand & Menu Button */}
+      <motion.header
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.2 }}
+        className="absolute top-0 left-0 right-0 z-40 px-6 sm:px-10 md:px-14 py-6 md:py-8 flex items-center justify-between pointer-events-auto"
+      >
+        {/* Brand Identity with Official Logo Emblem */}
+        <Link href="/" className="group flex items-center gap-3.5 sm:gap-4 select-none">
+          <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+            <Image
+              src="/logo/logo.png"
+              alt="Roborashtra Emblem"
+              fill
+              className="object-contain drop-shadow-sm"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="font-orbitron font-extrabold text-base sm:text-xl md:text-2xl tracking-wider text-textDark">
+                ROBO<span className="text-rust">RASHTRA</span>
+              </span>
+              <span className="hidden sm:inline-block font-mono text-[9px] tracking-widest px-2 py-0.5 rounded-full border bg-black/5 text-rust border-black/10">
+                2026-27
+              </span>
+            </div>
+            <span className="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase text-textMuted">
+              ROBOTICS CLUB · PCCOER PUNE
+            </span>
+          </div>
+        </Link>
+
+        {/* Action / Menu Trigger */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          <button
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            aria-haspopup="true"
+            aria-expanded={menuOpen}
+            className="font-mono text-xs font-semibold tracking-wider px-4 py-2 rounded-xl backdrop-blur-md transition-all duration-200 flex items-center gap-2 text-textDark border border-black/20 hover:border-rust hover:text-rust bg-white/70 hover:bg-white shadow-sm active:scale-[0.98]"
+          >
+            <div className="flex flex-col gap-1 w-3.5">
+              <span className="block h-0.5 w-full bg-current rounded-full" />
+              <span className="block h-0.5 w-2/3 bg-current rounded-full" />
+            </div>
+            <span>MENU</span>
+          </button>
+        </div>
+      </motion.header>
+
+      {/* Fullscreen Navigation Menu */}
+      <FullscreenMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       {/* Subtle Editorial Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.035)_1px,transparent_1px)] bg-[size:44px_44px] pointer-events-none" />

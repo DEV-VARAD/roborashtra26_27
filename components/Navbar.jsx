@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import FullscreenMenu from './FullscreenMenu'
@@ -83,17 +84,34 @@ export default function Navbar() {
           duration: 0.35,
           ease: [0.16, 1, 0.3, 1],
         }}
-        className="fixed top-3 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none"
+        className="fixed top-3 sm:top-5 left-0 right-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none"
       >
-        <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between px-5 sm:px-8 py-2.5 sm:py-3 rounded-full border border-black/10 bg-[#FAF8F5]/90 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-colors duration-300">
-          <Link
-            href="/"
-            className="font-serifEd text-lg md:text-xl tracking-wide text-textDark hover:text-rust transition-colors select-none"
-          >
-            Roborashtra
-          </Link>
+        <div className="relative pointer-events-auto w-full max-w-5xl flex items-center justify-between px-3 sm:px-6 md:px-8 py-1.5 sm:py-2 rounded-full border border-black/10 bg-[#FAF8F5]/90 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300">
+          {/* Left: Logo A + Brand Title */}
+          <div className="flex items-center gap-2 sm:gap-3 z-10 shrink-0">
+            <Link
+              href="/"
+              className="flex items-center gap-2 sm:gap-2.5 group select-none"
+              aria-label="Roborashtra Home"
+            >
+              <div className="relative h-9 sm:h-10 md:h-12 w-auto flex items-center justify-center">
+                <Image
+                  src="/img55.png"
+                  alt="Logo A - Roborashtra"
+                  width={140}
+                  height={56}
+                  priority
+                  className="h-9 sm:h-10 md:h-12 w-auto max-h-12 object-contain mix-blend-multiply transition-all duration-300 group-hover:scale-105 group-hover:opacity-90"
+                />
+              </div>
+              <span className="font-serifEd text-base sm:text-lg md:text-xl tracking-wide text-textDark group-hover:text-rust transition-colors hidden min-[440px]:inline-block">
+                Roborashtra
+              </span>
+            </Link>
+          </div>
 
-          <nav className="hidden md:flex items-center gap-9 font-mono text-[11px] tracking-widest2 text-textDark/80">
+          {/* Center: Independently Centered Navigation */}
+          <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-8 font-mono text-[11px] tracking-widest2 text-textDark/80 whitespace-nowrap">
             <Link href="/gallery" className="hover:text-rust transition-colors">
               ABOUT
             </Link>
@@ -110,15 +128,29 @@ export default function Navbar() {
             </a>
           </nav>
 
-          <button
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            aria-haspopup="true"
-            aria-expanded={open}
-            className="font-mono text-[10px] sm:text-[11px] tracking-widest2 px-4 py-1.5 rounded-full border border-black/20 hover:border-rust hover:text-rust text-textDark transition-colors"
-          >
-            MENU
-          </button>
+          {/* Right: MENU Button first, then Logo B to the right of the menu */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5 z-10 shrink-0">
+            <button
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              aria-haspopup="true"
+              aria-expanded={open}
+              className="font-mono text-[10px] sm:text-[11px] tracking-widest2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-black/20 hover:border-rust hover:text-rust active:scale-95 text-textDark transition-all duration-200 shrink-0 select-none"
+            >
+              MENU
+            </button>
+
+            <div className="relative h-9 sm:h-10 md:h-12 w-auto flex items-center justify-center">
+              <Image
+                src="/logo-b.png"
+                alt="Logo B"
+                width={140}
+                height={56}
+                priority
+                className="h-9 sm:h-10 md:h-12 w-auto max-h-12 object-contain mix-blend-multiply transition-all duration-300 hover:scale-105 hover:opacity-90 cursor-pointer"
+              />
+            </div>
+          </div>
         </div>
       </motion.header>
 

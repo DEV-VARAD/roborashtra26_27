@@ -22,7 +22,7 @@ const years = [
     phase: 'ROBORASHTRA 2K24',
     title: 'Hosting a National-Level Event',
     tagline: 'Successfully managing RoboRashtra 2k24 with 290+ registrations and ₹1,00,000+ prize pools.',
-    at: 0.15,
+    at: 0.05,
     badge: 'DRDO SPONSORED',
     shortBadge: '1ST ED',
     details: [
@@ -52,7 +52,7 @@ const years = [
     phase: 'ROBORASHTRA 2K26',
     title: 'Pan-India Reach & Industry Alliances',
     tagline: '147+ institutions participating across colleges, schools, and universities with premier corporate sponsors.',
-    at: 0.85,
+    at: 0.95,
     badge: 'TITLE: MITSUBISHI',
     shortBadge: '3RD ED',
     details: [
@@ -211,9 +211,9 @@ export default function RoadmapSection() {
           <div className="absolute inset-0 bg-gradient-to-b from-[rgba(6,3,2,0.92)] via-[rgba(15,7,3,0.50)] to-[rgba(55,22,8,0.30)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_45%_at_20%_10%,rgba(255,170,50,0.16),transparent_70%)]" />
 
-          {/* Horizon haze band at ground rail level */}
+          {/* Desktop horizon haze band at ground rail level */}
           <div
-            className="absolute left-0 right-0 pointer-events-none"
+            className="absolute left-0 right-0 pointer-events-none hidden lg:block"
             style={{ top: `${GROUND_Y_PCT - 4}%` }}
             aria-hidden="true"
           >
@@ -232,15 +232,15 @@ export default function RoadmapSection() {
           />
         </div>
 
-        {/* Soft edge fade overlays (z-10 so they don't cover the rover or cards) */}
+        {/* Soft edge fade overlays */}
         <div className="absolute top-0 left-0 right-0 h-16 z-10 pointer-events-none bg-gradient-to-b from-black/70 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-12 z-10 pointer-events-none bg-gradient-to-t from-black/60 to-transparent" />
 
         {/* ════════════════════════════════════════
-            AMBIENT STEP WATERMARK (Behind cards)
+            AMBIENT STEP WATERMARK (Behind rover & cards)
         ════════════════════════════════════════ */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-[15%] z-[2] flex flex-col items-center select-none overflow-hidden"
+          className="pointer-events-none absolute inset-x-0 top-[7%] sm:top-[10%] lg:top-[15%] z-[2] flex flex-col items-center select-none overflow-hidden"
           aria-hidden="true"
         >
           <AnimatePresence mode="wait">
@@ -255,7 +255,7 @@ export default function RoadmapSection() {
               <div
                 className="font-mono font-black leading-none tracking-tighter"
                 style={{
-                  fontSize: 'clamp(5rem, 16vw, 13rem)',
+                  fontSize: 'clamp(3.8rem, 13vw, 13rem)',
                   color: 'transparent',
                   WebkitTextStroke: '1px rgba(255,180,60,0.06)',
                   textShadow: '0 0 40px rgba(255,150,30,0.03)',
@@ -264,7 +264,7 @@ export default function RoadmapSection() {
                 0{activeStep + 1}
               </div>
               <p
-                className="mt-1 font-mono text-[10px] sm:text-xs font-bold tracking-[0.35em] uppercase"
+                className="mt-0.5 font-mono text-[9px] sm:text-xs font-bold tracking-[0.35em] uppercase"
                 style={{ color: 'rgba(255,160,30,0.30)' }}
               >
                 {years[activeStep].phase}
@@ -276,8 +276,8 @@ export default function RoadmapSection() {
         {/* ════════════════════════════════════════
             TOP HUD HEADER
         ════════════════════════════════════════ */}
-        <header className="absolute left-4 right-4 top-4 sm:top-5 z-30 flex items-center justify-between sm:left-8 sm:right-8 lg:left-12 lg:right-12 xl:left-16 xl:right-16 pointer-events-none">
-          {/* Left: Title block (concealed behind navbar; revealed when navbar disappears) */}
+        <header className="absolute left-4 right-4 top-3.5 sm:top-5 z-30 flex items-center justify-between sm:left-8 sm:right-8 lg:left-12 lg:right-12 xl:left-16 xl:right-16 pointer-events-none">
+          {/* Left: Title block */}
           <motion.div
             initial={false}
             animate={{
@@ -291,21 +291,33 @@ export default function RoadmapSection() {
             }}
             className="pointer-events-auto"
           >
-            <div className="mb-1 flex items-center gap-2">
+            <div className="mb-0.5 flex items-center gap-2">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
-              <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.22em] text-amber-400 font-bold">
+              <span className="font-mono text-[8.5px] sm:text-[10px] uppercase tracking-[0.22em] text-amber-400 font-bold">
                 TIMELINE ARCHIVE
               </span>
             </div>
-            <h2 className="font-serifEd leading-none tracking-tight text-white font-bold text-lg sm:text-2xl lg:text-3xl">
+            <h2 className="font-serifEd leading-none tracking-tight text-white font-bold text-base sm:text-2xl lg:text-3xl">
               <span>ROBORASHTRA </span>
-              <span className="text-amber-400 font-serifEd italic font-normal">ROADMAP</span>
+              <span className="text-amber-400 font-serifEd italic font-normal">Journey</span>
             </h2>
           </motion.div>
 
           {/* Right: Phase Controls Pills */}
-          <div className="pointer-events-auto flex items-center gap-2 shrink-0">
-            <nav aria-label="Phase navigation" className="flex items-center gap-1.5 sm:gap-2">
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: navHidden ? 1 : 0,
+              y: navHidden ? 0 : -14,
+              pointerEvents: navHidden ? 'auto' : 'none',
+            }}
+            transition={{
+              duration: reducedMotion ? 0 : 0.35,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="pointer-events-auto flex items-center gap-2 shrink-0 lg:opacity-100 lg:translate-y-0 lg:pointer-events-auto"
+          >
+            <nav aria-label="Phase navigation" className="flex items-center gap-1 sm:gap-2">
               {years.map((item, idx) => {
                 const active = activeStep === idx
                 return (
@@ -314,7 +326,7 @@ export default function RoadmapSection() {
                     onClick={() => scrollToPhase(idx)}
                     onKeyDown={(e) => handleKeyDown(e, idx)}
                     aria-pressed={active}
-                    className="shrink-0 rounded-full border px-3 py-1.5 sm:px-4 sm:py-2 font-mono text-[10px] sm:text-xs tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer min-h-[36px] flex items-center justify-center backdrop-blur-xl"
+                    className="shrink-0 rounded-full border px-2.5 py-1 sm:px-4 sm:py-2 font-mono text-[9px] sm:text-xs tracking-wider transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer min-h-[32px] sm:min-h-[36px] flex items-center justify-center backdrop-blur-xl"
                     style={{
                       borderColor: active ? 'rgba(245,158,11,0.8)' : 'rgba(255,255,255,0.14)',
                       background: active
@@ -335,7 +347,7 @@ export default function RoadmapSection() {
                 )
               })}
             </nav>
-          </div>
+          </motion.div>
         </header>
 
         {/* ════════════════════════════════════════
@@ -466,11 +478,15 @@ export default function RoadmapSection() {
 
         {/* ════════════════════════════════════════
             TRAJECTORY STAGE (SVG Rail Track)
+            Dedicated upper arena on mobile (< lg) so rover is 100% visible
         ════════════════════════════════════════ */}
         <div
           ref={stageRef}
-          className="absolute inset-x-0 top-0 bottom-0 z-10 pointer-events-none"
+          className="absolute inset-x-0 top-0 h-[38svh] sm:h-[42svh] lg:h-full z-10 pointer-events-none"
         >
+          {/* Mobile subtle horizon haze glow at stage bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-b from-transparent via-amber-500/10 to-transparent lg:hidden" />
+
           {/* ── Trajectory SVG ── */}
           <svg
             viewBox="0 0 1200 700"
@@ -578,8 +594,8 @@ export default function RoadmapSection() {
                       active
                         ? '#f59e0b'
                         : reached
-                        ? 'rgba(245,158,11,0.70)'
-                        : 'rgba(255,255,255,0.15)'
+                          ? 'rgba(245,158,11,0.70)'
+                          : 'rgba(255,255,255,0.15)'
                     }
                     stroke={active ? '#fde68a' : reached ? '#f59e0b' : 'rgba(255,255,255,0.30)'}
                     strokeWidth="1.5"
@@ -606,8 +622,8 @@ export default function RoadmapSection() {
               left: `${(TRACK_START_X / 1200) * 100}%`,
               top: `${GROUND_Y_PCT}%`,
               transform: 'translate(-50%, -50%)',
-              width: 'clamp(130px, 18vw, 230px)',
-              height: 'clamp(130px, 18vw, 230px)',
+              width: 'clamp(115px, 20vw, 220px)',
+              height: 'clamp(115px, 20vw, 220px)',
             }}
           >
             {/* Wheel contact shadow glow */}
@@ -630,8 +646,9 @@ export default function RoadmapSection() {
 
         {/* ════════════════════════════════════════
             MOBILE BOTTOM CARD (< lg)
+            Positioned cleanly below the rover arena with responsive fit
         ════════════════════════════════════════ */}
-        <div className="absolute bottom-4 sm:bottom-6 left-3.5 right-3.5 sm:left-6 sm:right-6 max-w-lg mx-auto lg:hidden z-30 pointer-events-auto">
+        <div className="absolute bottom-2.5 sm:bottom-4 left-3 right-3 sm:left-6 sm:right-6 max-w-lg mx-auto lg:hidden z-30 pointer-events-auto">
           <AnimatePresence mode="wait">
             {years.map(
               (item, index) =>
@@ -640,19 +657,19 @@ export default function RoadmapSection() {
                     key={item.step}
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.25}
+                    dragElastic={0.2}
                     onDragEnd={(_, { offset }) => {
-                      if (offset.x < -40 && activeStep < years.length - 1) {
+                      if (offset.x < -35 && activeStep < years.length - 1) {
                         scrollToPhase(activeStep + 1)
-                      } else if (offset.x > 40 && activeStep > 0) {
+                      } else if (offset.x > 35 && activeStep > 0) {
                         scrollToPhase(activeStep - 1)
                       }
                     }}
-                    initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                    initial={{ opacity: 0, y: 14, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.98 }}
                     transition={{ duration: reducedMotion ? 0 : 0.25, ease: 'easeOut' }}
-                    className="relative overflow-hidden rounded-2xl touch-pan-y cursor-grab active:cursor-grabbing select-none"
+                    className="relative overflow-hidden rounded-2xl touch-pan-y cursor-grab active:cursor-grabbing select-none max-h-[56svh] flex flex-col justify-between"
                     style={{
                       background:
                         'linear-gradient(145deg, rgba(20, 10, 5, 0.92) 0%, rgba(10, 5, 2, 0.96) 100%)',
@@ -660,81 +677,88 @@ export default function RoadmapSection() {
                       WebkitBackdropFilter: 'blur(28px)',
                       border: '1px solid rgba(245,158,11,0.35)',
                       boxShadow:
-                        '0 24px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.10)',
+                        '0 20px 50px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.12)',
                     }}
                   >
                     {/* Sheet handle indicator */}
-                    <div className="pt-2.5 pb-1 flex justify-center">
-                      <div className="w-10 h-1 rounded-full bg-amber-400/40" />
+                    <div className="pt-2 pb-0.5 flex justify-center shrink-0">
+                      <div className="w-9 h-1 rounded-full bg-amber-400/40" />
                     </div>
 
                     {/* Top ambient highlight line */}
-                    <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-amber-400/80 to-transparent" />
+                    <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-amber-400/80 to-transparent pointer-events-none" />
 
                     {/* Corner brackets */}
-                    <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-amber-400 rounded-tl-sm" />
-                    <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-amber-400/40 rounded-tr-sm" />
-                    <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-amber-400/40 rounded-bl-sm" />
-                    <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-amber-400 rounded-br-sm" />
+                    <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-amber-400 rounded-tl-sm pointer-events-none" />
+                    <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-amber-400/40 rounded-tr-sm pointer-events-none" />
+                    <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-amber-400/40 rounded-bl-sm pointer-events-none" />
+                    <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-amber-400 rounded-br-sm pointer-events-none" />
 
-                    <div className="relative px-5 pb-4 pt-1.5">
-                      {/* Meta row */}
-                      <div className="mb-2 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-[10px] sm:text-xs tracking-[0.20em] text-amber-400 font-bold uppercase">
-                            {item.year}
-                          </span>
-                          <span className="text-amber-400/40 font-mono text-[9px]">/</span>
-                          <span className="font-mono text-[9.5px] sm:text-xs tracking-[0.16em] text-white/60 uppercase font-semibold">
-                            Edition {item.step}
+                    {/* Card content container with sleek scrolling if needed */}
+                    <div className="relative px-4 sm:px-5 pb-3 pt-1 sm:pb-4 overflow-y-auto no-scrollbar flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Meta row */}
+                        <div className="mb-1.5 flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-mono text-[10px] sm:text-xs tracking-[0.20em] text-amber-400 font-bold uppercase">
+                              {item.year}
+                            </span>
+                            <span className="text-amber-400/40 font-mono text-[9px]">/</span>
+                            <span className="font-mono text-[9px] sm:text-xs tracking-[0.16em] text-white/60 uppercase font-semibold">
+                              Edition {item.step}
+                            </span>
+                          </div>
+                          <span className="font-mono text-[8px] sm:text-[9.5px] tracking-[0.14em] rounded-full px-2 py-0.5 text-amber-300 font-bold uppercase border border-amber-400/40 bg-amber-400/15 shrink-0">
+                            {item.badge}
                           </span>
                         </div>
-                        <span className="font-mono text-[8.5px] sm:text-[9.5px] tracking-[0.14em] rounded-full px-2.5 py-0.5 text-amber-300 font-bold uppercase border border-amber-400/40 bg-amber-400/15">
-                          {item.badge}
-                        </span>
-                      </div>
 
-                      <div className="flex items-start justify-between gap-2.5">
-                        <h3 className="font-serifEd text-lg sm:text-xl leading-[1.18] text-white font-bold">
-                          {item.title}
-                        </h3>
-                        <span
-                          className="font-mono text-2xl sm:text-3xl font-black shrink-0 leading-none select-none"
-                          style={{ color: 'rgba(245,158,11,0.22)' }}
-                        >
-                          {item.step}
-                        </span>
-                      </div>
-
-                      <p className="mt-1 text-xs sm:text-[13px] leading-relaxed text-white/70 font-normal line-clamp-2">
-                        {item.tagline}
-                      </p>
-
-                      <div className="my-2.5 h-px bg-gradient-to-r from-amber-400/35 via-white/10 to-transparent" />
-
-                      <ul className="space-y-1.5">
-                        {item.details.map((d) => (
-                          <li
-                            key={d}
-                            className="flex items-start gap-2 text-xs sm:text-[13px] leading-relaxed text-white/85"
+                        {/* Title & Ghost Step */}
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="font-serifEd text-base sm:text-lg xl:text-xl leading-snug text-white font-bold">
+                            {item.title}
+                          </h3>
+                          <span
+                            className="font-mono text-2xl sm:text-3xl font-black shrink-0 leading-none select-none"
+                            style={{ color: 'rgba(245,158,11,0.22)' }}
                           >
-                            <span className="text-amber-400 font-bold text-xs shrink-0 mt-0.5">
-                              ▸
-                            </span>
-                            <span className="line-clamp-2 sm:line-clamp-none">{d}</span>
-                          </li>
-                        ))}
-                      </ul>
+                            {item.step}
+                          </span>
+                        </div>
+
+                        {/* Tagline */}
+                        <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-white/70 font-normal line-clamp-2">
+                          {item.tagline}
+                        </p>
+
+                        {/* Divider */}
+                        <div className="my-2 h-px bg-gradient-to-r from-amber-400/35 via-white/10 to-transparent" />
+
+                        {/* Objectives List */}
+                        <ul className="space-y-1 sm:space-y-1.5">
+                          {item.details.map((d) => (
+                            <li
+                              key={d}
+                              className="flex items-start gap-1.5 text-[11px] sm:text-xs leading-snug text-white/85"
+                            >
+                              <span className="text-amber-400 font-bold text-xs shrink-0 mt-px">
+                                ▸
+                              </span>
+                              <span className="line-clamp-2 sm:line-clamp-none">{d}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
                       {/* Touch navigation controls */}
-                      <div className="mt-3.5 pt-2.5 border-t border-white/[0.10] flex items-center justify-between">
+                      <div className="mt-2.5 pt-2 border-t border-white/[0.10] flex items-center justify-between shrink-0">
                         <button
                           disabled={activeStep === 0}
                           onClick={(e) => {
                             e.stopPropagation()
                             scrollToPhase(activeStep - 1)
                           }}
-                          className="font-mono text-[10px] font-bold text-amber-300 disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 px-3 py-1.5 rounded-lg border border-amber-400/30 active:bg-amber-400/25 min-h-[38px] touch-manipulation cursor-pointer"
+                          className="font-mono text-[10px] font-bold text-amber-300 disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-amber-400/30 active:bg-amber-400/25 min-h-[34px] touch-manipulation cursor-pointer"
                         >
                           ‹ PREV
                         </button>
@@ -748,12 +772,12 @@ export default function RoadmapSection() {
                                 scrollToPhase(dotIdx)
                               }}
                               aria-label={`Go to Phase ${dotIdx + 1}`}
-                              className="min-h-[38px] min-w-[30px] flex items-center justify-center cursor-pointer"
+                              className="min-h-[34px] min-w-[28px] flex items-center justify-center cursor-pointer"
                             >
                               <span
-                                className="block h-2 rounded-full transition-all duration-300"
+                                className="block h-1.5 rounded-full transition-all duration-300"
                                 style={{
-                                  width: activeStep === dotIdx ? '1.5rem' : '0.5rem',
+                                  width: activeStep === dotIdx ? '1.25rem' : '0.45rem',
                                   background:
                                     activeStep === dotIdx ? '#f59e0b' : 'rgba(255,255,255,0.25)',
                                 }}
@@ -768,7 +792,7 @@ export default function RoadmapSection() {
                             e.stopPropagation()
                             scrollToPhase(activeStep + 1)
                           }}
-                          className="font-mono text-[10px] font-bold text-amber-300 disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 px-3 py-1.5 rounded-lg border border-amber-400/30 active:bg-amber-400/25 min-h-[38px] touch-manipulation cursor-pointer"
+                          className="font-mono text-[10px] font-bold text-amber-300 disabled:opacity-25 disabled:cursor-not-allowed flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-amber-400/30 active:bg-amber-400/25 min-h-[34px] touch-manipulation cursor-pointer"
                         >
                           NEXT ›
                         </button>

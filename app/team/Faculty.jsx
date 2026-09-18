@@ -15,7 +15,7 @@ function LinkedInIcon({ className = 'w-4 h-4' }) {
 }
 
 /**
- * 3D Flippable Faculty Member Card (Responsive Frame & Portrait Sizing)
+ * 3D Flippable Faculty Member Card
  */
 function FacultyCard({ faculty, index }) {
   const [isFlipped, setIsFlipped] = useState(false)
@@ -30,6 +30,14 @@ function FacultyCard({ faculty, index }) {
       setIsFlipped((prev) => !prev)
     }
   }
+
+  // Short professional descriptions for the card back
+  const facultyAbout =
+    faculty.name.includes('Vrushali')
+      ? '5+ years of experience in Computer Engineering, with a focus on teaching, student mentoring and academic coordination. Actively involved in NBA activities and departmental responsibilities.'
+      : faculty.name.includes('Pallavi')
+        ? '20+ years of experience in Computer Engineering, with expertise in Computer Networks, Data Mining & Warehousing, Software Engineering and OOD. Actively involved in academic publications, software development and student mentoring.'
+        : 'Experienced faculty member contributing to teaching, student mentoring and academic activities.'
 
   return (
     <div
@@ -48,9 +56,12 @@ function FacultyCard({ faculty, index }) {
         style={{ transformStyle: 'preserve-3d' }}
         className="group relative w-full h-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-4 focus-visible:ring-offset-black rounded-xl sm:rounded-2xl"
       >
-        {/* FRONT FACE (Photo, Name Only & Flip Button) */}
+        {/* FRONT FACE */}
         <div
-          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+          style={{
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+          }}
           className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#121824]/95 via-[#0b101c]/95 to-[#070a13]/98 border border-white/15 p-2.5 min-[360px]:p-3 sm:p-4 md:p-5 flex flex-col justify-between shadow-[0_16px_50px_rgba(0,0,0,0.7)] backdrop-blur-xl transition-all duration-500 group-hover:border-amber/50 group-hover:shadow-[0_0_35px_rgba(255,159,28,0.2)] group-hover:-translate-y-1"
         >
           {/* Precision Corner Crosshairs */}
@@ -87,16 +98,21 @@ function FacultyCard({ faculty, index }) {
 
             {/* Bottom Interactive Flip Prompt */}
             <div className="pt-2 sm:pt-2.5 border-t border-white/10 flex items-center justify-between font-mono text-[7.5px] min-[360px]:text-[8.5px] sm:text-[10px] tracking-wider text-ivory/60">
-              <span className="group-hover:text-amber transition-colors uppercase font-medium">CONNECT</span>
+              <span className="group-hover:text-amber transition-colors uppercase font-medium">
+                CONNECT
+              </span>
+
               <div className="flex items-center gap-1 sm:gap-1.5 text-amber bg-amber/10 px-2 py-0.5 sm:py-1 rounded-full border border-amber/30 group-hover:bg-amber group-hover:text-blueprintDeep transition-all shadow-xs">
-                <span className="font-bold uppercase text-[7px] min-[360px]:text-[8px] sm:text-[10px]">FLIP</span>
+                <span className="font-bold uppercase text-[7px] min-[360px]:text-[8px] sm:text-[10px]">
+                  FLIP
+                </span>
                 <RotateCw className="w-2.5 h-2.5 sm:w-3 sm:h-3 transition-transform group-hover:rotate-180 duration-500" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* BACK FACE (180deg) */}
+        {/* BACK FACE */}
         <div
           style={{
             backfaceVisibility: 'hidden',
@@ -122,25 +138,40 @@ function FacultyCard({ faculty, index }) {
             <h3 className="font-serifEd text-[13px] min-[360px]:text-[15px] sm:text-xl text-ivory font-medium mb-0.5 leading-tight">
               {faculty.name}
             </h3>
+
             <p className="font-mono text-[7.5px] min-[360px]:text-[8.5px] sm:text-xs text-amber tracking-wider uppercase mb-0.5 font-bold">
               {faculty.designation}
             </p>
+
             <p className="font-mono text-[7px] min-[360px]:text-[8px] sm:text-[10px] text-steel tracking-wide mb-1 sm:mb-2 truncate">
               {faculty.department}
             </p>
 
-            <div className="bg-black/50 rounded-lg p-1.5 sm:p-2 border border-white/10 mb-1.5 sm:mb-2">
+            {/* Credentials */}
+            <div className="bg-black/50 rounded-lg p-1.5 sm:p-2 border border-white/10 mb-2 sm:mb-3">
               <p className="font-mono text-[6.5px] sm:text-[8px] uppercase tracking-wider text-ivory/40 mb-0.5 font-bold">
                 CREDENTIALS
               </p>
+
               <p className="text-[8.5px] min-[360px]:text-[9.5px] sm:text-[11px] text-ivory/85 leading-snug line-clamp-3 sm:line-clamp-4">
                 {faculty.credentials}
+              </p>
+            </div>
+
+            {/* ABOUT / CAREER DESCRIPTION */}
+            <div className="px-0.5">
+              <p className="font-mono text-[6.5px] min-[360px]:text-[7px] sm:text-[8px] uppercase tracking-[0.16em] text-amber font-bold mb-1">
+                ABOUT
+              </p>
+
+              <p className="font-mono text-[7.5px] min-[360px]:text-[8px] sm:text-[10px] text-ivory/65 leading-[1.5]">
+                {facultyAbout}
               </p>
             </div>
           </div>
 
           {/* Clickable Social Media Links */}
-          <div className="space-y-1 my-auto">
+          <div className="space-y-1 my-auto pt-2">
             <a
               href={faculty.socials?.linkedin || 'https://linkedin.com'}
               target="_blank"
@@ -153,8 +184,12 @@ function FacultyCard({ faculty, index }) {
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-[#0A66C2]/20 text-[#0A66C2] flex items-center justify-center group-hover/link:bg-[#0A66C2] group-hover/link:text-white transition-colors">
                   <LinkedInIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </div>
-                <span className="font-mono text-[8.5px] sm:text-[11px] tracking-wide">LinkedIn</span>
+
+                <span className="font-mono text-[8.5px] sm:text-[11px] tracking-wide">
+                  LinkedIn
+                </span>
               </div>
+
               <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-ivory/40 group-hover/link:text-ivory transition-colors" />
             </a>
           </div>
@@ -162,8 +197,11 @@ function FacultyCard({ faculty, index }) {
           {/* Bottom Flip Back Button */}
           <div className="pt-1.5 border-t border-white/10 flex items-center justify-between font-mono text-[7.5px] sm:text-[9px] tracking-wider text-ivory/60">
             <span>RETURN</span>
+
             <div className="flex items-center gap-1 text-amber bg-amber/10 px-2 py-0.5 rounded-full border border-amber/30 group-hover:bg-amber group-hover:text-blueprintDeep transition-all shadow-xs">
-              <span className="font-bold uppercase text-[7px] sm:text-[8px]">BACK</span>
+              <span className="font-bold uppercase text-[7px] sm:text-[8px]">
+                BACK
+              </span>
               <RotateCw className="w-2.5 h-2.5 rotate-180" />
             </div>
           </div>
@@ -186,10 +224,11 @@ export default function Faculty() {
 
     const handleChange = (e) => setReducedMotion(e.matches)
     mediaQuery.addEventListener('change', handleChange)
+
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
-  // Track 300vh scroll progress (0.0 -> 1.0)
+  // Track 300vh scroll progress
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -202,19 +241,55 @@ export default function Faculty() {
     restDelta: 0.001,
   })
 
-  // Unified "ROBORASHTRA" Text Movement:
-  const titleY = useTransform(smoothProgress, [0.1, 0.38], ['0vh', '-22vh'])
-  const titleScale = useTransform(smoothProgress, [0.1, 0.38], [1, 0.7])
-  const titleOpacity = useTransform(smoothProgress, [0.1, 0.34], [0.85, 0])
+  // Unified "ROBORASHTRA" Text Movement
+  const titleY = useTransform(
+    smoothProgress,
+    [0.1, 0.38],
+    ['0vh', '-22vh']
+  )
 
-  // Center Faculty Cards: Emerge smoothly after watermark fades
-  const cardsOpacity = useTransform(smoothProgress, [0.30, 0.58], [0, 1])
-  const cardsScale = useTransform(smoothProgress, [0.30, 0.65], [0.9, 1])
-  const cardsY = useTransform(smoothProgress, [0.30, 0.65], [40, 0])
-  const cardsPointerEvents = useTransform(smoothProgress, (v) => (v > 0.35 ? 'auto' : 'none'))
+  const titleScale = useTransform(
+    smoothProgress,
+    [0.1, 0.38],
+    [1, 0.7]
+  )
+
+  const titleOpacity = useTransform(
+    smoothProgress,
+    [0.1, 0.34],
+    [0.85, 0]
+  )
+
+  // Center Faculty Cards
+  const cardsOpacity = useTransform(
+    smoothProgress,
+    [0.30, 0.58],
+    [0, 1]
+  )
+
+  const cardsScale = useTransform(
+    smoothProgress,
+    [0.30, 0.65],
+    [0.9, 1]
+  )
+
+  const cardsY = useTransform(
+    smoothProgress,
+    [0.30, 0.65],
+    [40, 0]
+  )
+
+  const cardsPointerEvents = useTransform(
+    smoothProgress,
+    (v) => (v > 0.35 ? 'auto' : 'none')
+  )
 
   // Scroll Indicator Prompt
-  const promptOpacity = useTransform(smoothProgress, [0, 0.14], [0.75, 0])
+  const promptOpacity = useTransform(
+    smoothProgress,
+    [0, 0.14],
+    [0.75, 0]
+  )
 
   // Reduced motion accessible static layout
   if (reducedMotion) {
@@ -226,7 +301,11 @@ export default function Faculty() {
       >
         <div className="flex flex-row justify-center items-center gap-3 sm:gap-8 max-w-5xl mx-auto">
           {facultyMembers.map((faculty, i) => (
-            <FacultyCard key={faculty.id} faculty={faculty} index={i} />
+            <FacultyCard
+              key={faculty.id}
+              faculty={faculty}
+              index={i}
+            />
           ))}
         </div>
       </section>
@@ -243,28 +322,26 @@ export default function Faculty() {
     >
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden flex flex-col justify-center items-center select-none bg-[#070707]">
+
         {/* Atmospheric Background Grid & Subtle Vignette */}
         <div className="absolute inset-0 bg-blueprintGrid bg-grid opacity-15 pointer-events-none" />
+
         <div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(255, 159, 28, 0.08), transparent 60%)',
+            background:
+              'radial-gradient(circle at 50% 50%, rgba(255, 159, 28, 0.08), transparent 60%)',
           }}
         />
 
         {/* Top Header */}
-        <div className="absolute top-20 sm:top-24 left-6 md:left-12 right-6 md:right-12 z-30 flex items-center justify-between pointer-events-none">
-          <div className="flex items-center gap-2">
-            <h2
-              className="font-serifEd leading-[0.9] text-textLight"
-              style={{ fontSize: 'clamp(1.5rem, 3.8vw, 3.5rem)' }}
-            >
-              Faculty Mentorship
-            </h2>
-          </div>
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 z-40">
+          <h2 className="font-mono text-sm sm:text-base md:text-lg text-paperWhite tracking-[0.12em] uppercase whitespace-nowrap leading-none">
+            FACULTY MENTORSHIP.
+          </h2>
         </div>
 
-        {/* CINEMATIC WATERMARK TYPOGRAPHY (Fades cleanly before cards appear) */}
+        {/* CINEMATIC WATERMARK TYPOGRAPHY */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-5">
           <motion.div
             style={{
@@ -286,7 +363,7 @@ export default function Faculty() {
           </motion.div>
         </div>
 
-        {/* EMERGING FACULTY PROFILE CARDS (z-20) */}
+        {/* EMERGING FACULTY PROFILE CARDS */}
         <motion.div
           style={{
             opacity: cardsOpacity,
@@ -297,7 +374,11 @@ export default function Faculty() {
           className="relative z-20 flex flex-row items-center justify-center gap-2.5 min-[360px]:gap-3.5 sm:gap-6 md:gap-8 lg:gap-10 w-full px-2 sm:px-4 mt-12 sm:mt-14 md:mt-16 overflow-x-hidden"
         >
           {facultyMembers.map((faculty, idx) => (
-            <FacultyCard key={faculty.id} faculty={faculty} index={idx} />
+            <FacultyCard
+              key={faculty.id}
+              faculty={faculty}
+              index={idx}
+            />
           ))}
         </motion.div>
 

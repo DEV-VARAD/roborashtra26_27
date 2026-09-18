@@ -55,7 +55,6 @@ function AtmosphericParticles({ count = 80, radius = 9 }) {
 function CinematicCamera({ isMobile, isTablet }) {
   const camRef = useRef()
 
-  // Base camera elevation and distance (zoomed out for spacious composition)
   const baseCamZ = isMobile ? 14.0 : isTablet ? 12.5 : 11.5
   const baseCamY = isMobile ? 1.8 : 1.5
 
@@ -63,7 +62,6 @@ function CinematicCamera({ isMobile, isTablet }) {
     if (!camRef.current) return
     const time = state.clock.getElapsedTime()
 
-    // Gentle floating breathing motion
     const driftY = Math.sin(time * 0.4) * 0.06
     const driftX = Math.cos(time * 0.3) * 0.06
 
@@ -72,18 +70,19 @@ function CinematicCamera({ isMobile, isTablet }) {
       baseCamY + driftY,
       delta * 3
     )
+
     camRef.current.position.x = THREE.MathUtils.lerp(
       camRef.current.position.x,
       driftX,
       delta * 3
     )
+
     camRef.current.position.z = THREE.MathUtils.lerp(
       camRef.current.position.z,
       baseCamZ,
       delta * 3
     )
 
-    // Look toward ring center
     camRef.current.lookAt(0, -0.15, 0)
   })
 
@@ -101,7 +100,6 @@ function CinematicCamera({ isMobile, isTablet }) {
 
 /**
  * GalleryScene - The Three.js canvas container.
- * Configures lighting, responsive layout, atmospheric environment, and render parameters.
  */
 export default function GalleryScene({
   photos = [],
@@ -111,7 +109,6 @@ export default function GalleryScene({
   reducedMotion = false,
   ringControlRef = null,
 }) {
-  // Screen size detection for responsive 3D ring tuning
   const [screenSize, setScreenSize] = useState({
     isMobile: false,
     isTablet: false,
@@ -120,17 +117,27 @@ export default function GalleryScene({
   useEffect(() => {
     const handleResize = () => {
       const w = window.innerWidth
+
       setScreenSize({
         isMobile: w < 640,
         isTablet: w >= 640 && w < 1024,
       })
     }
+
     handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+
+    window.addEventListener(
+      'resize',
+      handleResize
+    )
+
+    return () =>
+      window.removeEventListener(
+        'resize',
+        handleResize
+      )
   }, [])
 
-  // Responsive photo count and radius
   const { visiblePhotos, radius } = useMemo(() => {
     if (screenSize.isMobile) {
       return {
@@ -138,12 +145,14 @@ export default function GalleryScene({
         radius: 5.0,
       }
     }
+
     if (screenSize.isTablet) {
       return {
         visiblePhotos: photos.slice(0, 18),
         radius: 5.8,
       }
     }
+
     return {
       visiblePhotos: photos.slice(0, 22),
       radius: 6.4,
@@ -154,7 +163,7 @@ export default function GalleryScene({
     <div className="w-full h-full relative select-none">
       <Canvas
         className="touch-none cursor-grab active:cursor-grabbing"
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{
           antialias: true,
           alpha: true,
@@ -170,22 +179,19 @@ export default function GalleryScene({
 
         {/* Studio Lighting Setup */}
         <ambientLight intensity={0.65} />
-        
-        {/* Warm key light creating rich highlights */}
+
         <directionalLight
           position={[8, 10, 6]}
           intensity={1.4}
           color="#fff6eb"
         />
 
-        {/* Cool cyan rim light from opposite side */}
         <directionalLight
           position={[-9, -4, -6]}
           intensity={0.85}
           color="#3a6ea5"
         />
 
-        {/* Center core point light highlighting photo card inner edges */}
         <pointLight
           position={[0, 0, 0]}
           intensity={1.8}
@@ -193,7 +199,6 @@ export default function GalleryScene({
           color="#ffecd1"
         />
 
-        {/* Top down fill */}
         <directionalLight
           position={[0, 12, 0]}
           intensity={0.4}
@@ -201,8 +206,15 @@ export default function GalleryScene({
         />
 
         <Suspense fallback={null}>
-          <AtmosphericParticles count={screenSize.isMobile ? 35 : 70} radius={8.5} />
-          
+          <AtmosphericParticles
+            count={
+              screenSize.isMobile
+                ? 35
+                : 70
+            }
+            radius={8.5}
+          />
+
           <PhotoRing
             photos={visiblePhotos}
             radius={radius}

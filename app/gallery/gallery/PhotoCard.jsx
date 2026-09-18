@@ -3,35 +3,64 @@
 import { useRef, useState, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import iconImage from '../../icon.png'
+
+// Shared texture caches.
+// Prevents every PhotoCard from loading/creating duplicate textures.
+let emblemTextureCache = null
+let cameoGlowTextureCache = null
+
+const photoTextureCache = new Map()
+const photoLoadingCache = new Map()
 
 // Procedural high-tech blueprint fallback texture
-function generateProceduralTexture(title = '', category = '', aspect = 1) {
+function generateProceduralTexture(
+  title = '',
+  category = '',
+  aspect = 1
+) {
   if (typeof document === 'undefined') return null
-  const w = 512
-  const h = Math.round(512 / Math.max(0.4, aspect))
+
+  const w = 256
+  const h = Math.round(
+    256 / Math.max(0.4, aspect)
+  )
+
   const canvas = document.createElement('canvas')
   canvas.width = w
   canvas.height = h
+
   const ctx = canvas.getContext('2d')
   if (!ctx) return null
 
   // Dark blueprint gradient
-  const grad = ctx.createLinearGradient(0, 0, w, h)
+  const grad = ctx.createLinearGradient(
+    0,
+    0,
+    w,
+    h
+  )
+
   grad.addColorStop(0, '#0c1626')
   grad.addColorStop(1, '#060a12')
+
   ctx.fillStyle = grad
   ctx.fillRect(0, 0, w, h)
 
   // Technical blueprint grid
-  ctx.strokeStyle = 'rgba(90, 110, 130, 0.24)'
+  ctx.strokeStyle =
+    'rgba(90, 110, 130, 0.24)'
   ctx.lineWidth = 1
+
   const step = 32
+
   for (let x = 0; x < w; x += step) {
     ctx.beginPath()
     ctx.moveTo(x, 0)
     ctx.lineTo(x, h)
     ctx.stroke()
   }
+
   for (let y = 0; y < h; y += step) {
     ctx.beginPath()
     ctx.moveTo(0, y)
@@ -39,40 +68,148 @@ function generateProceduralTexture(title = '', category = '', aspect = 1) {
     ctx.stroke()
   }
 
-  // Blueprint corner accents
-  ctx.strokeStyle = '#ff9f1c'
+  // Very muted warm accent
+  ctx.strokeStyle = '#A47752'
   ctx.lineWidth = 2
-  ctx.strokeRect(16, 16, w - 32, h - 32)
+
+  ctx.strokeRect(
+    16,
+    16,
+    w - 32,
+    h - 32
+  )
 
   // Eyebrow tag
-  ctx.fillStyle = '#ff9f1c'
+  ctx.fillStyle = '#A47752'
   ctx.font = 'bold 15px monospace'
-  ctx.fillText((category || 'ROBORASHTRA').toUpperCase(), 32, 48)
+
+  ctx.fillText(
+    (category || 'ROBORASHTRA').toUpperCase(),
+    32,
+    48
+  )
 
   // Title
   ctx.fillStyle = '#f4f6f8'
   ctx.font = 'bold 20px sans-serif'
-  const displayTitle = title.length > 22 ? title.slice(0, 20) + '…' : title
-  ctx.fillText(displayTitle || 'ARCHIVE MOMENT', 32, h / 2)
+
+  const displayTitle =
+    title.length > 22
+      ? title.slice(0, 20) + '…'
+      : title
+
+  ctx.fillText(
+    displayTitle || 'ARCHIVE MOMENT',
+    32,
+    h / 2
+  )
 
   // Footer metadata
   ctx.fillStyle = '#5c6b7a'
   ctx.font = '12px monospace'
-  ctx.fillText('3D CAPTURE // FIELD RECORD', 32, h - 32)
 
-  const texture = new THREE.CanvasTexture(canvas)
+  ctx.fillText(
+    '3D CAPTURE // FIELD RECORD',
+    32,
+    h - 32
+  )
+
+  const texture =
+    new THREE.CanvasTexture(canvas)
+
+  texture.colorSpace =
+    THREE.SRGBColorSpace
+
   texture.needsUpdate = true
+
+  return texture
+}
+
+// Very soft warm cameo glow
+function generateCameoGlowTexture() {
+  if (typeof document === 'undefined') {
+    return null
+  }
+
+  const size = 256
+
+  const canvas =
+    document.createElement('canvas')
+
+  canvas.width = size
+  canvas.height = size
+
+  const ctx = canvas.getContext('2d')
+
+  if (!ctx) return null
+
+  const gradient =
+    ctx.createRadialGradient(
+      size / 2,
+      size / 2,
+      0,
+      size / 2,
+      size / 2,
+      size / 2
+    )
+
+  gradient.addColorStop(
+    0,
+    'rgba(198, 132, 76, 0.20)'
+  )
+
+  gradient.addColorStop(
+    0.25,
+    'rgba(198, 132, 76, 0.12)'
+  )
+
+  gradient.addColorStop(
+    0.50,
+    'rgba(198, 132, 76, 0.055)'
+  )
+
+  gradient.addColorStop(
+    0.75,
+    'rgba(198, 132, 76, 0.015)'
+  )
+
+  gradient.addColorStop(
+    1,
+    'rgba(198, 132, 76, 0)'
+  )
+
+  ctx.fillStyle = gradient
+
+  ctx.fillRect(
+    0,
+    0,
+    size,
+    size
+  )
+
+  const texture =
+    new THREE.CanvasTexture(canvas)
+
+  texture.colorSpace =
+    THREE.SRGBColorSpace
+
+  texture.needsUpdate = true
+
   return texture
 }
 
 /**
- * PhotoCard - Represents an organic, tactile physical photograph in 3D space.
+ * PhotoCard
+ *
  * Features:
- * - Bulletproof texture loading with procedural canvas fallback
- * - Physical backing and bevelled frame border
- * - Smooth spring-like hover elevation & scale
- * - Idle floating drift
- * - Click trigger to expand into the spotlight
+ * - Procedural fallback texture
+ * - Physical backing and frame
+ * - RoboRashtra emblem on rear
+ * - Faint warm cameo glow
+ * - Brownish subtle frame
+ * - Smooth hover elevation
+ * - Organic floating movement
+ * - Click trigger to expand
  */
 export default function PhotoCard({
   photo,
@@ -90,53 +227,188 @@ export default function PhotoCard({
   const groupRef = useRef()
   const frameMeshRef = useRef()
   const photoMeshRef = useRef()
-  const [hovered, setHovered] = useState(false)
+  const glowMeshRef = useRef()
 
-  // Safe Texture Loader with zero-crash procedural fallback
-  const [texture, setTexture] = useState(() =>
-    generateProceduralTexture(photo.title, photo.category, aspect)
-  )
+  const [hovered, setHovered] =
+    useState(false)
 
+  // RoboRashtra emblem
+  const emblemTexture = useMemo(() => {
+    if (emblemTextureCache) {
+      return emblemTextureCache
+    }
+
+    const textureLoader =
+      new THREE.TextureLoader()
+
+    const texture =
+      textureLoader.load(
+        typeof iconImage === 'string'
+          ? iconImage
+          : iconImage.src
+      )
+
+    texture.colorSpace =
+      THREE.SRGBColorSpace
+
+    texture.generateMipmaps = true
+
+    texture.minFilter =
+      THREE.LinearMipmapLinearFilter
+
+    texture.magFilter =
+      THREE.LinearFilter
+
+    emblemTextureCache = texture
+
+    return texture
+  }, [])
+
+  // Cameo glow
+  const cameoGlowTexture = useMemo(() => {
+    if (!cameoGlowTextureCache) {
+      cameoGlowTextureCache =
+        generateCameoGlowTexture()
+    }
+
+    return cameoGlowTextureCache
+  }, [])
+
+  // Procedural fallback
+  const [texture, setTexture] =
+    useState(() =>
+      generateProceduralTexture(
+        photo.title,
+        photo.category,
+        aspect
+      )
+    )
+
+  // Load front photo texture
   useEffect(() => {
     if (!photo.src) return
-    let active = true
 
-    const loader = new THREE.TextureLoader()
-    loader.setCrossOrigin('anonymous')
-    loader.load(
-      photo.src,
-      (loadedTex) => {
-        if (active) {
-          loadedTex.generateMipmaps = true
-          loadedTex.minFilter = THREE.LinearMipmapLinearFilter
-          loadedTex.magFilter = THREE.LinearFilter
-          loadedTex.colorSpace = THREE.SRGBColorSpace
-          setTexture(loadedTex)
-        }
-      },
-      undefined,
-      () => {
-        // Fallback is already active, safely ignore error
-        if (active && !texture) {
-          setTexture(generateProceduralTexture(photo.title, photo.category, aspect))
-        }
-      }
+    let active = true
+    let timeoutId
+
+    const cacheKey = photo.src
+
+    // Use already-loaded texture
+    if (photoTextureCache.has(cacheKey)) {
+      setTexture(
+        photoTextureCache.get(cacheKey)
+      )
+      return
+    }
+
+    // Prevent duplicate requests for the same image
+    if (photoLoadingCache.has(cacheKey)) {
+      photoLoadingCache
+        .get(cacheKey)
+        .then((loadedTex) => {
+          if (active && loadedTex) {
+            setTexture(loadedTex)
+          }
+        })
+
+      return
+    }
+
+    // Stagger image loading to avoid an initial loading spike
+    const loadDelay =
+      Math.min(index * 70, 900)
+
+    const loadPromise =
+      new Promise((resolve) => {
+        timeoutId = setTimeout(() => {
+          const loader =
+            new THREE.TextureLoader()
+
+          loader.setCrossOrigin('anonymous')
+
+          loader.load(
+            photo.src,
+            (loadedTex) => {
+              loadedTex.generateMipmaps =
+                true
+
+              loadedTex.minFilter =
+                THREE.LinearMipmapLinearFilter
+
+              loadedTex.magFilter =
+                THREE.LinearFilter
+
+              loadedTex.colorSpace =
+                THREE.SRGBColorSpace
+
+              photoTextureCache.set(
+                cacheKey,
+                loadedTex
+              )
+
+              photoLoadingCache.delete(
+                cacheKey
+              )
+
+              resolve(loadedTex)
+            },
+            undefined,
+            () => {
+              photoLoadingCache.delete(
+                cacheKey
+              )
+
+              resolve(null)
+            }
+          )
+        }, loadDelay)
+      })
+
+    photoLoadingCache.set(
+      cacheKey,
+      loadPromise
     )
+
+    loadPromise.then((loadedTex) => {
+      if (!active) return
+
+      if (loadedTex) {
+        setTexture(loadedTex)
+      }
+    })
 
     return () => {
       active = false
-    }
-  }, [photo.src, photo.title, photo.category, aspect])
 
-  // Calculate card dimensions based on aspect ratio
-  const { cardW, cardH, imgW, imgH } = useMemo(() => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [
+    photo.src,
+    photo.title,
+    photo.category,
+    aspect,
+    index,
+  ])
+
+  // Card dimensions
+  const {
+    cardW,
+    cardH,
+    imgW,
+    imgH,
+  } = useMemo(() => {
     let w = 1.85
     let h = w / aspect
+
     if (h > 2.5) {
       h = 2.5
       w = h * aspect
     }
+
     const margin = 0.08
+
     return {
       cardW: w + margin * 2,
       cardH: h + margin * 2,
@@ -145,86 +417,234 @@ export default function PhotoCard({
     }
   }, [aspect])
 
-  // Unique deterministic phase offset for organic float
-  const floatPhase = useMemo(() => index * 0.73 + 1.2, [index])
-  const floatSpeed = useMemo(() => 0.8 + (index % 5) * 0.15, [index])
+  // Floating motion
+  const floatPhase = useMemo(
+    () => index * 0.73 + 1.2,
+    [index]
+  )
 
-  // Target vectors for lerping
-  const currentPos = useRef(new THREE.Vector3(...basePosition))
-  const targetPos = useRef(new THREE.Vector3(...basePosition))
-  const currentRot = useRef(new THREE.Euler(...baseRotation))
-  const targetRot = useRef(new THREE.Euler(...baseRotation))
-  const currentScale = useRef(baseScale)
-  const targetScale = useRef(baseScale)
+  const floatSpeed = useMemo(
+    () =>
+      0.8 +
+      (index % 5) * 0.15,
+    [index]
+  )
+
+  // Animation state
+  const currentPos = useRef(
+    new THREE.Vector3(
+      ...basePosition
+    )
+  )
+
+  const targetPos = useRef(
+    new THREE.Vector3(
+      ...basePosition
+    )
+  )
+
+  const currentRot = useRef(
+    new THREE.Euler(
+      ...baseRotation
+    )
+  )
+
+  const targetRot = useRef(
+    new THREE.Euler(
+      ...baseRotation
+    )
+  )
+
+  const currentScale =
+    useRef(baseScale)
+
+  const targetScale =
+    useRef(baseScale)
 
   useFrame((state, delta) => {
     if (!groupRef.current) return
 
-    const time = state.clock.getElapsedTime()
-    const isHoverActive = hovered && !isSelected
+    const time =
+      state.clock.getElapsedTime()
 
-    // Ambient floating displacement (subtle Y & rotation wobble)
+    const isHoverActive =
+      hovered && !isSelected
+
+    // Ambient floating
     let floatY = 0
     let floatRotZ = 0
-    if (!reducedMotion && !isSelected) {
-      floatY = Math.sin(time * floatSpeed + floatPhase) * 0.06
-      floatRotZ = Math.cos(time * floatSpeed * 0.8 + floatPhase) * 0.02
+
+    if (
+      !reducedMotion &&
+      !isSelected
+    ) {
+      floatY =
+        Math.sin(
+          time *
+            floatSpeed +
+            floatPhase
+        ) * 0.06
+
+      floatRotZ =
+        Math.cos(
+          time *
+            floatSpeed *
+            0.8 +
+            floatPhase
+        ) * 0.02
     }
 
-    // Set targets based on hover state
-    const hoverScaleMultiplier = isHoverActive ? 1.14 : isDimmed ? 0.92 : 1.0
-    targetScale.current = baseScale * hoverScaleMultiplier
+    // Scale
+    const hoverScaleMultiplier =
+      isHoverActive
+        ? 1.14
+        : isDimmed
+          ? 0.92
+          : 1.0
 
-    // Base position with float
+    targetScale.current =
+      baseScale *
+      hoverScaleMultiplier
+
+    // Position
     targetPos.current.set(
       basePosition[0],
-      basePosition[1] + floatY,
+      basePosition[1] +
+        floatY,
       basePosition[2]
     )
 
-    // When hovered, push card slightly outward along its forward vector
+    // Hover pushes card outward
     if (isHoverActive) {
-      const forward = new THREE.Vector3(0, 0, 0.45)
-      forward.applyEuler(currentRot.current)
-      targetPos.current.add(forward)
+      const forward =
+        new THREE.Vector3(
+          0,
+          0,
+          0.45
+        )
+
+      forward.applyEuler(
+        currentRot.current
+      )
+
+      targetPos.current.add(
+        forward
+      )
     }
 
+    // Rotation
     targetRot.current.set(
       baseRotation[0],
       baseRotation[1],
-      baseRotation[2] + floatRotZ
+      baseRotation[2] +
+        floatRotZ
     )
 
-    // Smooth interpolation (spring-like lerp)
-    const lerpFactor = Math.min(1, delta * 8.5)
-    currentPos.current.lerp(targetPos.current, lerpFactor)
-    groupRef.current.position.copy(currentPos.current)
-
-    currentRot.current.x += (targetRot.current.x - currentRot.current.x) * lerpFactor
-    currentRot.current.y += (targetRot.current.y - currentRot.current.y) * lerpFactor
-    currentRot.current.z += (targetRot.current.z - currentRot.current.z) * lerpFactor
-    groupRef.current.rotation.copy(currentRot.current)
-
-    currentScale.current += (targetScale.current - currentScale.current) * lerpFactor
-    groupRef.current.scale.setScalar(currentScale.current)
-
-    // Animate frame border and photo material emissive / roughness on hover
-    if (frameMeshRef.current && frameMeshRef.current.material) {
-      const targetEmissive = isHoverActive ? 0.18 : 0.02
-      frameMeshRef.current.material.emissiveIntensity = THREE.MathUtils.lerp(
-        frameMeshRef.current.material.emissiveIntensity,
-        targetEmissive,
-        lerpFactor
+    // Smooth interpolation
+    const lerpFactor =
+      Math.min(
+        1,
+        delta * 8.5
       )
+
+    currentPos.current.lerp(
+      targetPos.current,
+      lerpFactor
+    )
+
+    groupRef.current.position.copy(
+      currentPos.current
+    )
+
+    currentRot.current.x +=
+      (targetRot.current.x -
+        currentRot.current.x) *
+      lerpFactor
+
+    currentRot.current.y +=
+      (targetRot.current.y -
+        currentRot.current.y) *
+      lerpFactor
+
+    currentRot.current.z +=
+      (targetRot.current.z -
+        currentRot.current.z) *
+      lerpFactor
+
+    groupRef.current.rotation.copy(
+      currentRot.current
+    )
+
+    // Scale interpolation
+    currentScale.current +=
+      (targetScale.current -
+        currentScale.current) *
+      lerpFactor
+
+    groupRef.current.scale.setScalar(
+      currentScale.current
+    )
+
+    // VERY subtle frame glow
+    if (
+      frameMeshRef.current &&
+      frameMeshRef.current.material
+    ) {
+      const targetEmissive =
+        isHoverActive
+          ? 0.085
+          : 0.012
+
+      frameMeshRef.current.material
+        .emissiveIntensity =
+        THREE.MathUtils.lerp(
+          frameMeshRef.current
+            .material
+            .emissiveIntensity,
+          targetEmissive,
+          lerpFactor
+        )
     }
 
-    if (photoMeshRef.current && photoMeshRef.current.material) {
-      const targetPhotoEmissive = isHoverActive ? 0.12 : 0.0
-      photoMeshRef.current.material.emissiveIntensity = THREE.MathUtils.lerp(
-        photoMeshRef.current.material.emissiveIntensity,
-        targetPhotoEmissive,
-        lerpFactor
-      )
+    // Front photo hover
+    if (
+      photoMeshRef.current &&
+      photoMeshRef.current.material
+    ) {
+      const targetPhotoEmissive =
+        isHoverActive
+          ? 0.12
+          : 0.0
+
+      photoMeshRef.current.material
+        .emissiveIntensity =
+        THREE.MathUtils.lerp(
+          photoMeshRef.current
+            .material
+            .emissiveIntensity,
+          targetPhotoEmissive,
+          lerpFactor
+        )
+    }
+
+    // Very subtle cameo glow
+    if (
+      glowMeshRef.current &&
+      glowMeshRef.current.material
+    ) {
+      const targetOpacity =
+        isHoverActive
+          ? 0.38
+          : 0.18
+
+      glowMeshRef.current.material.opacity =
+        THREE.MathUtils.lerp(
+          glowMeshRef.current
+            .material
+            .opacity,
+          targetOpacity,
+          lerpFactor
+        )
     }
   })
 
@@ -236,39 +656,178 @@ export default function PhotoCard({
       scale={baseScale}
       onPointerOver={(e) => {
         e.stopPropagation()
+
         setHovered(true)
-        document.body.style.cursor = 'pointer'
+
+        document.body.style.cursor =
+          'pointer'
       }}
       onPointerOut={() => {
         setHovered(false)
-        document.body.style.cursor = 'auto'
+
+        document.body.style.cursor =
+          'auto'
       }}
       onClick={(e) => {
         e.stopPropagation()
-        onSelect?.(photo, index)
+
+        onSelect?.(
+          photo,
+          index
+        )
       }}
     >
-      {/* 3D Physical Photo Backplate / Border Frame */}
-      <mesh ref={frameMeshRef} position={[0, 0, -0.015]} castShadow receiveShadow>
-        <boxGeometry args={[cardW, cardH, 0.035]} />
+
+      {/* =========================================
+          BROWNISH OUTER FRAME
+          ========================================= */}
+      <mesh
+        ref={frameMeshRef}
+        position={[
+          0,
+          0,
+          -0.015,
+        ]}
+        castShadow
+        receiveShadow
+      >
+        <boxGeometry
+          args={[
+            cardW,
+            cardH,
+            0.035,
+          ]}
+        />
+
         <meshStandardMaterial
-          color={hovered ? '#fcfbf7' : '#e6e2d8'}
-          roughness={0.4}
-          metalness={0.15}
-          emissive={hovered ? '#ff9f1c' : '#101826'}
-          emissiveIntensity={0.02}
+          color={
+            hovered
+              ? '#815435'
+              : '#7a4e32'
+          }
+          roughness={0.46}
+          metalness={0.16}
+          emissive={
+            hovered
+              ? '#76563D'
+              : '#2A211C'
+          }
+          emissiveIntensity={0.012}
         />
       </mesh>
 
-      {/* Dark backplate inner recess */}
-      <mesh position={[0, 0, -0.03]}>
-        <planeGeometry args={[cardW * 0.98, cardH * 0.98]} />
-        <meshBasicMaterial color="#090d14" />
+      {/* =========================================
+          FAINT WARM ORANGE BACK
+          ========================================= */}
+      <mesh
+        position={[
+          0,
+          0,
+          -0.041,
+        ]}
+        rotation={[
+          0,
+          Math.PI,
+          0,
+        ]}
+      >
+        <planeGeometry
+          args={[
+            cardW * 0.96,
+            cardH * 0.96,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color="#D9C1A5"
+          roughness={0.70}
+          metalness={0.04}
+        />
       </mesh>
 
-      {/* High-Resolution Front Photo Mesh */}
-      <mesh ref={photoMeshRef} position={[0, 0, 0.02]}>
-        <planeGeometry args={[imgW, imgH]} />
+      {/* =========================================
+          SOFT CAMEO GLOW
+          ========================================= */}
+      <mesh
+        ref={glowMeshRef}
+        position={[
+          0,
+          0,
+          -0.047,
+        ]}
+        rotation={[
+          0,
+          Math.PI,
+          0,
+        ]}
+      >
+        <planeGeometry
+          args={[
+            cardW * 0.84,
+            cardH * 0.84,
+          ]}
+        />
+
+        <meshBasicMaterial
+          map={cameoGlowTexture}
+          transparent
+          opacity={0.18}
+          depthWrite={false}
+          blending={
+            THREE.NormalBlending
+          }
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* =========================================
+          ROBO RASHTRA EMBLEM
+          ========================================= */}
+      <mesh
+        position={[
+          0,
+          0,
+          -0.052,
+        ]}
+        rotation={[
+          0,
+          Math.PI,
+          0,
+        ]}
+      >
+        <planeGeometry
+          args={[
+            cardW * 0.60,
+            cardH * 0.60,
+          ]}
+        />
+
+        <meshBasicMaterial
+          map={emblemTexture}
+          color="#40372F"
+          toneMapped={false}
+          transparent
+        />
+      </mesh>
+
+      {/* =========================================
+          FRONT PHOTO
+          ========================================= */}
+      <mesh
+        ref={photoMeshRef}
+        position={[
+          0,
+          0,
+          0.02,
+        ]}
+      >
+        <planeGeometry
+          args={[
+            imgW,
+            imgH,
+          ]}
+        />
+
         <meshStandardMaterial
           map={texture}
           roughness={0.35}
@@ -276,19 +835,43 @@ export default function PhotoCard({
           emissive="#ffffff"
           emissiveIntensity={0}
           transparent
-          opacity={isDimmed ? 0.45 : 1}
+          opacity={
+            isDimmed
+              ? 0.45
+              : 1
+          }
         />
       </mesh>
 
-      {/* Subtle bottom label on the card border (Polaroid / Gallery Print touch) */}
-      <mesh position={[0, -cardH / 2 + 0.045, 0.025]}>
-        <planeGeometry args={[cardW * 0.75, 0.012]} />
+      {/* =========================================
+          SUBTLE BROWN / COPPER ACCENT
+          ========================================= */}
+      <mesh
+        position={[
+          0,
+          -cardH / 2 +
+            0.045,
+          0.025,
+        ]}
+      >
+        <planeGeometry
+          args={[
+            cardW * 0.75,
+            0.012,
+          ]}
+        />
+
         <meshBasicMaterial
-          color={hovered ? '#ff9f1c' : '#888275'}
+          color={
+            hovered
+              ? '#B1845C'
+              : '#866348'
+          }
           transparent
-          opacity={0.65}
+          opacity={0.55}
         />
       </mesh>
+
     </group>
   )
 }

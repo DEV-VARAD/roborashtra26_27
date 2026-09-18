@@ -7,7 +7,7 @@ export const facultyMembers = [
     id: 'faculty-01',
     name: 'Prof. Pallavi Kulkarni',
     designation: 'Faculty Coordinator',
-    department: 'Dept. of Robotics & Automation',
+    department: 'Department of Computer Science Engineering',
     description:
       'Spearheading autonomous kinematics architectures, ROS 2 deployment, and national combat robotics mentorship for over 12 years.',
     image: '/team/pallavikulkarni.png',
@@ -23,7 +23,8 @@ export const facultyMembers = [
     id: 'faculty-02',
     name: 'Prof. Vrushali Deore',
     designation: 'Faculty Coordinator',
-    department: 'Dept. of Mechatronics & AI',
+    department: 'Department of Computer Science Engineering',
+
     description:
       'Leading embedded vision pipelines, high-speed FPV dynamics, and precision manipulator telemetry across all competitive fleets.',
     image: '/team/vrushalideore.png',

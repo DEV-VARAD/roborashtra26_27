@@ -212,7 +212,7 @@ export default function Hero() {
               </span>
             </div>
             <span className="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase text-textMuted">
-              ROBOTICS CLUB · PCCOER PUNE
+              ROBOTICS CLUB
             </span>
           </div>
         </Link>
@@ -319,9 +319,6 @@ export default function Hero() {
                   CLUB DIVISIONS
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-textMuted uppercase tracking-wider">
-                PCCOER, PUNE
-              </span>
             </div>
 
             {/* Division Selector Tabs */}

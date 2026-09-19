@@ -1,1 +1,1 @@
-export { default, metadata } from '../sponsor/page'
+export { default } from '../sponsor/page'

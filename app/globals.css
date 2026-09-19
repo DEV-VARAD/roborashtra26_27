@@ -212,6 +212,7 @@ button, a, [role="button"] {
 
 /* Roadmap bottom card: better spacing on very small screens */
 @media (max-width: 374px) {
+  section#roadmap .absolute.bottom-2\.5,
   section#roadmap .absolute.bottom-3 {
     bottom: 0.5rem !important;
     left: 0.5rem !important;

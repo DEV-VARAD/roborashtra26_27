@@ -31,6 +31,45 @@ body {
   background-position: -1px -1px;
 }
 
+/* First-visit initial black screen curtain */
+#initial-blackout {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100dvh;
+  background-color: #000000;
+  z-index: 99998;
+  pointer-events: all;
+}
+
+/* When intro is pending or loading animation is running, show pure black and hide background/navbar */
+html.intro-pending,
+html.intro-pending body {
+  background-color: #000000 !important;
+  background-image: none !important;
+  overflow: hidden !important;
+}
+
+html.intro-pending #initial-blackout {
+  display: block !important;
+}
+
+html.intro-pending header {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html.intro-pending canvas[aria-hidden="true"] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 ::selection {
   background: #ff9f1c;
   color: #060a12;

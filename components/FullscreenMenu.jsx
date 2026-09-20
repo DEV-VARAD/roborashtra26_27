@@ -85,7 +85,6 @@ export default function FullscreenMenu({ open, onClose }) {
             className="px-6 md:px-12 pb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 font-mono text-[11px] tracking-widest2 text-ivory/60 uppercase"
           >
             <span></span>
-            <span>Instagram · LinkedIn · Email</span>
           </motion.div>
         </motion.div>
       )}

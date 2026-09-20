@@ -10,16 +10,16 @@ export const teamData = {
       id: 'lead-1',
       name: 'Shivraj Patil',
       role: 'Club President & Lead',
-      image: '/team/lead/shivrajpatil.png',
+      image: '/team/shivrajpatil.png',
       socials: {
-        linkedin: 'https://linkedin.com',
+        linkedin: 'https://www.linkedin.com/in/shivraj-patil-6b205532b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
       },
     },
     {
       id: 'lead-2',
       name: 'Sarthak Gadhave',
       role: 'Management & Ops Lead',
-      image: '/team/lead/sarthakgadhave.png',
+      image: '/team/sarthakgadhave.png',
       socials: {
         linkedin: 'https://linkedin.com',
       },
@@ -28,7 +28,7 @@ export const teamData = {
       id: 'lead-3',
       name: 'Rushikesh Sonaje',
       role: 'Finance & Treasury Lead',
-      image: '/team/lead/rushikeshsonaje.png',
+      image: '/team/rushikeshsonaje.png',
       socials: {
         linkedin: 'https://www.linkedin.com/in/rushikesh-sonaje-a752b232b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
       },
@@ -46,7 +46,7 @@ export const teamData = {
           id: 'workshop-head-1',
           name: 'Dhananjay',
           role: 'Workshop & Fabrication Head',
-          image: 'https://res.cloudinary.com/hlrhjabh/image/upload/v1789165000/dhananjay.png' || '/team/workshop/dhananjay.png',
+          image: '/team/dhananjay.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -58,7 +58,7 @@ export const teamData = {
           name: 'Shruti Gandhat',
           role: 'Chassis Machinist',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/shruti-gandhat-545235424?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
           },
         },
         {
@@ -66,7 +66,7 @@ export const teamData = {
           name: 'Swanand Barapatre',
           role: 'Embedded Hardware Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/swanand-barapatre-42baa1278?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -74,7 +74,7 @@ export const teamData = {
           name: 'Harshwardhan Jadhav',
           role: 'Embedded Hardware Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/hjadhavdev',
           },
         },
         {
@@ -82,7 +82,7 @@ export const teamData = {
           name: 'Shriya Sardeshpande',
           role: 'Embedded Hardware Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/shriya-sardeshpande-748a54414?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -90,7 +90,7 @@ export const teamData = {
           name: 'Namrata Amilkanthwar',
           role: 'Embedded Hardware Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/namrata-amilkanthwar-684997408?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -98,7 +98,7 @@ export const teamData = {
           name: 'Manav Bhosale',
           role: 'Embedded Hardware Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/manav-undefined-970a90430',
           },
         },
         {
@@ -106,7 +106,7 @@ export const teamData = {
           name: 'Parth Nikumbh',
           role: 'Embedded Hardware Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/parth-nikumbh-42baa1278?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -122,9 +122,9 @@ export const teamData = {
           id: 'pr-head-1',
           name: 'Saloni Sinha',
           role: 'Public Relations Head',
-          image: '/team/pr/saloni.png',
+          image: '/team/saloni.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/saloni-sinha-46b123374?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
           },
         },
       ],
@@ -134,7 +134,7 @@ export const teamData = {
           name: 'Vedika Katke',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/vedika-katke-663572432?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -142,7 +142,7 @@ export const teamData = {
           name: 'Anuja Pandey',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/anuja-pandey-44a27b419?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -150,7 +150,7 @@ export const teamData = {
           name: 'Manisi Khushi',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/manisi-khushi-385037363?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -166,7 +166,7 @@ export const teamData = {
           name: 'Sukrut Suryavanshi',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/sukrut-suryawanshi',
           },
         },
         {
@@ -174,7 +174,7 @@ export const teamData = {
           name: 'Vedant Parsewar',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/vedant-parsewar-819993376?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -182,7 +182,7 @@ export const teamData = {
           name: 'Sanatkumar Pol',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/sanatkumar-pol-b60b68430',
           },
         },
         {
@@ -190,7 +190,7 @@ export const teamData = {
           name: 'Divya Nande',
           role: 'Outreach Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/divya-nande-077bb83a2',
           },
         },
       ],
@@ -206,18 +206,18 @@ export const teamData = {
           id: 'event-head-1',
           name: 'Devika Chaudhari',
           role: 'Event Management Head',
-          image: '/team/event/devika.png',
+          image: '/team/devika.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/devika-choudhari-54453432b/',
           },
         },
         {
           id: 'event-head-2',
           name: 'Parth Khade',
           role: 'Event Management Co-Head',
-          image: '/team/event/parth.png',
+          image: '/team/parth.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/parth-khade-5a338532b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -227,7 +227,7 @@ export const teamData = {
           name: 'Kanaklata Joshi',
           role: 'Arena Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/kanaklata-joshi-214b1b424?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -235,7 +235,7 @@ export const teamData = {
           name: 'Nilakshi Talwekar',
           role: 'Match Marshall',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/public-profile/settings/',
           },
         },
         {
@@ -243,7 +243,7 @@ export const teamData = {
           name: 'Sara Mahokar',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/sara-mahokar-3913723bb?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -251,7 +251,7 @@ export const teamData = {
           name: 'Namrata Tate',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/namrata-tate-a63a82430?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -259,7 +259,7 @@ export const teamData = {
           name: 'Rishab Ohol',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/rishabh-ohol-192477385?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -267,7 +267,7 @@ export const teamData = {
           name: 'Akshat Menon',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/akshat-menon-747666418?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -275,7 +275,7 @@ export const teamData = {
           name: 'Shravani Kaulapure',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/shravani-kaulapure-292a6432b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -283,7 +283,7 @@ export const teamData = {
           name: 'Mukesh Borane',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/mukesh-borane-a86b4a375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -291,7 +291,7 @@ export const teamData = {
           name: 'Prathmesh Kadam',
           role: 'Pit Crew Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/prathmesh-kadam-275b63420?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -307,9 +307,9 @@ export const teamData = {
           id: 'ps-head-1',
           name: 'Albin Biju',
           role: 'Problem Statement Head',
-          image: '/team/ps/albin.png',
+          image: '/team/albin.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'http://www.linkedin.com/in/albinbijumathew',
           },
         },
       ],
@@ -319,7 +319,7 @@ export const teamData = {
           name: 'Anushka Mali',
           role: 'Problem Statement Coordinator',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/anushka-mali-209651299',
           },
         },
         {
@@ -327,7 +327,7 @@ export const teamData = {
           name: 'Atharva Deshmukh',
           role: 'Benchmark Lead',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/atharva-deshmukh-dev?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -335,7 +335,7 @@ export const teamData = {
           name: 'Varsha Jairam',
           role: 'Benchmark Lead',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/varsha-jairam-6b0738358?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
           },
         },
       ],
@@ -351,18 +351,18 @@ export const teamData = {
           id: 'design-head-1',
           name: 'Prachi Gareja',
           role: 'Design Head',
-          image: '/team/design/prachi.png',
+          image: '/team/prachi.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/prachi-gereja-05441132b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
           id: 'design-head-2',
           name: 'Soham Sejwal',
           role: 'Design Co-Head',
-          image: '/team/design/soham.png',
+          image: '/team/soham.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/soham-shejwal?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -372,7 +372,7 @@ export const teamData = {
           name: 'Arya Kadam',
           role: 'UI/UX Designer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/aryan-kadam-023b20397?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
@@ -380,7 +380,7 @@ export const teamData = {
           name: 'Siddhi Agrawal',
           role: '3D & Motion Designer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/siddhi-agrawal-228233378?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -396,21 +396,20 @@ export const teamData = {
           id: 'web-head-1',
           name: 'Riddhi Sonawane',
           role: 'Web & Systems Head',
-          image: '/team/web/riddhi.png',
+          image: '/team/riddhi.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/riddhisonawane?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
         {
           id: 'web-head-2',
           name: 'Yadnesh Borole',
           role: 'Web & Systems Co-Head',
-          image: '/team/web/yadnesh.png',
+          image: '/team/yadnesh.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/yadnyesh-borole-51aa0532a/',
           },
         },
-        
       ],
       members: [
         {
@@ -418,7 +417,7 @@ export const teamData = {
           name: 'Veer Shah',
           role: 'Frontend Engineer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/veershah1152',
           },
         },
         {
@@ -426,8 +425,22 @@ export const teamData = {
           name: 'Arya Kukkadwal',
           role: 'Fullstack Developer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/arya-kukkadwal-17b998391?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
+        },
+        {
+          id: 'web-member-3',
+          name: 'Varad Yadav',
+          role: 'Fullstack Developer',
+          socials: {
+            linkedin: 'https://www.linkedin.com/in/varad-yadav',
+          },
+        },
+        {
+          id: 'web-member-4',
+          name: 'Muinasraf Momin',
+          role: 'Fullstack Developer',
+          socials: {},
         },
       ],
     },
@@ -440,20 +453,11 @@ export const teamData = {
       heads: [
         {
           id: 'content-head-1',
-          name: 'Suyash Shinde',
-          role: 'Content Head',
-          image: '/team/content/suyash.png',
-          socials: {
-            linkedin: 'https://linkedin.com',
-          },
-        },
-        {
-          id: 'content-head-2',
           name: 'Tanaj Manyar',
           role: 'Social Media Lead',
-          image: '/team/content/tanaj.png',
+          image: '/team/tanaj.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/tanaj-manyar-59a05932b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -471,7 +475,7 @@ export const teamData = {
           name: 'Girish Mule',
           role: 'Cinematographer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/girish-mule-b4a17b434?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -487,9 +491,9 @@ export const teamData = {
           id: 'doc-head-1',
           name: 'Rajat Poddar',
           role: 'Documentation Head',
-          image: '/team/docs/rajat.png',
+          image: '/team/rajat.png',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/rajat-poddar-b0ab38208?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
@@ -499,12 +503,12 @@ export const teamData = {
           name: 'Anisha Nandi',
           role: 'Technical Writer',
           socials: {
-            linkedin: 'https://linkedin.com',
+            linkedin: 'https://www.linkedin.com/in/anisha-nandi-028b52352?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],
     },
- 
+
     {
       id: 'cad',
       name: 'CAD/CAM',
@@ -515,7 +519,7 @@ export const teamData = {
           id: 'cad-head-1',
           name: 'Sarthak Thete',
           role: 'CAD Head',
-          image: '/team/cad/sarthak.png',
+          image: '/team/sarthak.png',
           socials: {
             linkedin: 'https://linkedin.com',
           },

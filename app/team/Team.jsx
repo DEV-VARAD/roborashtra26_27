@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence, useMotionValue, useSpring, animate, useScroll } from 'framer-motion'
 import { teamData } from '@/data/teamData'
 import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Globe } from 'lucide-react'
@@ -230,9 +231,40 @@ function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
 }
 
 /**
+ * Initials avatar shown when no Cloudinary image URL is available.
+ * Uses the person's initials on a warm gradient background.
+ */
+function InitialsAvatar({ name }) {
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join('')
+  return (
+    <div
+      className="w-full h-full flex items-center justify-center select-none"
+      style={{
+        background: 'linear-gradient(135deg, #FF8A00 0%, #FFB347 100%)',
+      }}
+      aria-hidden="true"
+    >
+      <span className="font-cinzel font-bold text-white text-2xl sm:text-3xl tracking-wider">
+        {initials}
+      </span>
+    </div>
+  )
+}
+
+/**
  * Compact, Elegant Team Head Card (Responsive Framing)
+ * Uses next/image for Cloudinary-optimized delivery.
+ * Falls back to an initials avatar if no image URL is available.
  */
 function HeadCard({ head, index }) {
+  const [imgError, setImgError] = useState(false)
+  const hasImage = !!head.image && !imgError
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -244,12 +276,19 @@ function HeadCard({ head, index }) {
       <div>
         {/* Compact Responsive Portrait */}
         <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
-          <img
-            src={head.image}
-            alt={head.name}
-            className="w-full h-full object-cover object-top sm:object-center transition-transform duration-500 ease-out group-hover:scale-105"
-            loading="lazy"
-          />
+          {hasImage ? (
+            <Image
+              src={head.image}
+              alt={head.name}
+              fill
+              sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 200px"
+              className="object-cover object-top sm:object-center transition-transform duration-500 ease-out group-hover:scale-105"
+              loading="lazy"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <InitialsAvatar name={head.name} />
+          )}
         </div>
 
         {/* Compact Head Info */}

@@ -101,6 +101,10 @@ export default function Navbar() {
     }
   }, [isHidden])
 
+  if (pathname === '/' || pathname === '') {
+    return null
+  }
+
   return (
     <>
       <motion.header

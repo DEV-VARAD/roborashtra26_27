@@ -146,10 +146,10 @@ export default function Navbar() {
           {/* Center: Independently Centered Navigation */}
           <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-8 font-mono text-[11px] tracking-widest2 text-textDark/80 whitespace-nowrap">
             <Link href="/gallery" className="hover:text-rust transition-colors">
-              ABOUT
+              GALLERY
             </Link>
             <Link href="/event" className="hover:text-rust transition-colors">
-              EVENTS
+              PROBLEM STATEMENTS
             </Link>
             <a
               href="https://unstop.com/"

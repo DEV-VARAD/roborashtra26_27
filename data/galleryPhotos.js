@@ -23,21 +23,21 @@
 
 import { getCloudinaryUrl } from '@/lib/cloudinary'
 
-// Builds a gallery delivery URL — 1600px wide, auto format & quality
+// Builds a gallery delivery URL — 1200px wide, auto format & quality
 function galleryUrl(publicId) {
   const url = getCloudinaryUrl(publicId, {
-    width: 1600,
-    crop: 'limit',  // 'limit' preserves aspect ratio without upscaling
+    width: 1200,
+    crop: 'limit', // 'limit' preserves aspect ratio without upscaling
     gravity: 'auto',
     format: 'auto',
     quality: 'auto',
     dpr: true,
   })
-  // If cloud name isn't configured yet, fall back to the original local path
-  // so the gallery still renders during local development
+  // If cloud name isn't configured yet, use the optimized WebP images
+  // (70-150KB instead of 20MB raw files) so the 3D gallery loads instantly with zero lag
   if (!url) {
     const filename = publicId.split('/').pop()
-    return `/gallery/${filename}.JPG.jpeg`
+    return `/gallery/optimized/${filename}.webp`
   }
   return url
 }

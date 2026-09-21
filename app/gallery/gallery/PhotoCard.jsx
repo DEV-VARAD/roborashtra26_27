@@ -284,9 +284,33 @@ export default function PhotoCard({
       )
     )
 
-  // Load front photo texture
+  // Lazy loading state:
+  // Front-facing cards load immediately so the front view is crystal clear without delay.
+  // Back & side cards load when rotated forward or during background idle time.
+  const [shouldLoad, setShouldLoad] = useState(() => {
+    const rotY = 0.15
+    const initWorldZ =
+      basePosition[0] * Math.sin(rotY) + basePosition[2] * Math.cos(rotY)
+    return initWorldZ > 1.2 || isSelected
+  })
+
+  const loadTriggered = useRef(shouldLoad)
+
+  // Progressive background preloading for remaining cards after initial front cards settle
   useEffect(() => {
-    if (!photo.src) return
+    if (shouldLoad) return
+
+    const timer = setTimeout(() => {
+      loadTriggered.current = true
+      setShouldLoad(true)
+    }, 1800 + index * 90)
+
+    return () => clearTimeout(timer)
+  }, [shouldLoad, index])
+
+  // Load front photo texture when shouldLoad becomes true
+  useEffect(() => {
+    if (!shouldLoad || !photo.src) return
 
     let active = true
     let timeoutId
@@ -314,9 +338,8 @@ export default function PhotoCard({
       return
     }
 
-    // Stagger image loading to avoid an initial loading spike
-    const loadDelay =
-      Math.min(index * 70, 900)
+    // Small stagger for front cards to avoid CPU spike
+    const loadDelay = Math.min((index % 6) * 35, 180)
 
     const loadPromise =
       new Promise((resolve) => {
@@ -326,39 +349,46 @@ export default function PhotoCard({
 
           loader.setCrossOrigin('anonymous')
 
+          const applyTextureSettings = (loadedTex) => {
+            loadedTex.generateMipmaps = true
+            loadedTex.minFilter = THREE.LinearMipmapLinearFilter
+            loadedTex.magFilter = THREE.LinearFilter
+            loadedTex.colorSpace = THREE.SRGBColorSpace
+            photoTextureCache.set(cacheKey, loadedTex)
+            photoLoadingCache.delete(cacheKey)
+            if (active) {
+              setTexture(loadedTex)
+            }
+            resolve(loadedTex)
+          }
+
           loader.load(
             photo.src,
             (loadedTex) => {
-              loadedTex.generateMipmaps =
-                true
-
-              loadedTex.minFilter =
-                THREE.LinearMipmapLinearFilter
-
-              loadedTex.magFilter =
-                THREE.LinearFilter
-
-              loadedTex.colorSpace =
-                THREE.SRGBColorSpace
-
-              photoTextureCache.set(
-                cacheKey,
-                loadedTex
-              )
-
-              photoLoadingCache.delete(
-                cacheKey
-              )
-
-              resolve(loadedTex)
+              applyTextureSettings(loadedTex)
             },
             undefined,
             () => {
-              photoLoadingCache.delete(
-                cacheKey
-              )
+              // Fallback: try raw high-res path if optimized path failed
+              const rawFilename = photo.publicId?.split('/').pop() || ''
+              const rawSrc = `/gallery/${rawFilename}.JPG.jpeg`
 
-              resolve(null)
+              if (photo.src !== rawSrc) {
+                loader.load(
+                  rawSrc,
+                  (rawTex) => {
+                    applyTextureSettings(rawTex)
+                  },
+                  undefined,
+                  () => {
+                    photoLoadingCache.delete(cacheKey)
+                    resolve(null)
+                  }
+                )
+              } else {
+                photoLoadingCache.delete(cacheKey)
+                resolve(null)
+              }
             }
           )
         }, loadDelay)
@@ -385,7 +415,9 @@ export default function PhotoCard({
       }
     }
   }, [
+    shouldLoad,
     photo.src,
+    photo.publicId,
     photo.title,
     photo.category,
     aspect,
@@ -461,8 +493,31 @@ export default function PhotoCard({
   const targetScale =
     useRef(baseScale)
 
+  // Keep physics state in sync when layout/breakpoint changes
+  useEffect(() => {
+    currentPos.current.set(...basePosition)
+    targetPos.current.set(...basePosition)
+    currentRot.current.set(...baseRotation)
+    targetRot.current.set(...baseRotation)
+    currentScale.current = baseScale
+    targetScale.current = baseScale
+  }, [basePosition, baseRotation, baseScale])
+
   useFrame((state, delta) => {
     if (!groupRef.current) return
+
+    // Dynamic 3D lazy loading: when card rotates into the front arc, trigger texture download
+    if (!loadTriggered.current) {
+      const parentRotY = groupRef.current.parent?.rotation?.y ?? 0.15
+      const cardWorldZ =
+        basePosition[0] * Math.sin(parentRotY) +
+        basePosition[2] * Math.cos(parentRotY)
+
+      if (cardWorldZ > 0.9 || isSelected) {
+        loadTriggered.current = true
+        setShouldLoad(true)
+      }
+    }
 
     const time =
       state.clock.getElapsedTime()
@@ -575,76 +630,76 @@ export default function PhotoCard({
       currentRot.current
     )
 
-    // Scale interpolation
-    currentScale.current +=
-      (targetScale.current -
-        currentScale.current) *
-      lerpFactor
+    // Scale interpolation - only update when changing to eliminate render lag
+    if (Math.abs(currentScale.current - targetScale.current) > 0.001) {
+      currentScale.current +=
+        (targetScale.current -
+          currentScale.current) *
+        lerpFactor
 
-    groupRef.current.scale.setScalar(
-      currentScale.current
-    )
-
-    // VERY subtle frame glow
-    if (
-      frameMeshRef.current &&
-      frameMeshRef.current.material
-    ) {
-      const targetEmissive =
-        isHoverActive
-          ? 0.085
-          : 0.012
-
-      frameMeshRef.current.material
-        .emissiveIntensity =
-        THREE.MathUtils.lerp(
-          frameMeshRef.current
-            .material
-            .emissiveIntensity,
-          targetEmissive,
-          lerpFactor
-        )
+      groupRef.current.scale.setScalar(
+        currentScale.current
+      )
     }
 
-    // Front photo hover
-    if (
-      photoMeshRef.current &&
-      photoMeshRef.current.material
-    ) {
-      const targetPhotoEmissive =
-        isHoverActive
-          ? 0.12
-          : 0.0
-
-      photoMeshRef.current.material
-        .emissiveIntensity =
-        THREE.MathUtils.lerp(
-          photoMeshRef.current
-            .material
-            .emissiveIntensity,
-          targetPhotoEmissive,
+    // Update frame and glow materials only when hovered or transitioning
+    if (isHoverActive) {
+      if (frameMeshRef.current?.material) {
+        frameMeshRef.current.material.emissiveIntensity = THREE.MathUtils.lerp(
+          frameMeshRef.current.material.emissiveIntensity,
+          0.085,
           lerpFactor
         )
-    }
+      }
 
-    // Very subtle cameo glow
-    if (
-      glowMeshRef.current &&
-      glowMeshRef.current.material
-    ) {
-      const targetOpacity =
-        isHoverActive
-          ? 0.38
-          : 0.18
-
-      glowMeshRef.current.material.opacity =
-        THREE.MathUtils.lerp(
-          glowMeshRef.current
-            .material
-            .opacity,
-          targetOpacity,
+      if (photoMeshRef.current?.material) {
+        photoMeshRef.current.material.emissiveIntensity = THREE.MathUtils.lerp(
+          photoMeshRef.current.material.emissiveIntensity,
+          0.12,
           lerpFactor
         )
+      }
+
+      if (glowMeshRef.current?.material) {
+        glowMeshRef.current.material.opacity = THREE.MathUtils.lerp(
+          glowMeshRef.current.material.opacity,
+          0.38,
+          lerpFactor
+        )
+      }
+    } else {
+      if (
+        frameMeshRef.current?.material &&
+        frameMeshRef.current.material.emissiveIntensity > 0.013
+      ) {
+        frameMeshRef.current.material.emissiveIntensity = THREE.MathUtils.lerp(
+          frameMeshRef.current.material.emissiveIntensity,
+          0.012,
+          lerpFactor
+        )
+      }
+
+      if (
+        photoMeshRef.current?.material &&
+        photoMeshRef.current.material.emissiveIntensity > 0.005
+      ) {
+        photoMeshRef.current.material.emissiveIntensity = THREE.MathUtils.lerp(
+          photoMeshRef.current.material.emissiveIntensity,
+          0.0,
+          lerpFactor
+        )
+      }
+
+      if (
+        glowMeshRef.current?.material &&
+        glowMeshRef.current.material.opacity > 0.19
+      ) {
+        glowMeshRef.current.material.opacity = THREE.MathUtils.lerp(
+          glowMeshRef.current.material.opacity,
+          0.18,
+          lerpFactor
+        )
+      }
     }
   })
 

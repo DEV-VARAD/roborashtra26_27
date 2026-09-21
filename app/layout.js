@@ -37,10 +37,9 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preload" href="/loading.mp4" as="video" type="video/mp4" />
-        <link rel="preload" href="/models/3d-metal-robot.glb" as="fetch" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

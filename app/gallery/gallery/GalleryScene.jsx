@@ -51,37 +51,24 @@ function AtmosphericParticles({ count = 80, radius = 9 }) {
   )
 }
 
-// Camera controller with subtle cinematic drift
+// Camera controller with subtle cinematic drift (no initial zoom-in lerp)
 function CinematicCamera({ isMobile, isTablet }) {
   const camRef = useRef()
 
   const baseCamZ = isMobile ? 14.0 : isTablet ? 12.5 : 11.5
   const baseCamY = isMobile ? 1.8 : 1.5
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!camRef.current) return
     const time = state.clock.getElapsedTime()
 
     const driftY = Math.sin(time * 0.4) * 0.06
     const driftX = Math.cos(time * 0.3) * 0.06
 
-    camRef.current.position.y = THREE.MathUtils.lerp(
-      camRef.current.position.y,
-      baseCamY + driftY,
-      delta * 3
-    )
-
-    camRef.current.position.x = THREE.MathUtils.lerp(
-      camRef.current.position.x,
-      driftX,
-      delta * 3
-    )
-
-    camRef.current.position.z = THREE.MathUtils.lerp(
-      camRef.current.position.z,
-      baseCamZ,
-      delta * 3
-    )
+    // Set position directly with gentle float; no lerping from origin/back
+    camRef.current.position.y = baseCamY + driftY
+    camRef.current.position.x = driftX
+    camRef.current.position.z = baseCamZ
 
     camRef.current.lookAt(0, -0.15, 0)
   })
@@ -109,9 +96,15 @@ export default function GalleryScene({
   reducedMotion = false,
   ringControlRef = null,
 }) {
-  const [screenSize, setScreenSize] = useState({
-    isMobile: false,
-    isTablet: false,
+  const [screenSize, setScreenSize] = useState(() => {
+    if (typeof window === 'undefined') {
+      return { isMobile: false, isTablet: false }
+    }
+    const w = window.innerWidth
+    return {
+      isMobile: w < 640,
+      isTablet: w >= 640 && w < 1024,
+    }
   })
 
   useEffect(() => {
@@ -126,16 +119,8 @@ export default function GalleryScene({
 
     handleResize()
 
-    window.addEventListener(
-      'resize',
-      handleResize
-    )
-
-    return () =>
-      window.removeEventListener(
-        'resize',
-        handleResize
-      )
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const { visiblePhotos, radius } = useMemo(() => {
@@ -159,11 +144,21 @@ export default function GalleryScene({
     }
   }, [photos, screenSize])
 
+  const initialCamZ = screenSize.isMobile ? 14.0 : screenSize.isTablet ? 12.5 : 11.5
+  const initialCamY = screenSize.isMobile ? 1.8 : 1.5
+  const initialFov = screenSize.isMobile ? 52 : 45
+
   return (
     <div className="w-full h-full relative select-none">
       <Canvas
         className="touch-none cursor-grab active:cursor-grabbing"
         dpr={[1, 1.5]}
+        camera={{
+          position: [0, initialCamY, initialCamZ],
+          fov: initialFov,
+          near: 0.1,
+          far: 100,
+        }}
         gl={{
           antialias: true,
           alpha: true,

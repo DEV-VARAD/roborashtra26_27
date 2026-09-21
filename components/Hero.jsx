@@ -59,6 +59,31 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick }) {
   const { scene } = useGLTF('/models/3d-metal-robot.glb')
   const robotGroup = useRef()
   const clickSpinRef = useRef(0)
+  const globalMouse = useRef({ x: 0, y: 0 })
+
+  // Track cursor globally on the window so the bot follows the cursor
+  // across the entire page, including over the navbar, dossier cards, CTA buttons, and footer
+  useEffect(() => {
+    const handlePointerMove = (e) => {
+      if (typeof window === 'undefined') return
+      // Normalized Three.js coordinates [-1, 1]
+      globalMouse.current.x = (e.clientX / window.innerWidth) * 2 - 1
+      globalMouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1
+    }
+
+    const handlePointerLeave = () => {
+      globalMouse.current.x = 0
+      globalMouse.current.y = 0
+    }
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true })
+    window.addEventListener('pointerleave', handlePointerLeave, { passive: true })
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerleave', handlePointerLeave)
+    }
+  }, [])
 
   // Clone scene so transformations and shadows apply cleanly
   const clonedScene = useMemo(() => {
@@ -102,9 +127,9 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick }) {
     // Smooth floating animation
     const floatY = Math.sin(t * 2.2) * 0.08
 
-    // Cursor tracking physics
-    const mouseX = state.pointer.x
-    const mouseY = state.pointer.y
+    // Cursor tracking physics (using global mouse coordinates so it tracks everywhere)
+    const mouseX = globalMouse.current.x
+    const mouseY = globalMouse.current.y
 
     const targetBodyX = mouseX * 0.4
     const targetBodyRotY = Math.PI + mouseX * 0.35 + clickSpinRef.current

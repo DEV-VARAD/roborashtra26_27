@@ -226,7 +226,7 @@ export default function PhotoRing({
   }
 
   return (
-    <group ref={ringRef} position={[0, 0, 0]}>
+    <group ref={ringRef} position={[0, 0, 0]} rotation={[0.05, 0.15, 0]}>
       {ringItems.map((item) => {
         const isSelected = selectedPhoto?.id === item.photo.id
         const isDimmed = !!selectedPhoto && !isSelected

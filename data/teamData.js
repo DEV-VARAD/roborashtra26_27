@@ -438,9 +438,11 @@ export const teamData = {
         },
         {
           id: 'web-member-4',
-          name: 'Muinasraf Momin',
+          name: 'Muinashraf Momin',
           role: 'Fullstack Developer',
-          socials: {},
+          socials: {
+            linkedin: 'https://www.linkedin.com/in/muinashraf-momin-71033a335?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+          },
         },
       ],
     },
@@ -513,7 +515,7 @@ export const teamData = {
       id: 'cad',
       name: 'CAD/CAM',
       shortName: 'CAD/CAM',
-      tagline: '----',
+      tagline: '3D Modeling & Assemblies',
       heads: [
         {
           id: 'cad-head-1',

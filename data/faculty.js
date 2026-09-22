@@ -1,7 +1,18 @@
-/**
- * Faculty data for the ROBORASHTRA Faculty Mentorship Section.
- * Easily replace names, designations, bio descriptions, images, and social URLs.
- */
+import { getCloudinaryUrl } from '@/lib/cloudinary'
+
+function facultyPortrait(publicId, fallbackPath) {
+  const url = getCloudinaryUrl(publicId, {
+    width: 600,
+    height: 750,
+    crop: 'fill',
+    gravity: 'auto',
+    format: 'auto',
+    quality: 'auto',
+    dpr: true,
+  })
+  return url || fallbackPath
+}
+
 export const facultyMembers = [
   {
     id: 'faculty-01',
@@ -10,7 +21,7 @@ export const facultyMembers = [
     department: 'Department of Computer Science Engineering',
     description:
       'Spearheading autonomous kinematics architectures, ROS 2 deployment, and national combat robotics mentorship for over 12 years.',
-    image: '/team/pallavikulkarni.png',
+    image: facultyPortrait('roborashtra/team/faculty/pallavikulkarni', '/team/pallavikulkarni.png'),
     badge: 'FACULTY DIRECTOR',
     credentials: 'Ph.D. Robotics (IITB) · IEEE Senior Member',
     socials: {
@@ -27,7 +38,7 @@ export const facultyMembers = [
 
     description:
       'Leading embedded vision pipelines, high-speed FPV dynamics, and precision manipulator telemetry across all competitive fleets.',
-    image: '/team/vrushalideore.png',
+    image: facultyPortrait('roborashtra/team/faculty/vrushalideore', '/team/vrushalideore.png'),
     badge: 'CHIEF COORDINATOR',
     credentials: 'M.Tech AI & Automation · 8+ Years Industry Mentorship',
     socials: {
@@ -37,3 +48,4 @@ export const facultyMembers = [
     },
   },
 ]
+

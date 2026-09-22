@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence, useMotionValue, useSpring, animate, useScroll } from 'framer-motion'
 import { teamData } from '@/data/teamData'
 import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Globe } from 'lucide-react'
@@ -166,7 +167,7 @@ function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
                 opacity,
                 zIndex,
               }}
-              className={`w-[150px] sm:w-[170px] md:w-[195px] lg:w-[215px] h-[92px] sm:h-[102px] md:h-[114px] lg:h-[124px] rounded-2xl p-3.5 sm:p-4 md:p-4.5 flex flex-col justify-between cursor-pointer transition-all duration-300 ${
+              className={`w-[150px] sm:w-[170px] md:w-[195px] lg:w-[215px] h-[92px] sm:h-[102px] md:h-[114px] lg:h-[124px] rounded-2xl p-2 sm:p-4 md:p-3.5 flex flex-col justify-between cursor-pointer transition-all duration-300 ${
                 isActive
                   ? 'bg-[#FF8A00] text-[#111111] shadow-[0_10px_35px_rgba(255,138,0,0.35)] border-2 border-[#FF8A00]'
                   : 'bg-white text-[#111111] border border-black/8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:border-black/20 hover:shadow-[0_6px_26px_rgba(0,0,0,0.08)]'
@@ -230,9 +231,40 @@ function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
 }
 
 /**
+ * Initials avatar shown when no Cloudinary image URL is available.
+ * Uses the person's initials on a warm gradient background.
+ */
+function InitialsAvatar({ name }) {
+  const initials = name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join('')
+  return (
+    <div
+      className="w-full h-full flex items-center justify-center select-none"
+      style={{
+        background: 'linear-gradient(135deg, #FF8A00 0%, #FFB347 100%)',
+      }}
+      aria-hidden="true"
+    >
+      <span className="font-cinzel font-bold text-white text-2xl sm:text-3xl tracking-wider">
+        {initials}
+      </span>
+    </div>
+  )
+}
+
+/**
  * Compact, Elegant Team Head Card (Responsive Framing)
+ * Uses next/image for Cloudinary-optimized delivery.
+ * Falls back to an initials avatar if no image URL is available.
  */
 function HeadCard({ head, index }) {
+  const [imgError, setImgError] = useState(false)
+  const hasImage = !!head.image && !imgError
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -242,8 +274,9 @@ function HeadCard({ head, index }) {
       className="group bg-white rounded-xl sm:rounded-2xl p-2.5 min-[360px]:p-3 sm:p-4 border border-black/8 shadow-[0_3px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:border-[#FF8A00]/30 transition-all duration-300 flex flex-col justify-between select-none"
     >
       <div>
+
         {/* Compact Responsive Portrait */}
-        <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
+        <div className="relative aspect-[4/4] w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
           <img
             src={head.image}
             alt={head.name}
@@ -439,7 +472,7 @@ export default function Team() {
           </div>
 
           {/* TWO-AREA SPATIAL COMPOSITION (ROULETTE ON LEFT + CONTENT ON RIGHT) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-10 items-start lg:items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-10 pt-16 sm:pt-20 lg:pt-16 items-start lg:items-center">
             
             {/* LEFT: PARTIALLY HIDDEN CIRCULAR ROULETTE (Touches Left Edge) — desktop only */}
             <div className="hidden lg:flex lg:col-span-5 xl:col-span-4 w-full flex-col justify-center">
@@ -452,7 +485,7 @@ export default function Team() {
             </div>
 
             {/* RIGHT: SELECTED TEAM CONTENT & MEMBER CARDS */}
-            <div className="lg:col-span-7 xl:col-span-8 px-1.5 sm:px-4 md:px-8 lg:pr-10 lg:pl-2 w-full max-h-none lg:max-h-[86svh] overflow-visible lg:overflow-y-auto overscroll-contain no-scrollbar">
+            <div className="lg:col-span-7 xl:col-span-8 px-1.5 sm:px-4 md:px-8 lg:pr-10 lg:pl-2 w-full max-h-none overflow-visible overscroll-contain no-scrollbar">
               {/* Header Bar: Active Squad Title */}
               <div className="relative lg:sticky top-0 z-30 bg-[#F7F4ED]/95 backdrop-blur-md pt-1 pb-2 sm:pb-3 mb-3 sm:mb-5 border-b border-black/8">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -483,7 +516,7 @@ export default function Team() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -16 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="space-y-4 sm:space-y-6 md:space-y-8 pb-4"
+                  className="space-y-4 sm:space-y-6 md:space-y-8 pb-12 sm:pb-16 lg:pb-24"
                 >
 
                   {/* 1. UNIT HEADS SECTION */}
@@ -515,7 +548,7 @@ export default function Team() {
                       </div>
 
                       {activeUnit.members && activeUnit.members.length > 0 ? (
-                        <div className="grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-2">
+                        <div className="grid grid-cols-1 min-[440px]:grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-1.5 sm:gap-2">
                           {activeUnit.members.map((member, i) => (
                             <MemberCard key={member.id} member={member} index={i} />
                           ))}

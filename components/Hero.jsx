@@ -48,14 +48,27 @@ function MailIcon({ className = 'w-3.5 h-3.5' }) {
 useGLTF.preload('/models/3d-metal-robot.glb')
 
 // Responsive Rig for Canvas
-function ResponsiveRig({ children }) {
+function ResponsiveRig({ children, isMobile }) {
   const { viewport } = useThree()
-  const scale = Math.min(1.15, Math.max(0.7, viewport.width / 4.2))
-  return <group scale={scale}>{children}</group>
+  const isNarrow = viewport.width < 3.0 || isMobile
+  const scale = isNarrow
+    ? Math.min(1.0, Math.max(0.68, viewport.width / 3.6))
+    : Math.min(1.15, Math.max(0.75, viewport.width / 4.4))
+
+  // When narrow (mobile/tablet), position robot to the left so it does not overlap with RightNav text
+  // When wide (desktop), center robot between the division dossier card and right nav
+  const posX = isNarrow ? -Math.min(0.48, Math.max(0.28, viewport.width * 0.28)) : 0
+  const posY = isNarrow ? 0.05 : 0
+
+  return (
+    <group position={[posX, posY, 0]} scale={scale}>
+      {children}
+    </group>
+  )
 }
 
 // GLTF 3D Custom Metal Robot Model Component
-function CustomGLTFModel({ scrollProgress, onInteractiveClick }) {
+function CustomGLTFModel({ scrollProgress, onInteractiveClick, isMobile }) {
   const { scene } = useGLTF('/models/3d-metal-robot.glb')
   const robotGroup = useRef()
   const clickSpinRef = useRef(0)
@@ -131,7 +144,8 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick }) {
     const mouseX = globalMouse.current.x
     const mouseY = globalMouse.current.y
 
-    const targetBodyX = mouseX * 0.4
+    const maxMoveX = isMobile ? 0.12 : 0.35
+    const targetBodyX = mouseX * maxMoveX
     const targetBodyRotY = Math.PI + mouseX * 0.35 + clickSpinRef.current
     const targetBodyRotX = -mouseY * 0.18
     const targetBodyRotZ = -mouseX * 0.08
@@ -293,10 +307,10 @@ export default function Hero() {
             <directionalLight position={[4, 8, 5]} intensity={9.0} color="#ffffff" castShadow={!isMobile} />
             <directionalLight position={[-4, -2, -3]} intensity={2} color="#c84b27" />
 
-            <ResponsiveRig>
-              <group position={[0.3, 0, 0]}>
+            <ResponsiveRig isMobile={isMobile}>
+              <group position={[0, 0, 0]}>
                 <ContactShadows
-                  position={[-0.3, -1, 0]}
+                  position={[0, -1, 0]}
                   opacity={isMobile ? 0.25 : 0.4}
                   scale={7}
                   blur={1.6}
@@ -305,7 +319,7 @@ export default function Hero() {
                   color="#000000"
                 />
                 <Suspense fallback={<LoadingFallback />}>
-                  <CustomGLTFModel />
+                  <CustomGLTFModel isMobile={isMobile} />
                 </Suspense>
               </group>
             </ResponsiveRig>

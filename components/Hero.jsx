@@ -191,7 +191,7 @@ import FullscreenMenu from './FullscreenMenu'
 export default function Hero() {
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [activeTab, setActiveTab] = useState('roborashtra')
+  const [activeTab, setActiveTab] = useState('robohawk')
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -349,16 +349,6 @@ export default function Hero() {
             {/* Division Selector Tabs */}
             <div className="grid grid-cols-2 gap-1 p-1 bg-black/5 rounded-xl border border-black/10 mb-3">
               <button
-                onClick={() => setActiveTab('roborashtra')}
-                className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
-                  activeTab === 'roborashtra'
-                    ? 'bg-white text-textDark shadow-sm'
-                    : 'text-textMuted hover:text-textDark'
-                }`}
-              >
-                ROBORASHTRA
-              </button>
-              <button
                 onClick={() => setActiveTab('robohawk')}
                 className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
                   activeTab === 'robohawk'
@@ -368,58 +358,21 @@ export default function Hero() {
               >
                 ROBOHAWK
               </button>
+              <button
+                onClick={() => setActiveTab('roborashtra')}
+                className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
+                  activeTab === 'roborashtra'
+                    ? 'bg-white text-textDark shadow-sm'
+                    : 'text-textMuted hover:text-textDark'
+                }`}
+              >
+                ROBORASHTRA
+              </button>
             </div>
 
             {/* Humanized Dossier Card */}
             <AnimatePresence mode="wait">
-              {activeTab === 'roborashtra' ? (
-                <motion.div
-                  key="tab-roborashtra"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-black/10 shadow-sm space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-wider text-rust font-bold uppercase">
-                      GROUND COMBAT &amp; ARENA
-                    </span>
-                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-black/5 text-textDark font-medium">
-                      STATE ARENA
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="font-display font-bold text-lg text-textDark tracking-tight">
-                      Roborashtra Arena
-                    </h3>
-                    <p className="text-xs text-textMuted leading-relaxed mt-1 font-body">
-                      Our collegiate ground robotics division where teams design, fabricate, and wire 15kg and 30kg combat battlebots, line followers, and autonomous obstacle-course rovers.
-                    </p>
-                  </div>
-
-                  {/* Real Engineering Specs */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 font-mono text-[10px]">
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">ROBOT CLASSES</span>
-                      <span className="font-semibold text-textDark">15KG &amp; 30KG BOTS</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">CHASSIS</span>
-                      <span className="font-semibold text-textDark">ALUMINUM &amp; STEEL</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">TEAMS</span>
-                      <span className="font-semibold text-textDark">COLLEGIATE CIRUCT</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">WORKSHOP BAY</span>
-                      <span className="font-semibold text-textDark">BLOCK C, PCCOER</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
+              {activeTab === 'robohawk' ? (
                 <motion.div
                   key="tab-robohawk"
                   initial={{ opacity: 0, y: 6 }}
@@ -463,6 +416,53 @@ export default function Hero() {
                     <div className="p-2 bg-black/[0.03] rounded-lg">
                       <span className="text-textMuted block text-[8px] uppercase tracking-wider">FOCUS</span>
                       <span className="font-semibold text-textDark">PILOT &amp; SENSORS</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="tab-roborashtra"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-black/10 shadow-sm space-y-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] tracking-wider text-rust font-bold uppercase">
+                      GROUND COMBAT &amp; ARENA
+                    </span>
+                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-black/5 text-textDark font-medium">
+                      STATE ARENA
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-display font-bold text-lg text-textDark tracking-tight">
+                      Roborashtra Arena
+                    </h3>
+                    <p className="text-xs text-textMuted leading-relaxed mt-1 font-body">
+                      Our collegiate ground robotics division where teams design, fabricate, and wire 15kg and 30kg combat battlebots, line followers, and autonomous obstacle-course rovers.
+                    </p>
+                  </div>
+
+                  {/* Real Engineering Specs */}
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 font-mono text-[10px]">
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">ROBOT CLASSES</span>
+                      <span className="font-semibold text-textDark">15KG &amp; 30KG BOTS</span>
+                    </div>
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">CHASSIS</span>
+                      <span className="font-semibold text-textDark">ALUMINUM &amp; STEEL</span>
+                    </div>
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">TEAMS</span>
+                      <span className="font-semibold text-textDark">COLLEGIATE CIRUCT</span>
+                    </div>
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">WORKSHOP BAY</span>
+                      <span className="font-semibold text-textDark">BLOCK C, PCCOER</span>
                     </div>
                   </div>
                 </motion.div>

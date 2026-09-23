@@ -308,9 +308,9 @@ export default function Hero() {
             <directionalLight position={[-4, -2, -3]} intensity={2} color="#c84b27" />
 
             <ResponsiveRig isMobile={isMobile}>
-              <group position={[0, 0, 0]}>
+              <group position={[0.25, 0, 0]}>
                 <ContactShadows
-                  position={[0, -1, 0]}
+                  position={[-0.25, -1, 0]}
                   opacity={isMobile ? 0.25 : 0.4}
                   scale={7}
                   blur={1.6}

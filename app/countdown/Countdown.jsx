@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { ArrowRight, Radio } from 'lucide-react'
 import FlipCountdown from '@/app/countdown/FlipCountdown'
 
-// Default championship event target: January 1, 2027, 00:00:00 IST
-const DEFAULT_EVENT_DATE = '2027-01-01T00:00:00+05:30'
+// Default championship event target: February 1, 2027, 00:00:00 IST
+const DEFAULT_EVENT_DATE = '2027-02-01T00:00:00+05:30'
 
 export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
   const [copiedLink, setCopiedLink] = useState(false)
@@ -62,7 +62,7 @@ export default function Countdown({ targetDate = DEFAULT_EVENT_DATE }) {
 
           {/* MECHANICAL FLIP-CLOCK CARDS (DAYS - HOURS - MINUTES - SECONDS) */}
           <div className="w-full my-3 sm:my-6 flex justify-center">
-            <FlipCountdown targetDate={targetDate} />
+            <FlipCountdown targetDate={resolvedTarget} />
           </div>
 
 

@@ -115,9 +115,10 @@ export default function PhotoRing({
       }
 
       if (isDragging.current) {
-        // Sensitivity for desktop & mobile
-        const rotYSpeed = 0.0038
-        const rotXSpeed = 0.0018
+        // Sensitivity for desktop & mobile — higher rotYSpeed for touch
+        const isTouchEvent = e.pointerType === 'touch'
+        const rotYSpeed = isTouchEvent ? 0.005 : 0.0038
+        const rotXSpeed = isTouchEvent ? 0.0022 : 0.0018
 
         ringRotation.current.y += dx * rotYSpeed
         ringRotation.current.x += dy * rotXSpeed
@@ -183,7 +184,7 @@ export default function PhotoRing({
 
       // Ambient continuous rotation when idle
       if (!reducedMotion && !selectedPhoto && Math.abs(velocity.current.x) < 0.0005) {
-        ringRotation.current.y += delta * 0.045
+        ringRotation.current.y += delta * 0.032
       }
     }
 

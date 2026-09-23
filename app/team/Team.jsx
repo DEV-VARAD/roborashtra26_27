@@ -376,7 +376,6 @@ export default function Team() {
       number: '01',
       name: 'LEAD',
       shortName: 'LEAD',
-      tagline: 'Executive Presidential & Strategic Operations',
       description:
         'The executive presidential council orchestrating autonomous kinematics development, battle arena protocols, and state championship operations.',
       heads: teamData.leads,
@@ -388,7 +387,6 @@ export default function Team() {
       number: String(idx + 2).padStart(2, '0'),
       description:
         t.description ||
-        t.tagline ||
         `Directing specialized ${t.name.toLowerCase()} engineering pipelines and competition deliverables.`,
     }))
 
@@ -502,11 +500,7 @@ export default function Team() {
                     {activeUnit.name}
                   </motion.h2>
                 </div>
-                {activeUnit.tagline && (
-                  <p className="font-mono text-[8px] min-[360px]:text-[9px] sm:text-[11px] text-[#777777] tracking-wide mt-1 line-clamp-1">
-                    // {activeUnit.tagline}
-                  </p>
-                )}
+                
               </div>
 
               <AnimatePresence mode="wait">

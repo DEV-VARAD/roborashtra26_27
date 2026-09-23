@@ -107,7 +107,7 @@ export default function ExpandedPhoto({
             </button>
 
             {/* Image Stage */}
-            <div className="relative flex-1 bg-[#060a10] flex items-center justify-center p-6 md:p-8 overflow-hidden min-h-[300px] md:min-h-[500px]">
+            <div className="relative flex-1 bg-[#060a10] flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden min-h-[200px] sm:min-h-[300px] md:min-h-[500px]">
               {/* Subtle background radial glow */}
               <div className="absolute inset-0 bg-radial-gradient from-amber/5 via-transparent to-transparent pointer-events-none" />
 
@@ -126,7 +126,7 @@ export default function ExpandedPhoto({
                     onError={(e) => {
                       e.target.src = 'https://picsum.photos/seed/' + photo.id + '/900/675'
                     }}
-                    className="max-h-[55vh] md:max-h-[68vh] w-auto object-contain select-none"
+                    className="max-h-[38vh] sm:max-h-[55vh] md:max-h-[68vh] w-auto object-contain select-none"
                   />
                   {/* Film Grain / Contrast Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
@@ -181,25 +181,31 @@ export default function ExpandedPhoto({
               </div>
 
               {/* Mobile bottom nav & footer note */}
-              <div className="pt-6 mt-6 border-t border-grid flex items-center justify-between">
-                <div className="flex items-center gap-2 sm:hidden">
+              <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-grid flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={handlePrev}
-                    className="p-2 rounded bg-panel border border-grid text-ink hover:text-amber text-xs font-mono"
+                    className="sm:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg bg-panel border border-grid text-ink hover:text-amber text-[10px] font-mono tracking-wider transition-colors"
                   >
-                    PREV
+                    ← PREV
                   </button>
                   <button
                     onClick={handleNext}
-                    className="p-2 rounded bg-panel border border-grid text-ink hover:text-amber text-xs font-mono"
+                    className="sm:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg bg-panel border border-grid text-ink hover:text-amber text-[10px] font-mono tracking-wider transition-colors"
                   >
-                    NEXT
+                    NEXT →
                   </button>
                 </div>
 
-                <div className="text-[11px] font-mono tracking-widest text-slate uppercase ml-auto">
+                <div className="hidden sm:block text-[11px] font-mono tracking-widest text-slate uppercase ml-auto">
                   PRESS <kbd className="px-1.5 py-0.5 rounded bg-panel border border-grid text-amber">ESC</kbd> TO CLOSE
                 </div>
+                <button
+                  onClick={onClose}
+                  className="sm:hidden ml-auto text-[10px] font-mono tracking-widest text-slate uppercase px-3 py-2 rounded-lg bg-panel border border-grid hover:text-amber transition-colors"
+                >
+                  CLOSE ×
+                </button>
               </div>
             </div>
           </motion.div>

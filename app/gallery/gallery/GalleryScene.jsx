@@ -55,22 +55,22 @@ function AtmosphericParticles({ count = 80, radius = 9 }) {
 function CinematicCamera({ isMobile, isTablet }) {
   const camRef = useRef()
 
-  const baseCamZ = isMobile ? 14.0 : isTablet ? 12.5 : 11.5
-  const baseCamY = isMobile ? 1.8 : 1.5
+  const baseCamZ = isMobile ? 10.5 : isTablet ? 12.0 : 11.5
+  const baseCamY = isMobile ? 0.8 : 1.5
 
   useFrame((state) => {
     if (!camRef.current) return
     const time = state.clock.getElapsedTime()
 
-    const driftY = Math.sin(time * 0.4) * 0.06
-    const driftX = Math.cos(time * 0.3) * 0.06
+    const driftY = Math.sin(time * 0.4) * 0.04
+    const driftX = Math.cos(time * 0.3) * 0.04
 
     // Set position directly with gentle float; no lerping from origin/back
     camRef.current.position.y = baseCamY + driftY
     camRef.current.position.x = driftX
     camRef.current.position.z = baseCamZ
 
-    camRef.current.lookAt(0, -0.15, 0)
+    camRef.current.lookAt(0, -0.05, 0)
   })
 
   return (
@@ -78,7 +78,7 @@ function CinematicCamera({ isMobile, isTablet }) {
       ref={camRef}
       makeDefault
       position={[0, baseCamY, baseCamZ]}
-      fov={isMobile ? 52 : 45}
+      fov={isMobile ? 62 : 45}
       near={0.1}
       far={100}
     />
@@ -126,8 +126,8 @@ export default function GalleryScene({
   const { visiblePhotos, radius } = useMemo(() => {
     if (screenSize.isMobile) {
       return {
-        visiblePhotos: photos.slice(0, 14),
-        radius: 5.0,
+        visiblePhotos: photos.slice(0, 12),
+        radius: 4.2,
       }
     }
 
@@ -144,9 +144,9 @@ export default function GalleryScene({
     }
   }, [photos, screenSize])
 
-  const initialCamZ = screenSize.isMobile ? 14.0 : screenSize.isTablet ? 12.5 : 11.5
-  const initialCamY = screenSize.isMobile ? 1.8 : 1.5
-  const initialFov = screenSize.isMobile ? 52 : 45
+  const initialCamZ = screenSize.isMobile ? 10.5 : screenSize.isTablet ? 12.0 : 11.5
+  const initialCamY = screenSize.isMobile ? 0.8 : 1.5
+  const initialFov = screenSize.isMobile ? 62 : 45
 
   return (
     <div className="w-full h-full relative select-none">

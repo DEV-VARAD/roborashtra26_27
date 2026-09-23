@@ -95,24 +95,24 @@ export default function Gallery() {
 
         {/* ── Interactive Navigation Controls ── */}
         {/* Right Arrow Button (Next Photo Orbit) */}
-        <div className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+        <div className="absolute right-3 sm:right-8 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
           <button
             onClick={handleRotateNext}
             aria-label="Rotate gallery to next items"
-            className="group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 bg-black/60 hover:bg-[#FF9F1C]/20 border border-white/20 hover:border-[#FF9F1C]/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_24px_rgba(255,159,28,0.4)]"
+            className="group flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 bg-black/60 hover:bg-[#FF9F1C]/20 border border-white/20 hover:border-[#FF9F1C]/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_24px_rgba(255,159,28,0.4)]"
           >
-            <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 text-white group-hover:text-[#FF9F1C] transition-colors" />
+            <ChevronRight className="w-5 h-5 sm:w-7 sm:h-7 text-white group-hover:text-[#FF9F1C] transition-colors" />
           </button>
         </div>
 
-        {/* Left Arrow Button (Previous Photo Orbit - subtle) */}
-        <div className="hidden md:block absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+        {/* Left Arrow Button (Previous Photo Orbit) */}
+        <div className="absolute left-3 sm:left-8 top-1/2 -translate-y-1/2 z-20 pointer-events-auto">
           <button
             onClick={handleRotatePrev}
             aria-label="Rotate gallery to previous items"
-            className="group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 bg-black/40 hover:bg-[#FF9F1C]/20 border border-white/15 hover:border-[#FF9F1C]/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_24px_rgba(255,159,28,0.4)]"
+            className="group flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 bg-black/40 hover:bg-[#FF9F1C]/20 border border-white/15 hover:border-[#FF9F1C]/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_24px_rgba(255,159,28,0.4)]"
           >
-            <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 text-white/70 group-hover:text-[#FF9F1C] transition-colors" />
+            <ChevronLeft className="w-5 h-5 sm:w-7 sm:h-7 text-white/70 group-hover:text-[#FF9F1C] transition-colors" />
           </button>
         </div>
       </div>

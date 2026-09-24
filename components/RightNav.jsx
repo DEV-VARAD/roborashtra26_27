@@ -6,9 +6,8 @@ import { motion } from 'framer-motion'
 
 const portals = [
   { id: '01', label: 'GALLERY', href: '/gallery' },
-  { id: '02', label: 'EVENT', href: '/event' },
-  { id: '03', label: 'SPONSOR', href: '/sponsor' },
-  { id: '04', label: 'TEAM', href: '/team' },
+  { id: '02', label: 'SPONSOR', href: '/sponsor' },
+  { id: '03', label: 'TEAM', href: '/team' },
 ]
 
 const containerVariants = {

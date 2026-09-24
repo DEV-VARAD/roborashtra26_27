@@ -323,8 +323,8 @@ export default function Hero() {
           >
             {/* Space Lighting: Crisp Stark Keylight + Cool Lunar Bounce + Accent Flare */}
             <ambientLight intensity={0.7} />
-            <directionalLight position={[5, 8, 4]} intensity={11.0} color="#ffffff" castShadow={!isMobile} />
-            <directionalLight position={[-5, -2, -3]} intensity={11.8} color="#38bdf8" />
+            <directionalLight position={[5, 8, 4]} intensity={20.0} color="#ffffff" castShadow={!isMobile} />
+            <directionalLight position={[-5, -2, -3]} intensity={6} color="#38bdf8" />
             <pointLight position={[0, -1.8, 2]} intensity={8.0} color="#ff9f1c" />
 
             {/* Real 3D Deep Space Starfield & Micro-gravity Sparkles */}
@@ -425,41 +425,21 @@ export default function Hero() {
                   className="bg-[#060c1d]/85 backdrop-blur-xl p-4 sm:p-5 rounded-2xl border border-cyan-500/25 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_20px_rgba(6,182,212,0.12)] space-y-3 relative overflow-hidden"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-orbitron text-[10px] tracking-wider text-cyan-400 font-bold uppercase">
-                      AERIAL ROBOTICS WING
+                    <span className="font-orbitron text-[18px] tracking-wider text-cyan-400 font-bold uppercase">
+                      Robohawk
                     </span>
                     <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">
-                      UAV &amp; DRONES
+                      DRONES
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-orbitron font-extrabold text-lg text-white tracking-wide">
-                      Robohawk Fleet
-                    </h3>
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      Our dedicated UAV division researching autonomous flight stabilization, custom carbon-fiber quadcopters, high-speed FPV pilot racing, and precision payload drops.
+                      Welcome to RoboHawk, where innovation meets passion. Our student-driven Robotics Club at PCCOE&R under the guidance of Dr. Mahendra B. Salunke, is led by the dynamic leader Om Khare.
                     </p>
-                  </div>
-
-                  {/* Real Drone Specs */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 font-mono text-[10px]">
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">PLATFORM</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">CUSTOM CARBON UAV</span>
-                    </div>
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">TELEMETRY</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">5.8GHZ FPV LINK</span>
-                    </div>
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">AUTONOMY</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">WAYPOINT MISSIONS</span>
-                    </div>
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">FOCUS</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">PILOT &amp; SENSORS</span>
-                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">  
+                      RoboHawk has executed diverse projects in 3D printing, drones, and robotics. It offers hands-on learning, collaboration, and innovation opportunities.
+                    </p>
                   </div>
                 </motion.div>
               ) : (
@@ -472,42 +452,28 @@ export default function Hero() {
                   className="bg-[#060c1d]/85 backdrop-blur-xl p-4 sm:p-5 rounded-2xl border border-cyan-500/25 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_20px_rgba(6,182,212,0.12)] space-y-3 relative overflow-hidden"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-orbitron text-[10px] tracking-wider text-cyan-400 font-bold uppercase">
-                      GROUND COMBAT &amp; ARENA
+                    <span className="font-orbitron text-[18px] tracking-wider text-cyan-400 font-bold uppercase">
+                      Roborashtra
                     </span>
                     <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">
-                      STATE ARENA
+                      NATIONAL EVENT
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-orbitron font-extrabold text-lg text-white tracking-wide">
-                      Roborashtra Arena
-                    </h3>
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      Our collegiate ground robotics division where teams design, fabricate, and wire 15kg and 30kg combat battlebots, line followers, and autonomous obstacle-course rovers.
+                      RoboRashtra is a major inter-college robotics competition hosted annually by the RoboHawk Club at PCCOER, Ravet, Pune, in technical collaboration with DIAT DRDO.
                     </p>
-                  </div>
-
-                  {/* Real Engineering Specs */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 font-mono text-[10px]">
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">ROBOT CLASSES</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">15KG &amp; 30KG BOTS</span>
-                    </div>
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">CHASSIS</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">ALUMINUM &amp; STEEL</span>
-                    </div>
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">TEAMS</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">COLLEGIATE CIRCUIT</span>
-                    </div>
-                    <div className="p-2 bg-slate-950/60 border border-white/5 rounded-lg">
-                      <span className="text-cyan-400/80 block text-[8px] uppercase tracking-wider font-mono">WORKSHOP BAY</span>
-                      <span className="font-orbitron font-semibold text-white text-[10px]">BLOCK C, PCCOER</span>
-                    </div>
-                  </div>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Competitions: Steel Soldiers Slam, Cam Warriors, Blaze Maze, Chakravyuh, and other robotics challenges.
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Prizes: Cash prizes exceeding <span className="text-cyan-400">₹2,00,000.</span>
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Learning: Hands-on workshops, technical mentorship, and exposure to robotics, automation, AI, and emerging technologies.
+                    </p>
+                  </div> 
                 </motion.div>
               )}
             </AnimatePresence>
@@ -577,7 +543,7 @@ export default function Hero() {
               <span>YOUTUBE</span>
             </a>
             <a
-              href="https://www.instagram.com/roborashtra/"
+              href="https://www.instagram.com/roborashtra.pccoer/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram Profile"

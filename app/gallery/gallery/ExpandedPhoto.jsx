@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, Calendar, Tag, Sparkles } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 /**
  * ExpandedPhoto - High-end editorial spotlight modal when a 3D photograph is selected.
@@ -93,7 +93,7 @@ export default function ExpandedPhoto({
             <button
               onClick={handlePrev}
               aria-label="Previous photograph"
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/60 hover:bg-amber hover:text-blueprintDeep text-ink/80 transition-all duration-200 backdrop-blur-sm border border-white/10 hidden sm:flex items-center justify-center hover:scale-110"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/60 hover:bg-amber hover:text-blueprintDeep text-ink/80 transition-all duration-200 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:scale-110"
             >
               <ChevronLeft size={22} />
             </button>
@@ -101,7 +101,7 @@ export default function ExpandedPhoto({
             <button
               onClick={handleNext}
               aria-label="Next photograph"
-              className="absolute right-3 md:right-[calc(38%+12px)] top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/60 hover:bg-amber hover:text-blueprintDeep text-ink/80 transition-all duration-200 backdrop-blur-sm border border-white/10 hidden sm:flex items-center justify-center hover:scale-110"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-black/60 hover:bg-amber hover:text-blueprintDeep text-ink/80 transition-all duration-200 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:scale-110"
             >
               <ChevronRight size={22} />
             </button>
@@ -134,79 +134,8 @@ export default function ExpandedPhoto({
                 {/* Physical Print Footer stamp */}
                 <div className="flex items-center justify-between pt-2 px-1 text-[10px] font-mono tracking-widest text-[#666258] uppercase">
                   <span>ROBORASHTRA ARCHIVE</span>
-                  <span>REF #{String(currentIndex + 1).padStart(2, '0')}</span>
                 </div>
               </motion.div>
-            </div>
-
-            {/* Metadata Editorial Sidebar */}
-            <div className="w-full md:w-[38%] p-6 sm:p-8 flex flex-col justify-between bg-[#0e1624] border-t md:border-t-0 md:border-l border-grid">
-              <div>
-                {/* Header Tag / Counter */}
-                <div className="flex items-center justify-between gap-4 mb-6">
-                  <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-amber/10 border border-amber/30 text-amber text-xs font-mono tracking-widest uppercase">
-                    <Tag size={12} />
-                    <span>{photo.category || 'MOMENT'}</span>
-                  </div>
-                  <span className="font-mono text-xs tracking-widest text-slate">
-                    [ {String(currentIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')} ]
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-serifEd text-2xl sm:text-3xl text-paperWhite leading-tight mb-4">
-                  {photo.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-textMuted text-sm leading-relaxed mb-6 font-body">
-                  {photo.description}
-                </p>
-
-                {/* Date and Metadata Attributes */}
-                <div className="space-y-2.5 border-t border-grid pt-5">
-                  <div className="flex items-center gap-2.5 text-xs text-slate font-mono">
-                    <Calendar size={14} className="text-amber" />
-                    <span className="text-ink/80 tracking-wider">
-                      CAPTURE DATE: {photo.date || 'SEASON 2025-26'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2.5 text-xs text-slate font-mono">
-                    <Sparkles size={14} className="text-amber" />
-                    <span className="text-ink/80 tracking-wider">
-                      SYSTEM: COMPETITION & PROTOTYPES
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Mobile bottom nav & footer note */}
-              <div className="pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-grid flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handlePrev}
-                    className="sm:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg bg-panel border border-grid text-ink hover:text-amber text-[10px] font-mono tracking-wider transition-colors"
-                  >
-                    ← PREV
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    className="sm:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg bg-panel border border-grid text-ink hover:text-amber text-[10px] font-mono tracking-wider transition-colors"
-                  >
-                    NEXT →
-                  </button>
-                </div>
-
-                <div className="hidden sm:block text-[11px] font-mono tracking-widest text-slate uppercase ml-auto">
-                  PRESS <kbd className="px-1.5 py-0.5 rounded bg-panel border border-grid text-amber">ESC</kbd> TO CLOSE
-                </div>
-                <button
-                  onClick={onClose}
-                  className="sm:hidden ml-auto text-[10px] font-mono tracking-widest text-slate uppercase px-3 py-2 rounded-lg bg-panel border border-grid hover:text-amber transition-colors"
-                >
-                  CLOSE ×
-                </button>
-              </div>
             </div>
           </motion.div>
         </motion.div>

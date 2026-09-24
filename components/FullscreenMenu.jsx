@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowUpRight, X } from 'lucide-react'
 import LunarParticles from './LunarParticles'
+import Image from 'next/image'
 
 const links = [
   { label: 'HOME', href: '/' },
@@ -78,13 +79,24 @@ export default function FullscreenMenu({
           ====================================================== */}
 
           <div className="relative z-30 flex h-16 items-center justify-between px-5 sm:h-20 md:px-12">
-            <div className="flex items-center gap-3">
-              <span className="h-1.5 w-1.5 rounded-full bg-rust shadow-[0_0_12px_rgba(180,75,45,0.55)]" />
-
-              <span className="font-orbitron font-extrabold text-base tracking-wider sm:text-lg text-white">
+            <Link href="/" className="group flex items-center gap-3.5 sm:gap-4 select-none">
+          <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_16px_rgba(56,189,248,0.45)]">
+            <Image
+              src="/logo/logo.png"
+              alt="Roborashtra Emblem"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="font-orbitron font-black text-base sm:text-xl md:text-2xl tracking-wider text-white">
                 ROBO<span className="text-cyan-400">RASHTRA</span>
               </span>
             </div>
+          </div>
+        </Link>
 
             <button
               onClick={onClose}

@@ -4,6 +4,7 @@
 
 :root {
   color-scheme: dark;
+  --font-orbitron: 'Orbitron', 'Space Grotesk', sans-serif;
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;

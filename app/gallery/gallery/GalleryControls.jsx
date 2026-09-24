@@ -15,7 +15,7 @@ export default function GalleryControls({
 
       {/* Top Editorial Header — positioned below Navbar safely */}
       <div className="flex items-center justify-center pt-[72px] sm:pt-[80px] md:pt-[88px] px-4">
-        <h2 className="font-mono text-[10px] sm:text-xs md:text-sm text-white/60 tracking-[0.18em] uppercase leading-none">
+        <h2 className="font-mono text-[50px] sm:text-lg md:text-xl text-white/80 tracking-[0.18em] uppercase leading-none">
           MAPPING OUR MILESTONES
         </h2>
       </div>
@@ -54,4 +54,4 @@ export default function GalleryControls({
       </div>
     </div>
   )
-}
+}

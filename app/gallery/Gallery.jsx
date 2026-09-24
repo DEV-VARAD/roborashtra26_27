@@ -6,6 +6,7 @@ import GalleryScene from './gallery/GalleryScene'
 import GalleryControls from './gallery/GalleryControls'
 import ExpandedPhoto from './gallery/ExpandedPhoto'
 import { galleryPhotos } from '@/data/galleryPhotos'
+import LunarParticles from 'components/LunarParticles'
 
 /**
  * Gallery - Production-quality messy 3D ring photo gallery with natural drag physics.
@@ -59,8 +60,16 @@ export default function Gallery() {
       id="gallery"
       className="relative w-full h-screen h-[100dvh] min-h-[600px] bg-[#070b14] select-none overflow-hidden"
     >
+
+      
+        <div className="pointer-events-none absolute inset-0 z-10">
+          <LunarParticles />
+        </div>
+            
       {/* Fullscreen 3D Stage */}
       <div className="relative h-full w-full overflow-hidden bg-[#070b14]">
+
+
         {/* Background Gradients & Vignette */}
         <div className="absolute inset-0 bg-blueprintGrid bg-grid opacity-30 pointer-events-none" />
         <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#070b14]/60 to-[#070b14] pointer-events-none" />

@@ -276,20 +276,13 @@ function HeadCard({ head, index }) {
       <div>
 
         {/* Compact Responsive Portrait */}
-        <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
-          {hasImage ? (
-            <Image
-              src={head.image}
-              alt={head.name}
-              fill
-              sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 200px"
-              className="object-cover object-top sm:object-center transition-transform duration-500 ease-out group-hover:scale-105"
-              loading="lazy"
-              onError={() => setImgError(true)}
-            />
-          ) : (
-            <InitialsAvatar name={head.name} />
-          )}
+        <div className="relative aspect-[4/4] w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
+          <img
+            src={head.image}
+            alt={head.name}
+            className="w-full h-full object-cover object-top sm:object-center transition-transform duration-500 ease-out group-hover:scale-105"
+            loading="lazy"
+          />
         </div>
 
         {/* Compact Head Info */}
@@ -383,7 +376,6 @@ export default function Team() {
       number: '01',
       name: 'LEAD',
       shortName: 'LEAD',
-      tagline: 'Executive Presidential & Strategic Operations',
       description:
         'The executive presidential council orchestrating autonomous kinematics development, battle arena protocols, and state championship operations.',
       heads: teamData.leads,
@@ -395,7 +387,6 @@ export default function Team() {
       number: String(idx + 2).padStart(2, '0'),
       description:
         t.description ||
-        t.tagline ||
         `Directing specialized ${t.name.toLowerCase()} engineering pipelines and competition deliverables.`,
     }))
 
@@ -509,11 +500,7 @@ export default function Team() {
                     {activeUnit.name}
                   </motion.h2>
                 </div>
-                {activeUnit.tagline && (
-                  <p className="font-mono text-[8px] min-[360px]:text-[9px] sm:text-[11px] text-[#777777] tracking-wide mt-1 line-clamp-1">
-                    // {activeUnit.tagline}
-                  </p>
-                )}
+                
               </div>
 
               <AnimatePresence mode="wait">

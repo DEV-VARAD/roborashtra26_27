@@ -70,7 +70,6 @@ export const teamData = {
       id: 'workshop',
       name: 'WORKSHOP & HARDWARE',
       shortName: 'WORKSHOP',
-      tagline: 'Fabrication, CNC & Motor Dynamometer',
       heads: [
         {
           id: 'workshop-head-1',
@@ -86,7 +85,7 @@ export const teamData = {
         {
           id: 'workshop-member-1',
           name: 'Shruti Gandhat',
-          role: 'Chassis Machinist',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/shruti-gandhat-545235424?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
@@ -95,7 +94,7 @@ export const teamData = {
         {
           id: 'workshop-member-2',
           name: 'Swanand Barapatre',
-          role: 'Embedded Hardware Engineer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/swanand-barapatre-42baa1278?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -104,7 +103,7 @@ export const teamData = {
         {
           id: 'workshop-member-3',
           name: 'Harshwardhan Jadhav',
-          role: 'Embedded Hardware Engineer',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/hjadhavdev',
           },
@@ -112,7 +111,7 @@ export const teamData = {
         {
           id: 'workshop-member-4',
           name: 'Shriya Sardeshpande',
-          role: 'Embedded Hardware Engineer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/shriya-sardeshpande-748a54414?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -121,7 +120,7 @@ export const teamData = {
         {
           id: 'workshop-member-5',
           name: 'Namrata Amilkanthwar',
-          role: 'Embedded Hardware Engineer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/namrata-amilkanthwar-684997408?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -130,7 +129,7 @@ export const teamData = {
         {
           id: 'workshop-member-6',
           name: 'Manav Bhosale',
-          role: 'Embedded Hardware Engineer',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/manav-undefined-970a90430',
           },
@@ -138,7 +137,7 @@ export const teamData = {
         {
           id: 'workshop-member-7',
           name: 'Parth Nikumbh',
-          role: 'Embedded Hardware Engineer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/parth-nikumbh-42baa1278?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -151,7 +150,6 @@ export const teamData = {
       id: 'pr',
       name: 'PR & OUTREACH',
       shortName: 'PR',
-      tagline: 'Corporate Sponsorships & Public Relations',
       heads: [
         {
           id: 'pr-head-1',
@@ -168,7 +166,7 @@ export const teamData = {
         {
           id: 'pr-member-1',
           name: 'Vedika Katke',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/vedika-katke-663572432?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -177,7 +175,7 @@ export const teamData = {
         {
           id: 'pr-member-2',
           name: 'Anuja Pandey',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/anuja-pandey-44a27b419?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -186,7 +184,7 @@ export const teamData = {
         {
           id: 'pr-member-3',
           name: 'Manisi Khushi',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/manisi-khushi-385037363?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -195,7 +193,7 @@ export const teamData = {
         {
           id: 'pr-member-4',
           name: 'Aditya Kadam',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -203,7 +201,7 @@ export const teamData = {
         {
           id: 'pr-member-5',
           name: 'Sukrut Suryavanshi',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/sukrut-suryawanshi',
           },
@@ -211,7 +209,7 @@ export const teamData = {
         {
           id: 'pr-member-6',
           name: 'Vedant Parsewar',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/vedant-parsewar-819993376?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -220,7 +218,7 @@ export const teamData = {
         {
           id: 'pr-member-7',
           name: 'Sanatkumar Pol',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/sanatkumar-pol-b60b68430',
           },
@@ -228,7 +226,7 @@ export const teamData = {
         {
           id: 'pr-member-8',
           name: 'Divya Nande',
-          role: 'Outreach Coordinator',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/divya-nande-077bb83a2',
           },
@@ -240,7 +238,6 @@ export const teamData = {
       id: 'event',
       name: 'EVENT & ARENA',
       shortName: 'EVENT',
-      tagline: 'Arena Management & Combat Regulations',
       heads: [
         {
           id: 'event-head-1',
@@ -266,7 +263,7 @@ export const teamData = {
         {
           id: 'event-member-1',
           name: 'Kanaklata Joshi',
-          role: 'Arena Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/kanaklata-joshi-214b1b424?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -275,7 +272,7 @@ export const teamData = {
         {
           id: 'event-member-2',
           name: 'Nilakshi Talwekar',
-          role: 'Match Marshall',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/public-profile/settings/',
           },
@@ -283,7 +280,7 @@ export const teamData = {
         {
           id: 'event-member-3',
           name: 'Sara Mahokar',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/sara-mahokar-3913723bb?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -292,7 +289,7 @@ export const teamData = {
         {
           id: 'event-member-4',
           name: 'Namrata Tate',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/namrata-tate-a63a82430?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -301,7 +298,7 @@ export const teamData = {
         {
           id: 'event-member-5',
           name: 'Rishab Ohol',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/rishabh-ohol-192477385?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -310,7 +307,7 @@ export const teamData = {
         {
           id: 'event-member-6',
           name: 'Akshat Menon',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/akshat-menon-747666418?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -319,7 +316,7 @@ export const teamData = {
         {
           id: 'event-member-7',
           name: 'Shravani Kaulapure',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/shravani-kaulapure-292a6432b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -328,7 +325,7 @@ export const teamData = {
         {
           id: 'event-member-8',
           name: 'Mukesh Borane',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/mukesh-borane-a86b4a375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -337,7 +334,7 @@ export const teamData = {
         {
           id: 'event-member-9',
           name: 'Prathmesh Kadam',
-          role: 'Pit Crew Coordinator',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/prathmesh-kadam-275b63420?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -350,7 +347,6 @@ export const teamData = {
       id: 'problem-statement',
       name: 'PROBLEM STATEMENT',
       shortName: 'PROBLEM STATEMENT',
-      tagline: 'Competition Problem Statements & Challenge Engineering',
       heads: [
         {
           id: 'ps-head-1',
@@ -366,7 +362,7 @@ export const teamData = {
         {
           id: 'ps-member-1',
           name: 'Anushka Mali',
-          role: 'Problem Statement Coordinator',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/anushka-mali-209651299',
           },
@@ -374,7 +370,7 @@ export const teamData = {
         {
           id: 'ps-member-2',
           name: 'Atharva Deshmukh',
-          role: 'Benchmark Lead',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/atharva-deshmukh-dev?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -383,7 +379,7 @@ export const teamData = {
         {
           id: 'ps-member-3',
           name: 'Varsha Jairam',
-          role: 'Benchmark Lead',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/varsha-jairam-6b0738358?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
@@ -396,7 +392,6 @@ export const teamData = {
       id: 'design',
       name: 'DESIGN & MEDIA',
       shortName: 'DESIGN',
-      tagline: 'Aesthetic Direction & Visual Identity',
       heads: [
         {
           id: 'design-head-1',
@@ -423,7 +418,7 @@ export const teamData = {
         {
           id: 'design-member-1',
           name: 'Arya Kadam',
-          role: 'UI/UX Designer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/aryan-kadam-023b20397?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -432,7 +427,7 @@ export const teamData = {
         {
           id: 'design-member-2',
           name: 'Siddhi Agrawal',
-          role: '3D & Motion Designer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/siddhi-agrawal-228233378?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -445,7 +440,6 @@ export const teamData = {
       id: 'web',
       name: 'WEB DEVELOPMENT',
       shortName: 'WEB',
-      tagline: 'Digital Infrastructure & Live Telemetries',
       heads: [
         {
           id: 'web-head-1',
@@ -471,24 +465,15 @@ export const teamData = {
         {
           id: 'web-member-1',
           name: 'Veer Shah',
-          role: 'Frontend Engineer',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/veershah1152',
           },
         },
         {
-          id: 'web-member-2',
-          name: 'Arya Kukkadwal',
-          role: 'Fullstack Developer',
-          socials: {
-            linkedin:
-              'https://www.linkedin.com/in/arya-kukkadwal-17b998391?utm_source=share_via&utm_content=profile&utm_medium=member_android',
-          },
-        },
-        {
           id: 'web-member-3',
           name: 'Varad Yadav',
-          role: 'Fullstack Developer',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/varad-yadav',
           },
@@ -496,7 +481,7 @@ export const teamData = {
         {
           id: 'web-member-4',
           name: 'Muinashraf Momin',
-          role: 'Fullstack Developer',
+          role: 'Crew',
           socials: {
             linkedin: 'https://www.linkedin.com/in/muinashraf-momin-71033a335?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
@@ -508,21 +493,11 @@ export const teamData = {
       id: 'content',
       name: 'CONTENT & SOCIAL MEDIA',
       shortName: 'CONTENT',
-      tagline: 'Match Highlights, Cinematics & Coverage',
       heads: [
-        {
-          id: 'content-head-1',
-          name: 'Suyash Shinde',
-          role: 'Content Head',
-          image: portrait('roborashtra/team/content/suyash'),
-          socials: {
-            linkedin: 'https://linkedin.com',
-          },
-        },
         {
           id: 'content-head-2',
           name: 'Tanaj Manyar',
-          role: 'Social Media Lead',
+          role: 'Social Media Head',
           image: portrait('roborashtra/team/content/tanaj'),
           socials: {
             linkedin:
@@ -534,7 +509,7 @@ export const teamData = {
         {
           id: 'content-member-1',
           name: 'Sujal Padir',
-          role: 'Cinematographer',
+          role: 'Crew',
           socials: {
             linkedin: 'https://linkedin.com',
           },
@@ -542,7 +517,7 @@ export const teamData = {
         {
           id: 'content-member-2',
           name: 'Girish Mule',
-          role: 'Cinematographer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/girish-mule-b4a17b434?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -555,7 +530,6 @@ export const teamData = {
       id: 'documentation',
       name: 'DOCUMENTATION & RESEARCH',
       shortName: 'DOCS',
-      tagline: 'Technical Rulebooks & Engineering Papers',
       heads: [
         {
           id: 'doc-head-1',
@@ -572,7 +546,7 @@ export const teamData = {
         {
           id: 'doc-member-1',
           name: 'Anisha Nandi',
-          role: 'Technical Writer',
+          role: 'Crew',
           socials: {
             linkedin:
               'https://www.linkedin.com/in/anisha-nandi-028b52352?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -585,7 +559,6 @@ export const teamData = {
       id: 'cad',
       name: 'CAD/CAM',
       shortName: 'CAD/CAM',
-      tagline: '3D Modeling & Assemblies',
       heads: [
         {
           id: 'cad-head-1',

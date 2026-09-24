@@ -28,9 +28,11 @@ module.exports = {
         rust: '#B84A32',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'sans-serif'],
+        orbitron: ['var(--font-orbitron)', '"Orbitron"', 'sans-serif'],
+        display: ['var(--font-orbitron)', 'var(--font-display)', 'sans-serif'],
         body: ['var(--font-body)', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
+        tech: ['var(--font-display)', 'sans-serif'],
         ornate: ['var(--font-ornate)', 'serif'],
         cinzel: ['var(--font-cinzel)', '"Cinzel"', 'serif'],
         serifEd: ['var(--font-serif-ed)', 'serif'],

@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { ContactShadows, useGLTF } from '@react-three/drei'
+import { ContactShadows, useGLTF, Stars, Sparkles } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FileText, ArrowRight, ArrowUpRight, Compass } from 'lucide-react'
+import RightNav from './RightNav'
+import FullscreenMenu from './FullscreenMenu'
+import LunarParticles from './LunarParticles'
 
 function YouTubeIcon({ className = 'w-3.5 h-3.5' }) {
   return (
@@ -68,18 +71,16 @@ function ResponsiveRig({ children, isMobile }) {
 }
 
 // GLTF 3D Custom Metal Robot Model Component
-function CustomGLTFModel({ scrollProgress, onInteractiveClick, isMobile }) {
+function CustomGLTFModel({ onInteractiveClick, isMobile }) {
   const { scene } = useGLTF('/models/3d-metal-robot.glb')
   const robotGroup = useRef()
   const clickSpinRef = useRef(0)
   const globalMouse = useRef({ x: 0, y: 0 })
 
   // Track cursor globally on the window so the bot follows the cursor
-  // across the entire page, including over the navbar, dossier cards, CTA buttons, and footer
   useEffect(() => {
     const handlePointerMove = (e) => {
       if (typeof window === 'undefined') return
-      // Normalized Three.js coordinates [-1, 1]
       globalMouse.current.x = (e.clientX / window.innerWidth) * 2 - 1
       globalMouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1
     }
@@ -124,7 +125,7 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick, isMobile }) {
     const maxDim = Math.max(size.x, size.y, size.z)
     const desiredHeight = 2.4 * 0.6
     const baseScaleFactor = maxDim > 0 ? desiredHeight / maxDim : 1
-    const scaleFactor = baseScaleFactor * 1.3 // Slightly larger presence
+    const scaleFactor = baseScaleFactor * 1.3
 
     return {
       centeredOffset: [-center.x * scaleFactor, -center.y * scaleFactor, -center.z * scaleFactor],
@@ -137,10 +138,10 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick, isMobile }) {
     const dt = Math.min(delta, 0.08)
     const t = state.clock.getElapsedTime()
 
-    // Smooth floating animation
+    // Smooth floating animation in lunar zero-gravity
     const floatY = Math.sin(t * 2.2) * 0.08
 
-    // Cursor tracking physics (using global mouse coordinates so it tracks everywhere)
+    // Cursor tracking physics
     const mouseX = globalMouse.current.x
     const mouseY = globalMouse.current.y
 
@@ -150,7 +151,6 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick, isMobile }) {
     const targetBodyRotX = -mouseY * 0.18
     const targetBodyRotZ = -mouseX * 0.08
 
-    // Fixed scale (no scroll parallax scaling)
     const targetScale = baseScale
     const targetY = -0.15 + floatY
 
@@ -165,7 +165,7 @@ function CustomGLTFModel({ scrollProgress, onInteractiveClick, isMobile }) {
 
   const handleClick = (e) => {
     e.stopPropagation()
-    clickSpinRef.current += Math.PI * 2 // 360 degree spin surge on click
+    clickSpinRef.current += Math.PI * 2
     if (onInteractiveClick) onInteractiveClick()
   }
 
@@ -193,14 +193,11 @@ function LoadingFallback() {
     <group ref={meshRef} position={[0, 0, 0]}>
       <mesh castShadow>
         <capsuleGeometry args={[0.3, 0.4, 16, 16]} />
-        <meshStandardMaterial color="#f8f6f0" roughness={0.2} metalness={0.8} wireframe />
+        <meshStandardMaterial color="#38bdf8" roughness={0.2} metalness={0.8} wireframe />
       </mesh>
     </group>
   )
 }
-
-import RightNav from './RightNav'
-import FullscreenMenu from './FullscreenMenu'
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false)
@@ -221,36 +218,67 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative h-[100svh] min-h-[640px] w-full bg-[#F1EDE3] text-textDark select-none overflow-hidden border-b border-black/10 flex flex-col justify-between"
+      className="relative h-[100svh] min-h-[640px] w-full bg-[#030712] text-slate-100 select-none overflow-hidden border-b border-white/10 flex flex-col justify-between"
     >
-      {/* Header Navigation with Logo Emblem, ROBORASHTRA Brand & Menu Button */}
+      {/* =========================================================
+          LUNAR & DEEP SPACE ATMOSPHERE BACKGROUND
+      ========================================================== */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+        {/* Photorealistic Lunar Surface Horizon with Earthrise & Cosmos */}
+        <Image
+          src="/lunar-bg.jpg"
+          alt="Lunar Surface and Space"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-bottom opacity-80"
+        />
+
+        {/* Deep Space Cosmic Vignettes and Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/35 to-[#030712]/85" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,transparent_25%,#030712_88%)] opacity-80" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(56,189,248,0.12),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_75%,rgba(249,115,22,0.08),transparent_50%)]" />
+      </div>
+
+      {/* Floating Lunar Dust & Micro-gravity Particles */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <LunarParticles />
+      </div>
+
+      {/* High-Tech Tactical Telemetry Overlay Grid */}
+      <div className="absolute inset-0 z-[2] bg-[linear-gradient(rgba(56,189,248,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.035)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none opacity-60" />
+
+      {/* =========================================================
+          HEADER NAVIGATION: EMBLEM, BRAND & MENU BUTTON
+      ========================================================== */}
       <motion.header
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2 }}
         className="absolute top-0 left-0 right-0 z-40 px-6 sm:px-10 md:px-14 py-6 md:py-8 flex items-center justify-between pointer-events-auto"
       >
-        {/* Brand Identity with Official Logo Emblem */}
+        {/* Brand Identity with Glowing Official Logo Emblem */}
         <Link href="/" className="group flex items-center gap-3.5 sm:gap-4 select-none">
-          <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+          <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_16px_rgba(56,189,248,0.45)]">
             <Image
               src="/logo/logo.png"
               alt="Roborashtra Emblem"
               fill
-              className="object-contain drop-shadow-sm"
+              className="object-contain"
               priority
             />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="font-orbitron font-extrabold text-base sm:text-xl md:text-2xl tracking-wider text-textDark">
-                ROBO<span className="text-rust">RASHTRA</span>
+              <span className="font-orbitron font-black text-base sm:text-xl md:text-2xl tracking-wider text-white">
+                ROBO<span className="text-cyan-400">RASHTRA</span>
               </span>
-              <span className="hidden sm:inline-block font-mono text-[9px] tracking-widest px-2 py-0.5 rounded-full border bg-black/5 text-rust border-black/10">
+              <span className="hidden sm:inline-block font-orbitron font-bold text-[9px] tracking-widest px-2.5 py-0.5 rounded-full border bg-cyan-950/50 text-cyan-300 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
                 2026-27
               </span>
             </div>
-            <span className="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase text-textMuted">
+            <span className="font-orbitron font-semibold text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-slate-400 group-hover:text-cyan-400/80 transition-colors">
               ROBOTICS CLUB
             </span>
           </div>
@@ -263,11 +291,11 @@ export default function Hero() {
             aria-label="Open menu"
             aria-haspopup="true"
             aria-expanded={menuOpen}
-            className="font-mono text-xs font-semibold tracking-wider px-4 py-2 rounded-xl backdrop-blur-md transition-all duration-200 flex items-center gap-2 text-textDark border border-black/20 hover:border-rust hover:text-rust bg-white/70 hover:bg-white shadow-sm active:scale-[0.98]"
+            className="font-orbitron text-xs font-bold tracking-wider px-4 py-2 rounded-xl backdrop-blur-xl transition-all duration-300 flex items-center gap-2.5 text-slate-200 border border-white/20 hover:border-cyan-400 hover:text-cyan-300 bg-slate-950/60 hover:bg-slate-900/90 shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] active:scale-[0.98]"
           >
             <div className="flex flex-col gap-1 w-3.5">
-              <span className="block h-0.5 w-full bg-current rounded-full" />
-              <span className="block h-0.5 w-2/3 bg-current rounded-full" />
+              <span className="block h-0.5 w-full bg-cyan-400 rounded-full" />
+              <span className="block h-0.5 w-2/3 bg-cyan-400 rounded-full" />
             </div>
             <span>MENU</span>
           </button>
@@ -277,20 +305,10 @@ export default function Hero() {
       {/* Fullscreen Navigation Menu */}
       <FullscreenMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
 
-      {/* Subtle Editorial Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.035)_1px,transparent_1px)] bg-[size:44px_44px] pointer-events-none" />
-
-      {/* Soft Ambient Radial Warm Tint */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(circle at 50% 35%, rgba(200, 75, 39, 0.08), transparent 65%), radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.03), transparent 65%)',
-        }}
-      />
-
-      {/* 3D GLTF Metal Robot Scene*/}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-auto will-change-transform">
+      {/* =========================================================
+          3D GLTF METAL ROBOT SCENE IN SPACE
+      ========================================================== */}
+      <div className="absolute inset-0 z-[3] flex items-center justify-center pointer-events-auto will-change-transform">
         {mounted && (
           <Canvas
             shadows={!isMobile}
@@ -303,17 +321,23 @@ export default function Hero() {
             }}
             dpr={isMobile ? [1, 1] : [1, 1.5]}
           >
-            <ambientLight intensity={1.4} />
-            <directionalLight position={[4, 8, 5]} intensity={9.0} color="#ffffff" castShadow={!isMobile} />
-            <directionalLight position={[-4, -2, -3]} intensity={2} color="#c84b27" />
+            {/* Space Lighting: Crisp Stark Keylight + Cool Lunar Bounce + Accent Flare */}
+            <ambientLight intensity={0.7} />
+            <directionalLight position={[5, 8, 4]} intensity={20.0} color="#ffffff" castShadow={!isMobile} />
+            <directionalLight position={[-5, -2, -3]} intensity={6} color="#38bdf8" />
+            <pointLight position={[0, -1.8, 2]} intensity={8.0} color="#ff9f1c" />
+
+            {/* Real 3D Deep Space Starfield & Micro-gravity Sparkles */}
+            <Stars radius={50} depth={50} count={isMobile ? 800 : 1800} factor={3.5} saturation={0} fade speed={0.8} />
+            <Sparkles count={isMobile ? 20 : 45} scale={4.5} size={2.2} speed={0.3} opacity={0.5} color="#38bdf8" />
 
             <ResponsiveRig isMobile={isMobile}>
-              <group position={[0, 0, 0]}>
+              <group position={[0.25, 0, 0]}>
                 <ContactShadows
-                  position={[0, -1, 0]}
-                  opacity={isMobile ? 0.25 : 0.4}
+                  position={[-0.25, -1, 0]}
+                  opacity={isMobile ? 0.35 : 0.65}
                   scale={7}
-                  blur={1.6}
+                  blur={1.8}
                   far={2.5}
                   resolution={isMobile ? 128 : 256}
                   color="#000000"
@@ -327,23 +351,28 @@ export default function Hero() {
         )}
       </div>
 
-      {/* Viewport UI Overlay: Top Eyebrow, Left Identity, Right Portals, and Bottom Strip (z-20) */}
+      {/* =========================================================
+          VIEWPORT UI OVERLAY (TOP, LEFT, RIGHT, BOTTOM)
+      ========================================================== */}
       <div className="relative z-20 h-full flex flex-col justify-between px-5 sm:px-8 md:px-12 pt-24 sm:pt-28 md:pt-32 pb-6 md:pb-8 pointer-events-none">
-        {/* Top Eyebrow Tag */}
+        
+        {/* Top Eyebrow Tag & Lunar Telemetry */}
         <div className="flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-mono text-[9px] sm:text-[11px] font-bold tracking-widest2 uppercase text-rust"
+            className="flex items-center gap-2.5 font-orbitron text-[9px] sm:text-[11px] font-bold tracking-[0.25em] uppercase text-cyan-400"
           >
-            FLAGSHIP ROBOTICS CHAMPIONSHIP · 2026-2027
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]" />
+            <span>FLAGSHIP ROBOTICS CHAMPIONSHIP · 2026-2027</span>
           </motion.div>
         </div>
 
         {/* Mid-Row: Left Division Identity & Right Section Portals */}
         <div className="flex-1 flex items-center justify-between my-auto py-2">
-          {/* Left Humanized Club Divisions Dossier Card */}
+          
+          {/* Left Lunar Aerospace Division Dossier Card */}
           <motion.div
             initial={{ opacity: 0, x: -25 }}
             animate={{ opacity: 1, x: 0 }}
@@ -351,134 +380,100 @@ export default function Hero() {
             className="hidden lg:flex flex-col w-full max-w-[340px] xl:max-w-[370px] pointer-events-auto select-none"
           >
             {/* Header Label */}
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/10">
+            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-cyan-500/20">
               <div className="flex items-center gap-2">
-                <Compass className="w-3.5 h-3.5 text-rust" />
-                <span className="font-mono text-[11px] tracking-wider font-semibold text-textDark uppercase">
+                <Compass className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="font-orbitron text-[11px] tracking-[0.2em] font-bold text-white uppercase">
                   CLUB DIVISIONS
                 </span>
               </div>
             </div>
 
             {/* Division Selector Tabs */}
-            <div className="grid grid-cols-2 gap-1 p-1 bg-black/5 rounded-xl border border-black/10 mb-3">
-              <button
-                onClick={() => setActiveTab('roborashtra')}
-                className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
-                  activeTab === 'roborashtra'
-                    ? 'bg-white text-textDark shadow-sm'
-                    : 'text-textMuted hover:text-textDark'
-                }`}
-              >
-                ROBORASHTRA
-              </button>
+            <div className="grid grid-cols-2 gap-1 p-1 bg-slate-950/70 rounded-xl border border-white/10 mb-3 backdrop-blur-md">
               <button
                 onClick={() => setActiveTab('robohawk')}
-                className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
+                className={`py-1.5 px-3 rounded-lg font-orbitron text-[11px] tracking-wider font-bold transition-all ${
                   activeTab === 'robohawk'
-                    ? 'bg-white text-textDark shadow-sm'
-                    : 'text-textMuted hover:text-textDark'
+                    ? 'bg-gradient-to-r from-cyan-600/30 to-blue-600/30 border border-cyan-400/50 text-cyan-300 shadow-[0_0_14px_rgba(6,182,212,0.3)]'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
                 ROBOHAWK
               </button>
+              <button
+                onClick={() => setActiveTab('roborashtra')}
+                className={`py-1.5 px-3 rounded-lg font-orbitron text-[11px] tracking-wider font-bold transition-all ${
+                  activeTab === 'roborashtra'
+                    ? 'bg-gradient-to-r from-cyan-600/30 to-blue-600/30 border border-cyan-400/50 text-cyan-300 shadow-[0_0_14px_rgba(6,182,212,0.3)]'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                ROBORASHTRA
+              </button>
             </div>
 
-            {/* Humanized Dossier Card */}
+            {/* Glassmorphic Lunar Dossier Card */}
             <AnimatePresence mode="wait">
-              {activeTab === 'roborashtra' ? (
-                <motion.div
-                  key="tab-roborashtra"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-black/10 shadow-sm space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-wider text-rust font-bold uppercase">
-                      GROUND COMBAT &amp; ARENA
-                    </span>
-                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-black/5 text-textDark font-medium">
-                      STATE ARENA
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="font-display font-bold text-lg text-textDark tracking-tight">
-                      Roborashtra Arena
-                    </h3>
-                    <p className="text-xs text-textMuted leading-relaxed mt-1 font-body">
-                      Our collegiate ground robotics division where teams design, fabricate, and wire 15kg and 30kg combat battlebots, line followers, and autonomous obstacle-course rovers.
-                    </p>
-                  </div>
-
-                  {/* Real Engineering Specs */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 font-mono text-[10px]">
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">ROBOT CLASSES</span>
-                      <span className="font-semibold text-textDark">15KG &amp; 30KG BOTS</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">CHASSIS</span>
-                      <span className="font-semibold text-textDark">ALUMINUM &amp; STEEL</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">TEAMS</span>
-                      <span className="font-semibold text-textDark">COLLEGIATE CIRUCT</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">WORKSHOP BAY</span>
-                      <span className="font-semibold text-textDark">BLOCK C, PCCOER</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
+              {activeTab === 'robohawk' ? (
                 <motion.div
                   key="tab-robohawk"
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.2 }}
-                  className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-black/10 shadow-sm space-y-3"
+                  className="bg-[#060c1d]/85 backdrop-blur-xl p-4 sm:p-5 rounded-2xl border border-cyan-500/25 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_20px_rgba(6,182,212,0.12)] space-y-3 relative overflow-hidden"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-wider text-rust font-bold uppercase">
-                      AERIAL ROBOTICS WING
+                    <span className="font-orbitron text-[18px] tracking-wider text-cyan-400 font-bold uppercase">
+                      Robohawk
                     </span>
-                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-black/5 text-textDark font-medium">
-                      UAV &amp; DRONES
+                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">
+                      DRONES
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-display font-bold text-lg text-textDark tracking-tight">
-                      Robohawk Fleet
-                    </h3>
-                    <p className="text-xs text-textMuted leading-relaxed mt-1 font-body">
-                      Our dedicated UAV division researching autonomous flight stabilization, custom carbon-fiber quadcopters, high-speed FPV pilot racing, and precision payload drops.
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Welcome to RoboHawk, where innovation meets passion. Our student-driven Robotics Club at PCCOE&R under the guidance of Dr. Mahendra B. Salunke, is led by the dynamic leader Om Khare.
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">  
+                      RoboHawk has executed diverse projects in 3D printing, drones, and robotics. It offers hands-on learning, collaboration, and innovation opportunities.
                     </p>
                   </div>
-
-                  {/* Real Drone Specs */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 font-mono text-[10px]">
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">PLATFORM</span>
-                      <span className="font-semibold text-textDark">CUSTOM CARBON UAV</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">TELEMETRY</span>
-                      <span className="font-semibold text-textDark">5.8GHZ FPV LINK</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">AUTONOMY</span>
-                      <span className="font-semibold text-textDark">WAYPOINT MISSIONS</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">FOCUS</span>
-                      <span className="font-semibold text-textDark">PILOT &amp; SENSORS</span>
-                    </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="tab-roborashtra"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-[#060c1d]/85 backdrop-blur-xl p-4 sm:p-5 rounded-2xl border border-cyan-500/25 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_20px_rgba(6,182,212,0.12)] space-y-3 relative overflow-hidden"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-orbitron text-[18px] tracking-wider text-cyan-400 font-bold uppercase">
+                      Roborashtra
+                    </span>
+                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">
+                      NATIONAL EVENT
+                    </span>
                   </div>
+
+                  <div>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      RoboRashtra is a major inter-college robotics competition hosted annually by the RoboHawk Club at PCCOER, Ravet, Pune, in technical collaboration with DIAT DRDO.
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Competitions: Steel Soldiers Slam, Cam Warriors, Blaze Maze, Chakravyuh, and other robotics challenges.
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Prizes: Cash prizes exceeding <span className="text-cyan-400">₹2,00,000.</span>
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
+                      Learning: Hands-on workshops, technical mentorship, and exposure to robotics, automation, AI, and emerging technologies.
+                    </p>
+                  </div> 
                 </motion.div>
               )}
             </AnimatePresence>
@@ -502,11 +497,11 @@ export default function Hero() {
           {/* Button 1: Problem Statement */}
           <Link
             href="/problem-statements"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3 rounded-xl font-mono text-xs tracking-wider font-semibold uppercase bg-white/95 hover:bg-white text-textDark border border-black/20 hover:border-rust shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98] group"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3 rounded-xl font-orbitron text-xs tracking-wider font-bold uppercase backdrop-blur-xl bg-slate-950/75 hover:bg-slate-900 text-white border border-white/20 hover:border-cyan-400 shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:shadow-[0_0_25px_rgba(6,182,212,0.35)] transition-all duration-300 active:scale-[0.98] group"
           >
-            <FileText className="w-4 h-4 text-rust" />
+            <FileText className="w-4 h-4 text-cyan-400 transition-transform group-hover:scale-110" />
             <span>PROBLEM STATEMENT</span>
-            <ArrowUpRight className="w-4 h-4 text-textMuted group-hover:text-rust group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </Link>
 
           {/* Button 2: Register */}
@@ -514,7 +509,7 @@ export default function Hero() {
             href="https://unstop.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3 rounded-xl font-mono text-xs tracking-wider font-bold uppercase bg-rust hover:bg-[#a03820] text-white border border-rust shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98] group"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3 rounded-xl font-orbitron text-xs tracking-wider font-black uppercase bg-gradient-to-r from-rust via-orange-600 to-amber-500 hover:from-orange-600 hover:to-amber-400 text-white border border-orange-400/40 shadow-[0_0_25px_rgba(234,88,12,0.45)] hover:shadow-[0_0_35px_rgba(234,88,12,0.75)] transition-all duration-300 active:scale-[0.98] group"
           >
             <span>REGISTER NOW</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -526,11 +521,13 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-3 font-mono text-[10px] sm:text-[11px] tracking-widest uppercase text-textDark/80 border-t border-black/10 pt-3.5 pointer-events-auto"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-3 border-t border-white/10 pt-3.5 pointer-events-auto"
         >
           <div>
-            <p className="font-semibold text-textDark">ROBORASHTRA &amp; ROBOHAWK</p>
-            <p className="text-textMuted text-[9px] sm:text-[10px]">PIMPRI CHINCHWAD COLLEGE OF ENGINEERING &amp; RESEARCH, PUNE</p>
+            <p className="font-orbitron font-bold text-xs tracking-wider text-white">ROBORASHTRA &amp; ROBOHAWK</p>
+            <p className="font-mono text-slate-400 text-[9px] sm:text-[10px] tracking-widest uppercase">
+              PIMPRI CHINCHWAD COLLEGE OF ENGINEERING &amp; RESEARCH, PUNE
+            </p>
           </div>
 
           {/* Social Links */}
@@ -540,19 +537,19 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube Channel"
-              className="inline-flex items-center gap-1.5 text-textMuted hover:text-rust transition-colors"
+              className="inline-flex items-center gap-1.5 font-orbitron text-[10px] sm:text-xs tracking-wider font-semibold text-slate-300 hover:text-cyan-400 transition-colors"
             >
-              <YouTubeIcon className="w-3.5 h-3.5 text-rust" />
+              <YouTubeIcon className="w-3.5 h-3.5 text-cyan-400" />
               <span>YOUTUBE</span>
             </a>
             <a
-              href="https://www.instagram.com/roborashtra/"
+              href="https://www.instagram.com/roborashtra.pccoer/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram Profile"
-              className="inline-flex items-center gap-1.5 text-textMuted hover:text-rust transition-colors"
+              className="inline-flex items-center gap-1.5 font-orbitron text-[10px] sm:text-xs tracking-wider font-semibold text-slate-300 hover:text-cyan-400 transition-colors"
             >
-              <InstagramIcon className="w-3.5 h-3.5 text-rust" />
+              <InstagramIcon className="w-3.5 h-3.5 text-cyan-400" />
               <span>INSTAGRAM</span>
             </a>
             <a
@@ -560,17 +557,17 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn Page"
-              className="inline-flex items-center gap-1.5 text-textMuted hover:text-rust transition-colors"
+              className="inline-flex items-center gap-1.5 font-orbitron text-[10px] sm:text-xs tracking-wider font-semibold text-slate-300 hover:text-cyan-400 transition-colors"
             >
-              <LinkedInIcon className="w-3.5 h-3.5 text-rust" />
+              <LinkedInIcon className="w-3.5 h-3.5 text-cyan-400" />
               <span>LINKEDIN</span>
             </a>
             <a
               href="mailto:hq@roborashtra.club"
               aria-label="Email Contact"
-              className="inline-flex items-center gap-1.5 text-textMuted hover:text-rust transition-colors"
+              className="inline-flex items-center gap-1.5 font-orbitron text-[10px] sm:text-xs tracking-wider font-semibold text-slate-300 hover:text-cyan-400 transition-colors"
             >
-              <MailIcon className="w-3.5 h-3.5 text-rust" />
+              <MailIcon className="w-3.5 h-3.5 text-cyan-400" />
               <span>EMAIL</span>
             </a>
           </div>

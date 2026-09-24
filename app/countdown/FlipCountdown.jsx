@@ -9,7 +9,7 @@ const DEFAULT_TARGET_DATE = '2027-02-01T00:00:00+05:30'
  * Premium Mechanical Flip-Clock Countdown Component
  * Computes DAYS, HOURS, MINUTES, and SECONDS, flipping every single second in real time.
  */
-export default function FlipCountdown({ targetDate = DEFAULT_TARGET_DATE }) {
+export default function FlipCountdown({ targetDate = DEFAULT_TARGET_DATE, dark = true }) {
   const [mounted, setMounted] = useState(false)
   const [now, setNow] = useState(null)
 
@@ -47,10 +47,10 @@ export default function FlipCountdown({ targetDate = DEFAULT_TARGET_DATE }) {
 
   return (
     <div className="flex items-center justify-center gap-1.5 min-[350px]:gap-2 min-[390px]:gap-2.5 min-[480px]:gap-4 sm:gap-6 md:gap-7 lg:gap-8 xl:gap-10 flex-nowrap w-full max-w-5xl mx-auto px-1 sm:px-4">
-      <FlipUnit value={days} label="DAYS" isDays />
-      <FlipUnit value={hours} label="HOURS" />
-      <FlipUnit value={minutes} label="MINUTES" />
-      <FlipUnit value={seconds} label="SECONDS" />
+      <FlipUnit value={days} label="DAYS" isDays dark={dark} />
+      <FlipUnit value={hours} label="HOURS" dark={dark} />
+      <FlipUnit value={minutes} label="MINUTES" dark={dark} />
+      <FlipUnit value={seconds} label="SECONDS" dark={dark} />
     </div>
   )
 }

@@ -289,37 +289,7 @@ export default function FullscreenMenu({
             }}
             className="absolute bottom-0 left-0 right-0 z-30 flex flex-col gap-2 px-6 pb-5 font-mono text-[8px] uppercase tracking-[0.25em] text-ivory/30 sm:flex-row sm:items-center sm:justify-between md:px-12 md:pb-6"
           >
-            <div className="flex items-center gap-3">
-              <span className="h-1 w-1 rounded-full bg-rust" />
-
-              <span>
-                ROBO RASHTRA / SYSTEM ONLINE
-              </span>
-            </div>
-
-            {/* =================================================
-                SOCIAL LINKS
-            ================================================== */}
-
-            <div className="flex gap-5">
-              <a
-                href="https://www.instagram.com/robohawk.pccoer/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors duration-300 hover:text-rust"
-              >
-                Instagram
-              </a>
-
-              <a
-                href="https://www.linkedin.com/company/robohawk-pccoer/home/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors duration-300 hover:text-rust"
-              >
-                LinkedIn
-              </a>
-            </div>
+            <span></span>
           </motion.div>
         </motion.div>
       )}

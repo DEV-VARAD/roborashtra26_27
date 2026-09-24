@@ -81,8 +81,8 @@ export default function FullscreenMenu({
             <div className="flex items-center gap-3">
               <span className="h-1.5 w-1.5 rounded-full bg-rust shadow-[0_0_12px_rgba(180,75,45,0.55)]" />
 
-              <span className="font-serifEd text-lg tracking-wide sm:text-xl">
-                Roborashtra
+              <span className="font-orbitron font-extrabold text-base tracking-wider sm:text-lg text-white">
+                ROBO<span className="text-cyan-400">RASHTRA</span>
               </span>
             </div>
 
@@ -114,17 +114,6 @@ export default function FullscreenMenu({
               animate="show"
               className="flex w-full flex-1 flex-col justify-center px-5 md:px-12 lg:w-1/2 lg:flex-none lg:pr-10"
             >
-              <div className="mb-5 flex items-center gap-4">
-                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-ivory/35">
-                  Navigation
-                </span>
-
-                <span className="h-px w-12 bg-ivory/15 sm:w-16" />
-
-                <span className="font-mono text-[8px] tracking-[0.25em] text-ivory/20">
-                  08 MODULES
-                </span>
-              </div>
 
               <div className="w-full max-w-3xl">
                 {links.map((link, index) => {
@@ -136,7 +125,7 @@ export default function FullscreenMenu({
 
                       <span className="mr-3 h-px w-6 shrink-0 bg-ivory/15 transition-all duration-500 group-hover:w-10 group-hover:bg-rust sm:mr-5 sm:w-10 sm:group-hover:w-16" />
 
-                      <span className="font-serifEd text-[1.65rem] leading-none tracking-wide transition-all duration-300 group-hover:translate-x-2 group-hover:text-rust min-[380px]:text-[1.9rem] sm:text-3xl md:text-4xl xl:text-[2.7rem]">
+                      <span className="font-orbitron font-bold text-[1.25rem] leading-none tracking-wider transition-all duration-300 group-hover:translate-x-2 group-hover:text-cyan-400 min-[380px]:text-[1.5rem] sm:text-2xl md:text-3xl xl:text-[2.2rem]">
                         {link.label}
                       </span>
 

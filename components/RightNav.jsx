@@ -87,31 +87,31 @@ export default function RightNav({ className = '' }) {
               >
                 <div
                   className={`
-                    flex items-center gap-2.5 sm:gap-3.5 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-3.5 rounded-xl border backdrop-blur-md transition-all duration-300
+                    flex items-center gap-2.5 sm:gap-3.5 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-3.5 rounded-xl border backdrop-blur-xl transition-all duration-300
                     ${
                       isActive
-                        ? 'bg-white/95 border-rust shadow-[0_4px_24px_rgba(200,75,39,0.22)] scale-[1.03]'
-                        : 'bg-[#FAF8F5]/92 border-black/10 shadow-[0_2px_14px_rgba(0,0,0,0.05)] hover:border-rust/60 hover:bg-white hover:shadow-[0_4px_24px_rgba(200,75,39,0.18)]'
+                        ? 'bg-[#0a162e]/90 border-cyan-400 shadow-[0_0_24px_rgba(6,182,212,0.35)] scale-[1.03]'
+                        : 'bg-[#050a16]/75 border-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:border-cyan-400/60 hover:bg-[#0c1935]/85 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]'
                     }
                   `}
                 >
                   {/* Small section number */}
-                  <span className="font-mono text-xs sm:text-sm font-bold tracking-widest text-rust">
+                  <span className="font-orbitron text-xs sm:text-sm font-extrabold tracking-widest text-cyan-400">
                     {item.id}
                   </span>
 
                   {/* Left Arrow expanding on hover: 01 → GALLERY */}
                   <motion.span
                     variants={arrowVariants}
-                    className="font-mono text-xs sm:text-sm text-rust hidden sm:inline-block overflow-hidden"
+                    className="font-mono text-xs sm:text-sm text-cyan-400 hidden sm:inline-block overflow-hidden"
                   >
                     →
                   </motion.span>
 
                   {/* Uppercase section title with wide letter-spacing */}
                   <span
-                    className={`font-mono text-xs sm:text-sm font-semibold tracking-widest2 uppercase transition-colors ${
-                      isActive ? 'text-rust' : 'text-textDark group-hover:text-rust'
+                    className={`font-orbitron text-xs sm:text-sm font-bold tracking-widest2 uppercase transition-colors ${
+                      isActive ? 'text-white' : 'text-slate-300 group-hover:text-cyan-300'
                     }`}
                   >
                     {item.label}
@@ -120,20 +120,20 @@ export default function RightNav({ className = '' }) {
                   {/* Right Arrow: GALLERY → */}
                   <motion.span
                     variants={rightArrowVariants}
-                    className={`font-mono text-xs sm:text-sm font-bold text-rust ${
-                      isActive ? 'opacity-100' : ''
+                    className={`font-mono text-xs sm:text-sm font-bold text-cyan-400 ${
+                      isActive ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'
                     }`}
                   >
                     →
                   </motion.span>
                 </div>
 
-                {/* Editorial hairline divider under each button */}
+                {/* Cybernetic divider under each button */}
                 <div
                   className={`w-full h-[1px] mt-2 transition-colors duration-300 ${
                     isActive
-                      ? 'bg-rust/60'
-                      : 'bg-black/10 group-hover:bg-rust/40'
+                      ? 'bg-cyan-400/70 shadow-[0_0_8px_rgba(6,182,212,0.6)]'
+                      : 'bg-white/10 group-hover:bg-cyan-400/40'
                   }`}
                 />
               </Link>

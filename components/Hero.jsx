@@ -205,7 +205,7 @@ import FullscreenMenu from './FullscreenMenu'
 export default function Hero() {
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [activeTab, setActiveTab] = useState('robohawk')
+  const [activeTab, setActiveTab] = useState('roborashtra')
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -363,16 +363,6 @@ export default function Hero() {
             {/* Division Selector Tabs */}
             <div className="grid grid-cols-2 gap-1 p-1 bg-black/5 rounded-xl border border-black/10 mb-3">
               <button
-                onClick={() => setActiveTab('robohawk')}
-                className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
-                  activeTab === 'robohawk'
-                    ? 'bg-white text-textDark shadow-sm'
-                    : 'text-textMuted hover:text-textDark'
-                }`}
-              >
-                ROBOHAWK
-              </button>
-              <button
                 onClick={() => setActiveTab('roborashtra')}
                 className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
                   activeTab === 'roborashtra'
@@ -382,58 +372,21 @@ export default function Hero() {
               >
                 ROBORASHTRA
               </button>
+              <button
+                onClick={() => setActiveTab('robohawk')}
+                className={`py-1.5 px-3 rounded-lg font-mono text-[11px] tracking-wider font-semibold transition-all ${
+                  activeTab === 'robohawk'
+                    ? 'bg-white text-textDark shadow-sm'
+                    : 'text-textMuted hover:text-textDark'
+                }`}
+              >
+                ROBOHAWK
+              </button>
             </div>
 
             {/* Humanized Dossier Card */}
             <AnimatePresence mode="wait">
-              {activeTab === 'robohawk' ? (
-                <motion.div
-                  key="tab-robohawk"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-black/10 shadow-sm space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-wider text-rust font-bold uppercase">
-                      AERIAL ROBOTICS WING
-                    </span>
-                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-black/5 text-textDark font-medium">
-                      UAV &amp; DRONES
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="font-display font-bold text-lg text-textDark tracking-tight">
-                      Robohawk Fleet
-                    </h3>
-                    <p className="text-xs text-textMuted leading-relaxed mt-1 font-body">
-                      Our dedicated UAV division researching autonomous flight stabilization, custom carbon-fiber quadcopters, high-speed FPV pilot racing, and precision payload drops.
-                    </p>
-                  </div>
-
-                  {/* Real Drone Specs */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 font-mono text-[10px]">
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">PLATFORM</span>
-                      <span className="font-semibold text-textDark">CUSTOM CARBON UAV</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">TELEMETRY</span>
-                      <span className="font-semibold text-textDark">5.8GHZ FPV LINK</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">AUTONOMY</span>
-                      <span className="font-semibold text-textDark">WAYPOINT MISSIONS</span>
-                    </div>
-                    <div className="p-2 bg-black/[0.03] rounded-lg">
-                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">FOCUS</span>
-                      <span className="font-semibold text-textDark">PILOT &amp; SENSORS</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
+              {activeTab === 'roborashtra' ? (
                 <motion.div
                   key="tab-roborashtra"
                   initial={{ opacity: 0, y: 6 }}
@@ -477,6 +430,53 @@ export default function Hero() {
                     <div className="p-2 bg-black/[0.03] rounded-lg">
                       <span className="text-textMuted block text-[8px] uppercase tracking-wider">WORKSHOP BAY</span>
                       <span className="font-semibold text-textDark">BLOCK C, PCCOER</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="tab-robohawk"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-black/10 shadow-sm space-y-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] tracking-wider text-rust font-bold uppercase">
+                      AERIAL ROBOTICS WING
+                    </span>
+                    <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-black/5 text-textDark font-medium">
+                      UAV &amp; DRONES
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-display font-bold text-lg text-textDark tracking-tight">
+                      Robohawk Fleet
+                    </h3>
+                    <p className="text-xs text-textMuted leading-relaxed mt-1 font-body">
+                      Our dedicated UAV division researching autonomous flight stabilization, custom carbon-fiber quadcopters, high-speed FPV pilot racing, and precision payload drops.
+                    </p>
+                  </div>
+
+                  {/* Real Drone Specs */}
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 font-mono text-[10px]">
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">PLATFORM</span>
+                      <span className="font-semibold text-textDark">CUSTOM CARBON UAV</span>
+                    </div>
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">TELEMETRY</span>
+                      <span className="font-semibold text-textDark">5.8GHZ FPV LINK</span>
+                    </div>
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">AUTONOMY</span>
+                      <span className="font-semibold text-textDark">WAYPOINT MISSIONS</span>
+                    </div>
+                    <div className="p-2 bg-black/[0.03] rounded-lg">
+                      <span className="text-textMuted block text-[8px] uppercase tracking-wider">FOCUS</span>
+                      <span className="font-semibold text-textDark">PILOT &amp; SENSORS</span>
                     </div>
                   </div>
                 </motion.div>

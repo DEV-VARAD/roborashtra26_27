@@ -1,9 +1,5 @@
-import ProblemStatementComing from '@/app/event/ProblemStatementComing'
+import { redirect } from 'next/navigation'
 
 export default function ProblemStatementsPage() {
-  return (
-    <div className="h-screen h-[100dvh] w-full overflow-hidden">
-      <ProblemStatementComing />
-    </div>
-  )
+  redirect('/event')
 }

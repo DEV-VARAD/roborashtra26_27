@@ -462,16 +462,13 @@ export default function Hero() {
 
                   <div>
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      RoboRashtra is a major inter-college robotics competition hosted annually by the RoboHawk Club at PCCOER, Ravet, Pune, in technical collaboration with DIAT DRDO.
+                      RoboRashtra is a National Level robotics competition hosted annually by the RoboHawk Club at PCCOER, Ravet, Pune.
                     </p>
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      Competitions: Steel Soldiers Slam, Cam Warriors, Blaze Maze, Chakravyuh, and other robotics challenges.
+                      Prizes: <span className="text-cyan-400">2,10,000+</span> including Goodies.
                     </p>
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      Prizes: Cash prizes exceeding <span className="text-cyan-400">₹2,00,000.</span>
-                    </p>
-                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      Learning: Hands-on workshops, technical mentorship, and exposure to robotics, automation, AI, and emerging technologies.
+                      Learning: Hands-on workshops, technical mentorship, and exposure to robotics, automation, Al, and emerging technologies.
                     </p>
                   </div> 
                 </motion.div>

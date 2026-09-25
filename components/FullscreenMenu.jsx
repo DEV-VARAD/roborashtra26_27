@@ -245,31 +245,6 @@ export default function FullscreenMenu({
             </motion.div>
           </div>
 
-          {/* =====================================================
-              MOBILE LOGO
-          ====================================================== */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.9,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-            }}
-            transition={{
-              duration: 0.8,
-              delay: 0.3,
-            }}
-            className="pointer-events-none absolute bottom-20 right-4 z-20 lg:hidden"
-          >
-            <img
-              src="/logo-b.png"
-              alt=""
-              className="h-auto w-[100px] object-contain opacity-60 sm:w-[130px]"
-            />
-          </motion.div>
 
           {/* =====================================================
               FOOTER

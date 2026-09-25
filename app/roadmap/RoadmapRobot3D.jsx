@@ -1,8 +1,8 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { ContactShadows, Environment } from '@react-three/drei'
-import { useRef, useMemo } from 'react'
+import { ContactShadows, Environment, Lightformer } from '@react-three/drei'
+import { useRef, useState, Suspense } from 'react'
 import * as THREE from 'three'
 
 // 6-Wheel Rocker-Bogie positions [x, y, z] matching NASA Mars Exploration Rover layout
@@ -16,111 +16,234 @@ const WHEEL_DATA = [
   { id: 'RR', pos: [0.94, -0.58, -0.76], isSteering: true },   // Rear Right
 ]
 
+// Pre-computed static wheel coordinate arrays (zero runtime allocation)
+const CLEAT_DATA = Array.from({ length: 14 }, (_, i) => {
+  const angle = (i / 14) * Math.PI * 2
+  return {
+    y: Math.sin(angle) * 0.265,
+    z: Math.cos(angle) * 0.265,
+    rot: angle,
+  }
+})
+
+const SPOKE_DATA = Array.from({ length: 6 }, (_, i) => (i / 6) * Math.PI * 2)
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARED GEOMETRIES (Allocated once at module scope — instant GPU load)
+   ══════════════════════════════════════════════════════════════════ */
+const GEO_WHEEL_DRUM = new THREE.CylinderGeometry(0.265, 0.265, 0.22, 22)
+const GEO_RIM_OUTER = new THREE.CylinderGeometry(0.272, 0.272, 0.02, 22)
+const GEO_RIM_INNER = new THREE.CylinderGeometry(0.272, 0.272, 0.02, 22)
+const GEO_CLEAT = new THREE.BoxGeometry(0.21, 0.014, 0.032)
+const GEO_HUB_DISC = new THREE.CylinderGeometry(0.13, 0.13, 0.18, 16)
+const GEO_SPOKE = new THREE.BoxGeometry(0.012, 0.11, 0.022)
+const GEO_HUB_CAP = new THREE.CylinderGeometry(0.062, 0.062, 0.024, 16)
+const GEO_HUB_NUT = new THREE.CylinderGeometry(0.03, 0.03, 0.012, 6)
+const GEO_KINGPIN = new THREE.CylinderGeometry(0.07, 0.075, 0.18, 14)
+const GEO_KINGPIN_CAP = new THREE.CylinderGeometry(0.082, 0.082, 0.035, 14)
+const GEO_KNUCKLE_BRACKET = new THREE.BoxGeometry(0.06, 0.14, 0.08)
+
+// Suspension geometries
+const GEO_PIVOT_JOINT = new THREE.CylinderGeometry(0.07, 0.07, 0.15, 14)
+const GEO_FRONT_STRUT = new THREE.BoxGeometry(0.05, 0.08, 0.80)
+const GEO_REAR_STRUT = new THREE.BoxGeometry(0.05, 0.075, 0.65)
+const GEO_BOGIE_PIVOT = new THREE.CylinderGeometry(0.058, 0.058, 0.12, 14)
+const GEO_BOGIE_BRIDGE = new THREE.BoxGeometry(0.048, 0.07, 0.76)
+const GEO_TRANSVERSE_BAR = new THREE.CylinderGeometry(0.035, 0.035, 1.58, 14)
+
+// Chassis geometries
+const GEO_CHASSIS_HULL = new THREE.BoxGeometry(1.30, 0.36, 1.44)
+const GEO_CHASSIS_BELLY = new THREE.BoxGeometry(1.05, 0.13, 1.24)
+const GEO_NOSE_BAY = new THREE.BoxGeometry(0.80, 0.23, 0.12)
+const GEO_NOSE_RIB = new THREE.BoxGeometry(0.038, 0.17, 0.025)
+const GEO_HAZCAM_BARREL = new THREE.CylinderGeometry(0.04, 0.04, 0.055, 14)
+const GEO_HAZCAM_LENS = new THREE.SphereGeometry(0.024, 12, 12, 0, Math.PI * 2, 0, Math.PI * 0.5)
+const GEO_FOIL_SEAM = new THREE.BoxGeometry(0.018, 0.365, 1.445)
+const GEO_REAR_BAY = new THREE.BoxGeometry(0.90, 0.25, 0.11)
+const GEO_REAR_HAZCAM = new THREE.CylinderGeometry(0.032, 0.032, 0.038, 12)
+
+// Solar array geometries
+const GEO_SOLAR_DECK = new THREE.BoxGeometry(1.42, 0.03, 1.40)
+const GEO_SOLAR_TILE_CENTER = new THREE.BoxGeometry(0.21, 0.005, 1.32)
+const GEO_SOLAR_BUSBAR = new THREE.BoxGeometry(1.34, 0.003, 0.012)
+const GEO_SOLAR_WING = new THREE.BoxGeometry(0.60, 0.026, 1.30)
+const GEO_SOLAR_TILE_WING = new THREE.BoxGeometry(0.23, 0.005, 1.22)
+const GEO_SOLAR_TRIM = new THREE.BoxGeometry(0.018, 0.032, 1.31)
+const GEO_SOLAR_FLAP = new THREE.BoxGeometry(1.18, 0.024, 0.36)
+const GEO_SOLAR_TILE_FLAP = new THREE.BoxGeometry(1.10, 0.005, 0.30)
+const GEO_SUNDIAL_BASE = new THREE.CylinderGeometry(0.06, 0.06, 0.014, 16)
+const GEO_SUNDIAL_PIN = new THREE.CylinderGeometry(0.007, 0.01, 0.07, 10)
+const GEO_SUNDIAL_RING = new THREE.RingGeometry(0.025, 0.05, 16)
+
+// Mast geometries
+const GEO_MAST_BASE = new THREE.CylinderGeometry(0.10, 0.12, 0.08, 16)
+const GEO_MAST_COLUMN = new THREE.CylinderGeometry(0.055, 0.062, 1.02, 16)
+const GEO_MAST_COLLAR = new THREE.CylinderGeometry(0.068, 0.068, 0.07, 16)
+const GEO_MAST_WIRING = new THREE.BoxGeometry(0.03, 0.10, 0.04)
+const GEO_MOTOR_HOUSING = new THREE.CylinderGeometry(0.078, 0.070, 0.14, 16)
+const GEO_MOTOR_TRANSVERSE = new THREE.CylinderGeometry(0.055, 0.055, 0.16, 14)
+const GEO_CAMERA_BAR = new THREE.BoxGeometry(0.50, 0.11, 0.14)
+const GEO_PANCAM_POD = new THREE.BoxGeometry(0.10, 0.12, 0.12)
+const GEO_LENS_HOOD = new THREE.CylinderGeometry(0.040, 0.046, 0.08, 16)
+const GEO_OPTICAL_LENS = new THREE.SphereGeometry(0.026, 14, 14, 0, Math.PI * 2, 0, Math.PI * 0.5)
+const GEO_NAVCAM_BODY = new THREE.CylinderGeometry(0.020, 0.024, 0.05, 12)
+const GEO_NAVCAM_LENS = new THREE.SphereGeometry(0.013, 12, 12)
+const GEO_SUN_SIGHT = new THREE.CylinderGeometry(0.022, 0.026, 0.06, 12)
+
+// Antenna geometries
+const GEO_DISH_PEDESTAL = new THREE.CylinderGeometry(0.055, 0.070, 0.14, 14)
+const GEO_DISH_ARM = new THREE.BoxGeometry(0.045, 0.16, 0.045)
+const GEO_PARABOLIC_DISH = new THREE.SphereGeometry(0.24, 24, 14, 0, Math.PI * 2, 0, Math.PI * 0.44)
+const GEO_DISH_RIM = new THREE.TorusGeometry(0.236, 0.012, 8, 24)
+const GEO_FEED_HORN = new THREE.CylinderGeometry(0.014, 0.028, 0.16, 12)
+const GEO_FEED_TIP = new THREE.SphereGeometry(0.030, 14, 14)
+const GEO_LGA_BASE = new THREE.CylinderGeometry(0.04, 0.05, 0.10, 12)
+const GEO_LGA_MAST = new THREE.CylinderGeometry(0.012, 0.018, 0.74, 10)
+const GEO_LGA_TIP = new THREE.SphereGeometry(0.022, 10, 10)
+
+// Arm geometries
+const GEO_SHOULDER_A = new THREE.CylinderGeometry(0.07, 0.07, 0.12, 14)
+const GEO_SHOULDER_B = new THREE.CylinderGeometry(0.05, 0.05, 0.13, 12)
+const GEO_UPPER_ARM = new THREE.BoxGeometry(0.05, 0.06, 0.40)
+const GEO_ELBOW = new THREE.CylinderGeometry(0.045, 0.045, 0.10, 12)
+const GEO_FOREARM = new THREE.BoxGeometry(0.045, 0.05, 0.32)
+const GEO_TURRET_HOUSING = new THREE.CylinderGeometry(0.068, 0.068, 0.10, 16)
+const GEO_RAT_HEAD = new THREE.CylinderGeometry(0.034, 0.038, 0.07, 14)
+const GEO_APXS = new THREE.CylinderGeometry(0.028, 0.028, 0.06, 12)
+const GEO_MICROSCOPE = new THREE.CylinderGeometry(0.022, 0.026, 0.05, 10)
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARED MATERIALS (Shared shader programs — instant GPU compilation)
+   ══════════════════════════════════════════════════════════════════ */
+const MAT_WHEEL_DRUM = new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.88, roughness: 0.32 })
+const MAT_ALUM_RIM = new THREE.MeshStandardMaterial({ color: '#cbd5e1', metalness: 0.96, roughness: 0.12 })
+const MAT_SLATE_FLANGE = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.92, roughness: 0.22 })
+const MAT_CLEAT = new THREE.MeshStandardMaterial({ color: '#1e293b', metalness: 0.92, roughness: 0.28 })
+const MAT_HUB_DISC = new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.92, roughness: 0.25 })
+const MAT_SPOKE = new THREE.MeshStandardMaterial({ color: '#e2e8f0', metalness: 0.96, roughness: 0.14 })
+const MAT_GOLD_HUB = new THREE.MeshStandardMaterial({ color: '#d97706', metalness: 0.94, roughness: 0.2 })
+const MAT_AMBER_NUT = new THREE.MeshStandardMaterial({ color: '#f59e0b', metalness: 0.98, roughness: 0.1 })
+const MAT_SLATE_ACTUATOR = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.92, roughness: 0.22 })
+const MAT_DARK_ACTUATOR = new THREE.MeshStandardMaterial({ color: '#1e293b', metalness: 0.95, roughness: 0.15 })
+const MAT_KNUCKLE_BRACKET = new THREE.MeshStandardMaterial({ color: '#64748b', metalness: 0.92, roughness: 0.2 })
+
+const MAT_STRUT_GREY = new THREE.MeshStandardMaterial({ color: '#94a3b8', metalness: 0.94, roughness: 0.18 })
+const MAT_SLATE_PIVOT = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.92, roughness: 0.2 })
+const MAT_DARK_PIVOT = new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.95, roughness: 0.15 })
+const MAT_DIFF_BAR = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.95, roughness: 0.2 })
+
+const MAT_GOLD_MLI = new THREE.MeshStandardMaterial({ color: '#d99b26', metalness: 0.90, roughness: 0.32, envMapIntensity: 1.5 })
+const MAT_GOLD_TAPER = new THREE.MeshStandardMaterial({ color: '#b47818', metalness: 0.88, roughness: 0.38 })
+const MAT_DARK_BAY = new THREE.MeshStandardMaterial({ color: '#1e293b', metalness: 0.92, roughness: 0.2 })
+const MAT_RIB_GREY = new THREE.MeshStandardMaterial({ color: '#94a3b8', metalness: 0.96, roughness: 0.16 })
+const MAT_CAM_BARREL = new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.95, roughness: 0.1 })
+const MAT_HAZCAM_LENS = new THREE.MeshStandardMaterial({ color: '#0284c7', emissive: '#0369a1', emissiveIntensity: 0.7 })
+const MAT_GOLD_SEAM = new THREE.MeshStandardMaterial({ color: '#ca8a04', metalness: 0.94, roughness: 0.25 })
+const MAT_REAR_BAY = new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.9, roughness: 0.25 })
+const MAT_REAR_HAZCAM = new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.95, roughness: 0.15 })
+
+const MAT_SOLAR_DECK = new THREE.MeshStandardMaterial({ color: '#071424', metalness: 0.90, roughness: 0.16 })
+const MAT_SOLAR_CELL = new THREE.MeshStandardMaterial({ color: '#0b1b36', metalness: 0.92, roughness: 0.12, envMapIntensity: 1.8 })
+const MAT_BUSBAR = new THREE.MeshStandardMaterial({ color: '#38bdf8', emissive: '#0ea5e9', emissiveIntensity: 0.5 })
+const MAT_GOLD_TRIM = new THREE.MeshStandardMaterial({ color: '#d99b26', metalness: 0.94, roughness: 0.28 })
+const MAT_SUNDIAL_BASE = new THREE.MeshStandardMaterial({ color: '#e2e8f0', metalness: 0.6, roughness: 0.4 })
+const MAT_SUNDIAL_PIN = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.95, roughness: 0.15 })
+const MAT_SUNDIAL_RING = new THREE.MeshStandardMaterial({ color: '#ca8a04', metalness: 0.7, roughness: 0.3 })
+
+const MAT_MAST_BASE = new THREE.MeshStandardMaterial({ color: '#e2e8f0', metalness: 0.88, roughness: 0.2 })
+const MAT_MAST_WHITE = new THREE.MeshStandardMaterial({ color: '#f8fafc', metalness: 0.5, roughness: 0.3 })
+const MAT_MAST_COLLAR = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.95, roughness: 0.15 })
+const MAT_MAST_GOLD_BOX = new THREE.MeshStandardMaterial({ color: '#d97706', metalness: 0.90, roughness: 0.25 })
+const MAT_MOTOR_HEAD = new THREE.MeshStandardMaterial({ color: '#e2e8f0', metalness: 0.85, roughness: 0.22 })
+const MAT_CAM_BAR = new THREE.MeshStandardMaterial({ color: '#f8fafc', metalness: 0.65, roughness: 0.28 })
+const MAT_OPTICAL_LENS = new THREE.MeshStandardMaterial({
+  color: '#38bdf8',
+  emissive: '#0284c7',
+  emissiveIntensity: 1.4,
+  metalness: 0.98,
+  roughness: 0.05,
+})
+const MAT_NAVCAM_LENS = new THREE.MeshStandardMaterial({
+  color: '#fbbf24',
+  emissive: '#f59e0b',
+  emissiveIntensity: 1.5,
+})
+const MAT_SUN_SIGHT = new THREE.MeshStandardMaterial({ color: '#94a3b8', metalness: 0.95, roughness: 0.15 })
+
+const MAT_DISH_PEDESTAL = new THREE.MeshStandardMaterial({ color: '#cbd5e1', metalness: 0.92, roughness: 0.18 })
+const MAT_DISH_ARM = new THREE.MeshStandardMaterial({ color: '#475569', metalness: 0.94, roughness: 0.16 })
+const MAT_PARABOLIC_GOLD = new THREE.MeshStandardMaterial({
+  color: '#d97706',
+  metalness: 0.95,
+  roughness: 0.20,
+  side: THREE.DoubleSide,
+})
+const MAT_DISH_LIP = new THREE.MeshStandardMaterial({ color: '#f8fafc', metalness: 0.88, roughness: 0.2 })
+const MAT_FEED_HORN = new THREE.MeshStandardMaterial({ color: '#f59e0b', metalness: 0.96, roughness: 0.12 })
+const MAT_FEED_TIP = new THREE.MeshStandardMaterial({
+  color: '#ffedd5',
+  emissive: '#ff9f1c',
+  emissiveIntensity: 1.4,
+  metalness: 0.92,
+  roughness: 0.12,
+})
+const MAT_LGA_BASE = new THREE.MeshStandardMaterial({ color: '#94a3b8', metalness: 0.92, roughness: 0.2 })
+const MAT_LGA_TIP = new THREE.MeshStandardMaterial({ color: '#d97706', emissive: '#f59e0b', emissiveIntensity: 0.8 })
+
+const MAT_ARM_GREEN = new THREE.MeshStandardMaterial({ color: '#9cb3a8', metalness: 0.7, roughness: 0.4 })
+const MAT_TURRET_GOLD = new THREE.MeshStandardMaterial({ color: '#d99b26', metalness: 0.90, roughness: 0.28 })
+const MAT_RAT_HEAD = new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.96, roughness: 0.1 })
+const MAT_APXS = new THREE.MeshStandardMaterial({ color: '#cbd5e1', metalness: 0.94, roughness: 0.18 })
+const MAT_MICROSCOPE = new THREE.MeshStandardMaterial({ color: '#0284c7', emissive: '#0369a1', emissiveIntensity: 0.8 })
+
 /* ══════════════════════════════════════════════════════════════════
    1. SOLID MACHINED ROVER WHEEL WITH SPIRAL FLEXURES & INTEGRATED TREADS
    ══════════════════════════════════════════════════════════════════ */
 function RoverWheel({ position, wheelRef, isSteering, side }) {
-  // Cleat treads on wheel circumference
-  const cleats = useMemo(() => {
-    const items = []
-    const count = 14
-    for (let i = 0; i < count; i++) {
-      const angle = (i / count) * Math.PI * 2
-      items.push({
-        y: Math.sin(angle) * 0.265,
-        z: Math.cos(angle) * 0.265,
-        rot: angle,
-      })
-    }
-    return items
-  }, [])
-
-  // Spiral flexure internal spokes
-  const spokes = useMemo(() => {
-    const items = []
-    const count = 6
-    for (let i = 0; i < count; i++) {
-      items.push((i / count) * Math.PI * 2)
-    }
-    return items
-  }, [])
-
   return (
     <group position={position}>
       {/* Steering Kingpin Knuckle Actuator for Corner Wheels */}
       {isSteering && (
         <group position={[side * -0.04, 0.20, 0]}>
-          <mesh castShadow>
-            <cylinderGeometry args={[0.07, 0.075, 0.18, 16]} />
-            <meshStandardMaterial color="#475569" metalness={0.92} roughness={0.22} />
-          </mesh>
-          <mesh position={[0, 0.1, 0]}>
-            <cylinderGeometry args={[0.082, 0.082, 0.035, 16]} />
-            <meshStandardMaterial color="#1e293b" metalness={0.95} roughness={0.15} />
-          </mesh>
-          {/* Strut-to-hub knuckle bracket */}
-          <mesh position={[side * 0.04, -0.08, 0]}>
-            <boxGeometry args={[0.06, 0.14, 0.08]} />
-            <meshStandardMaterial color="#64748b" metalness={0.92} roughness={0.2} />
-          </mesh>
+          <mesh geometry={GEO_KINGPIN} material={MAT_SLATE_ACTUATOR} />
+          <mesh geometry={GEO_KINGPIN_CAP} material={MAT_DARK_ACTUATOR} position={[0, 0.1, 0]} />
+          <mesh geometry={GEO_KNUCKLE_BRACKET} material={MAT_KNUCKLE_BRACKET} position={[side * 0.04, -0.08, 0]} />
         </group>
       )}
 
       {/* Rotating Wheel Hub & Rim */}
       <group ref={wheelRef}>
         {/* Main Solid Aluminum Wheel Drum */}
-        <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.265, 0.265, 0.22, 28]} />
-          <meshStandardMaterial color="#334155" metalness={0.88} roughness={0.32} />
-        </mesh>
+        <mesh geometry={GEO_WHEEL_DRUM} material={MAT_WHEEL_DRUM} rotation={[0, 0, Math.PI / 2]} />
 
         {/* Machined Outer Wheel Rim Flange */}
-        <mesh position={[side * 0.108, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.272, 0.272, 0.02, 28]} />
-          <meshStandardMaterial color="#cbd5e1" metalness={0.96} roughness={0.12} />
-        </mesh>
+        <mesh geometry={GEO_RIM_OUTER} material={MAT_ALUM_RIM} position={[side * 0.108, 0, 0]} rotation={[0, 0, Math.PI / 2]} />
 
         {/* Machined Inner Wheel Rim Flange */}
-        <mesh position={[side * -0.108, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.272, 0.272, 0.02, 28]} />
-          <meshStandardMaterial color="#475569" metalness={0.92} roughness={0.22} />
-        </mesh>
+        <mesh geometry={GEO_RIM_INNER} material={MAT_SLATE_FLANGE} position={[side * -0.108, 0, 0]} rotation={[0, 0, Math.PI / 2]} />
 
         {/* Integrated Cleat Treads on Outer Tire Drum */}
-        {cleats.map((c, idx) => (
-          <mesh key={idx} position={[0, c.y, c.z]} rotation={[c.rot, 0, 0]}>
-            <boxGeometry args={[0.21, 0.014, 0.032]} />
-            <meshStandardMaterial color="#1e293b" metalness={0.92} roughness={0.28} />
-          </mesh>
+        {CLEAT_DATA.map((c, idx) => (
+          <mesh key={idx} geometry={GEO_CLEAT} material={MAT_CLEAT} position={[0, c.y, c.z]} rotation={[c.rot, 0, 0]} />
         ))}
 
         {/* Recessed Center Spoke Hub Disc */}
-        <mesh position={[side * 0.03, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.13, 0.13, 0.18, 20]} />
-          <meshStandardMaterial color="#0f172a" metalness={0.92} roughness={0.25} />
-        </mesh>
+        <mesh geometry={GEO_HUB_DISC} material={MAT_HUB_DISC} position={[side * 0.03, 0, 0]} rotation={[0, 0, Math.PI / 2]} />
 
         {/* Spiral Curved Flexure Hub Spokes */}
-        {spokes.map((angle, idx) => (
+        {SPOKE_DATA.map((angle, idx) => (
           <mesh
             key={idx}
+            geometry={GEO_SPOKE}
+            material={MAT_SPOKE}
             position={[side * 0.095, Math.sin(angle) * 0.16, Math.cos(angle) * 0.16]}
             rotation={[angle + 0.38, 0, 0]}
-          >
-            <boxGeometry args={[0.012, 0.11, 0.022]} />
-            <meshStandardMaterial color="#e2e8f0" metalness={0.96} roughness={0.14} />
-          </mesh>
+          />
         ))}
 
-        {/* Central Bronze/Gold Hub Cap */}
-        <mesh position={[side * 0.118, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.062, 0.062, 0.024, 18]} />
-          <meshStandardMaterial color="#d97706" metalness={0.94} roughness={0.2} />
-        </mesh>
-        <mesh position={[side * 0.132, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.03, 0.03, 0.012, 6]} />
-          <meshStandardMaterial color="#f59e0b" metalness={0.98} roughness={0.1} />
-        </mesh>
+        {/* Central Bronze/Gold Hub Cap & Nut */}
+        <mesh geometry={GEO_HUB_CAP} material={MAT_GOLD_HUB} position={[side * 0.118, 0, 0]} rotation={[0, 0, Math.PI / 2]} />
+        <mesh geometry={GEO_HUB_NUT} material={MAT_AMBER_NUT} position={[side * 0.132, 0, 0]} rotation={[0, 0, Math.PI / 2]} />
       </group>
     </group>
   )
@@ -137,52 +260,40 @@ function RockerBogieSuspension() {
         return (
           <group key={side} position={[x, 0, 0]}>
             {/* Main Rocker Differential Pivot Joint */}
-            <mesh position={[0, -0.14, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.07, 0.07, 0.15, 16]} />
-              <meshStandardMaterial color="#475569" metalness={0.92} roughness={0.2} />
-            </mesh>
+            <mesh geometry={GEO_PIVOT_JOINT} material={MAT_SLATE_PIVOT} position={[0, -0.14, 0]} rotation={[0, 0, Math.PI / 2]} />
 
             {/* Front Rocker Strut to Front Wheel */}
             <mesh
+              geometry={GEO_FRONT_STRUT}
+              material={MAT_STRUT_GREY}
               position={[side * 0.05, -0.34, 0.35]}
               rotation={[-0.62, 0, side * 0.07]}
-            >
-              <boxGeometry args={[0.05, 0.08, 0.80]} />
-              <meshStandardMaterial color="#94a3b8" metalness={0.94} roughness={0.18} />
-            </mesh>
+            />
 
             {/* Rear Rocker Strut to Bogie Pivot */}
             <mesh
+              geometry={GEO_REAR_STRUT}
+              material={MAT_STRUT_GREY}
               position={[side * 0.04, -0.26, -0.30]}
               rotation={[0.42, 0, side * -0.05]}
-            >
-              <boxGeometry args={[0.05, 0.075, 0.65]} />
-              <meshStandardMaterial color="#94a3b8" metalness={0.94} roughness={0.18} />
-            </mesh>
+            />
 
             {/* Rear Bogie Pivot Joint */}
-            <mesh position={[side * 0.05, -0.38, -0.40]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.058, 0.058, 0.12, 16]} />
-              <meshStandardMaterial color="#334155" metalness={0.95} roughness={0.15} />
-            </mesh>
+            <mesh geometry={GEO_BOGIE_PIVOT} material={MAT_DARK_PIVOT} position={[side * 0.05, -0.38, -0.40]} rotation={[0, 0, Math.PI / 2]} />
 
-            {/* Rear Bogie Bridge Bar (connecting middle & rear wheels) */}
+            {/* Rear Bogie Bridge Bar */}
             <mesh
+              geometry={GEO_BOGIE_BRIDGE}
+              material={MAT_ALUM_RIM}
               position={[side * 0.07, -0.47, -0.40]}
               rotation={[0.02, 0, side * -0.03]}
-            >
-              <boxGeometry args={[0.048, 0.07, 0.76]} />
-              <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.16} />
-            </mesh>
+            />
           </group>
         )
       })}
 
       {/* Transverse Top Differential Bar Across Chassis */}
-      <mesh position={[0, 0.02, -0.08]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.035, 0.035, 1.58, 16]} />
-        <meshStandardMaterial color="#475569" metalness={0.95} roughness={0.2} />
-      </mesh>
+      <mesh geometry={GEO_TRANSVERSE_BAR} material={MAT_DIFF_BAR} position={[0, 0.02, -0.08]} rotation={[0, 0, Math.PI / 2]} />
     </group>
   )
 }
@@ -194,71 +305,38 @@ function WarmElectronicsBox() {
   return (
     <group position={[0, -0.16, 0]}>
       {/* Main Faceted WEB Chassis Hull */}
-      <mesh castShadow receiveShadow position={[0, 0.04, 0]}>
-        <boxGeometry args={[1.30, 0.36, 1.44]} />
-        {/* Photorealistic Multi-Layer Insulation Gold Thermal Blanket */}
-        <meshStandardMaterial
-          color="#d99b26"
-          metalness={0.90}
-          roughness={0.32}
-          envMapIntensity={1.5}
-        />
-      </mesh>
+      <mesh geometry={GEO_CHASSIS_HULL} material={MAT_GOLD_MLI} position={[0, 0.04, 0]} />
 
       {/* Tapered Chassis Underbelly */}
-      <mesh position={[0, -0.16, 0.04]}>
-        <boxGeometry args={[1.05, 0.13, 1.24]} />
-        <meshStandardMaterial color="#b47818" metalness={0.88} roughness={0.38} />
-      </mesh>
+      <mesh geometry={GEO_CHASSIS_BELLY} material={MAT_GOLD_TAPER} position={[0, -0.16, 0.04]} />
 
       {/* Front Equipment Nose Bay with Structural Framing */}
       <group position={[0, 0.05, 0.74]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.80, 0.23, 0.12]} />
-          <meshStandardMaterial color="#1e293b" metalness={0.92} roughness={0.2} />
-        </mesh>
+        <mesh geometry={GEO_NOSE_BAY} material={MAT_DARK_BAY} />
         {/* Front Structural Ribs / Ducts */}
         {[-0.25, -0.08, 0.08, 0.25].map((x) => (
-          <mesh key={x} position={[x, 0, 0.065]}>
-            <boxGeometry args={[0.038, 0.17, 0.025]} />
-            <meshStandardMaterial color="#94a3b8" metalness={0.96} roughness={0.16} />
-          </mesh>
+          <mesh key={x} geometry={GEO_NOSE_RIB} material={MAT_RIB_GREY} position={[x, 0, 0.065]} />
         ))}
         {/* Front Hazcam Stereo Cameras */}
         {[-0.27, 0.27].map((x) => (
           <group key={x} position={[x, 0.05, 0.07]}>
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-              <cylinderGeometry args={[0.04, 0.04, 0.055, 16]} />
-              <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.1} />
-            </mesh>
-            <mesh position={[0, 0, 0.03]} rotation={[Math.PI / 2, 0, 0]}>
-              <sphereGeometry args={[0.024, 16, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
-              <meshStandardMaterial color="#0284c7" emissive="#0369a1" emissiveIntensity={0.7} />
-            </mesh>
+            <mesh geometry={GEO_HAZCAM_BARREL} material={MAT_CAM_BARREL} rotation={[Math.PI / 2, 0, 0]} />
+            <mesh geometry={GEO_HAZCAM_LENS} material={MAT_HAZCAM_LENS} position={[0, 0, 0.03]} rotation={[Math.PI / 2, 0, 0]} />
           </group>
         ))}
       </group>
 
       {/* Gold Foil Panel Seams */}
       {[-0.46, 0, 0.46].map((x) => (
-        <mesh key={x} position={[x, 0.04, 0]}>
-          <boxGeometry args={[0.018, 0.365, 1.445]} />
-          <meshStandardMaterial color="#ca8a04" metalness={0.94} roughness={0.25} />
-        </mesh>
+        <mesh key={x} geometry={GEO_FOIL_SEAM} material={MAT_GOLD_SEAM} position={[x, 0.04, 0]} />
       ))}
 
       {/* Rear Equipment Bay & Thermal Radiator Panel */}
       <group position={[0, 0.05, -0.74]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.90, 0.25, 0.11]} />
-          <meshStandardMaterial color="#334155" metalness={0.9} roughness={0.25} />
-        </mesh>
+        <mesh geometry={GEO_REAR_BAY} material={MAT_REAR_BAY} />
         {/* Rear Hazcams */}
         {[-0.22, 0.22].map((x) => (
-          <mesh key={x} position={[x, 0.04, -0.065]} rotation={[-Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.032, 0.032, 0.038, 14]} />
-            <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.15} />
-          </mesh>
+          <mesh key={x} geometry={GEO_REAR_HAZCAM} material={MAT_REAR_HAZCAM} position={[x, 0.04, -0.065]} rotation={[-Math.PI / 2, 0, 0]} />
         ))}
       </group>
     </group>
@@ -272,96 +350,49 @@ function SolarArrayDeck() {
   return (
     <group position={[0, 0.10, 0]}>
       {/* Central Solar Deck */}
-      <mesh castShadow receiveShadow position={[0, 0, 0.07]}>
-        <boxGeometry args={[1.42, 0.03, 1.40]} />
-        <meshStandardMaterial color="#071424" metalness={0.90} roughness={0.16} />
-      </mesh>
+      <mesh geometry={GEO_SOLAR_DECK} material={MAT_SOLAR_DECK} position={[0, 0, 0.07]} />
 
       {/* Photovoltaic Dark Blue Cell Tiles */}
       {[-0.50, -0.25, 0, 0.25, 0.50].map((x) => (
-        <mesh key={x} position={[x, 0.016, 0.07]}>
-          <boxGeometry args={[0.21, 0.005, 1.32]} />
-          <meshStandardMaterial
-            color="#0b1b36"
-            metalness={0.92}
-            roughness={0.12}
-            envMapIntensity={1.8}
-          />
-        </mesh>
+        <mesh key={x} geometry={GEO_SOLAR_TILE_CENTER} material={MAT_SOLAR_CELL} position={[x, 0.016, 0.07]} />
       ))}
 
       {/* Silver Trace Busbars */}
       {[-0.42, -0.14, 0.14, 0.42].map((z) => (
-        <mesh key={z} position={[0, 0.019, z]}>
-          <boxGeometry args={[1.34, 0.003, 0.012]} />
-          <meshStandardMaterial color="#38bdf8" emissive="#0ea5e9" emissiveIntensity={0.5} />
-        </mesh>
+        <mesh key={z} geometry={GEO_SOLAR_BUSBAR} material={MAT_BUSBAR} position={[0, 0.019, z]} />
       ))}
 
       {/* Left Solar Wing Panel */}
       <group position={[-1.00, 0.01, 0.04]} rotation={[0, 0, 0.04]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.60, 0.026, 1.30]} />
-          <meshStandardMaterial color="#071424" metalness={0.90} roughness={0.16} />
-        </mesh>
+        <mesh geometry={GEO_SOLAR_WING} material={MAT_SOLAR_DECK} />
         {[-0.15, 0.11].map((x) => (
-          <mesh key={x} position={[x, 0.014, 0]}>
-            <boxGeometry args={[0.23, 0.005, 1.22]} />
-            <meshStandardMaterial color="#0b1b36" metalness={0.92} roughness={0.12} />
-          </mesh>
+          <mesh key={x} geometry={GEO_SOLAR_TILE_WING} material={MAT_SOLAR_CELL} position={[x, 0.014, 0]} />
         ))}
         {/* Gold Trim Edge */}
-        <mesh position={[-0.305, -0.004, 0]}>
-          <boxGeometry args={[0.018, 0.032, 1.31]} />
-          <meshStandardMaterial color="#d99b26" metalness={0.94} roughness={0.28} />
-        </mesh>
+        <mesh geometry={GEO_SOLAR_TRIM} material={MAT_GOLD_TRIM} position={[-0.305, -0.004, 0]} />
       </group>
 
       {/* Right Solar Wing Panel */}
       <group position={[1.00, 0.01, 0.04]} rotation={[0, 0, -0.04]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.60, 0.026, 1.30]} />
-          <meshStandardMaterial color="#071424" metalness={0.90} roughness={0.16} />
-        </mesh>
+        <mesh geometry={GEO_SOLAR_WING} material={MAT_SOLAR_DECK} />
         {[-0.11, 0.15].map((x) => (
-          <mesh key={x} position={[x, 0.014, 0]}>
-            <boxGeometry args={[0.23, 0.005, 1.22]} />
-            <meshStandardMaterial color="#0b1b36" metalness={0.92} roughness={0.12} />
-          </mesh>
+          <mesh key={x} geometry={GEO_SOLAR_TILE_WING} material={MAT_SOLAR_CELL} position={[x, 0.014, 0]} />
         ))}
         {/* Gold Trim Edge */}
-        <mesh position={[0.305, -0.004, 0]}>
-          <boxGeometry args={[0.018, 0.032, 1.31]} />
-          <meshStandardMaterial color="#d99b26" metalness={0.94} roughness={0.28} />
-        </mesh>
+        <mesh geometry={GEO_SOLAR_TRIM} material={MAT_GOLD_TRIM} position={[0.305, -0.004, 0]} />
       </group>
 
       {/* Rear Solar Wing Flap */}
       <group position={[0, -0.004, -0.76]} rotation={[-0.05, 0, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[1.18, 0.024, 0.36]} />
-          <meshStandardMaterial color="#071424" metalness={0.90} roughness={0.16} />
-        </mesh>
-        <mesh position={[0, 0.013, 0]}>
-          <boxGeometry args={[1.10, 0.005, 0.30]} />
-          <meshStandardMaterial color="#0b1b36" metalness={0.92} roughness={0.12} />
-        </mesh>
+        <mesh geometry={GEO_SOLAR_FLAP} material={MAT_SOLAR_DECK} />
+        <mesh geometry={GEO_SOLAR_TILE_FLAP} material={MAT_SOLAR_CELL} position={[0, 0.013, 0]} />
       </group>
 
       {/* Mars Sundial / Solar Color Calibration Target */}
       <group position={[0.32, 0.022, 0.42]}>
-        <mesh>
-          <cylinderGeometry args={[0.06, 0.06, 0.014, 20]} />
-          <meshStandardMaterial color="#e2e8f0" metalness={0.6} roughness={0.4} />
-        </mesh>
-        <mesh position={[0, 0.035, 0]}>
-          <cylinderGeometry args={[0.007, 0.01, 0.07, 12]} />
-          <meshStandardMaterial color="#475569" metalness={0.95} roughness={0.15} />
-        </mesh>
-        <mesh position={[0, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.025, 0.05, 20]} />
-          <meshStandardMaterial color="#ca8a04" metalness={0.7} roughness={0.3} />
-        </mesh>
+        <mesh geometry={GEO_SUNDIAL_BASE} material={MAT_SUNDIAL_BASE} />
+        <mesh geometry={GEO_SUNDIAL_PIN} material={MAT_SUNDIAL_PIN} position={[0, 0.035, 0]} />
+        <mesh geometry={GEO_SUNDIAL_RING} material={MAT_SUNDIAL_RING} position={[0, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]} />
       </group>
     </group>
   )
@@ -374,117 +405,49 @@ function PancamMast({ mastRef }) {
   return (
     <group ref={mastRef} position={[-0.18, 0.12, 0.44]}>
       {/* Mast Deck Flange Base */}
-      <mesh castShadow position={[0, 0.04, 0]}>
-        <cylinderGeometry args={[0.10, 0.12, 0.08, 20]} />
-        <meshStandardMaterial color="#e2e8f0" metalness={0.88} roughness={0.2} />
-      </mesh>
+      <mesh geometry={GEO_MAST_BASE} material={MAT_MAST_BASE} position={[0, 0.04, 0]} />
 
       {/* Main Tall White Mast Column */}
-      <mesh castShadow position={[0, 0.58, 0]}>
-        <cylinderGeometry args={[0.055, 0.062, 1.02, 20]} />
-        <meshStandardMaterial color="#f8fafc" metalness={0.5} roughness={0.3} />
-      </mesh>
+      <mesh geometry={GEO_MAST_COLUMN} material={MAT_MAST_WHITE} position={[0, 0.58, 0]} />
 
       {/* Mid-Mast Wiring Collar */}
-      <mesh position={[0, 0.48, 0]}>
-        <cylinderGeometry args={[0.068, 0.068, 0.07, 18]} />
-        <meshStandardMaterial color="#475569" metalness={0.95} roughness={0.15} />
-      </mesh>
-      <mesh position={[0.045, 0.48, 0.02]}>
-        <boxGeometry args={[0.03, 0.10, 0.04]} />
-        <meshStandardMaterial color="#d97706" metalness={0.90} roughness={0.25} />
-      </mesh>
+      <mesh geometry={GEO_MAST_COLLAR} material={MAT_MAST_COLLAR} position={[0, 0.48, 0]} />
+      <mesh geometry={GEO_MAST_WIRING} material={MAT_MAST_GOLD_BOX} position={[0.045, 0.48, 0.02]} />
 
       {/* Top Elevation/Azimuth Motor Drive Housing */}
       <group position={[0, 1.14, 0]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.078, 0.070, 0.14, 18]} />
-          <meshStandardMaterial color="#e2e8f0" metalness={0.85} roughness={0.22} />
-        </mesh>
-        <mesh position={[0, 0.07, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.055, 0.055, 0.16, 16]} />
-          <meshStandardMaterial color="#475569" metalness={0.92} roughness={0.16} />
-        </mesh>
+        <mesh geometry={GEO_MOTOR_HOUSING} material={MAT_MOTOR_HEAD} />
+        <mesh geometry={GEO_MOTOR_TRANSVERSE} material={MAT_SLATE_ACTUATOR} position={[0, 0.07, 0]} rotation={[0, 0, Math.PI / 2]} />
 
         {/* ── Stereo Camera Bar Head ("The Eyes of the Rover") ── */}
         <group position={[0, 0.15, 0.06]}>
           {/* Main Transverse White Camera Bar */}
-          <mesh castShadow>
-            <boxGeometry args={[0.50, 0.11, 0.14]} />
-            <meshStandardMaterial color="#f8fafc" metalness={0.65} roughness={0.28} />
-          </mesh>
+          <mesh geometry={GEO_CAMERA_BAR} material={MAT_CAM_BAR} />
 
           {/* Left Panoramic Camera (Pancam) Pod */}
           <group position={[-0.19, 0.01, 0.06]}>
-            <mesh castShadow>
-              <boxGeometry args={[0.10, 0.12, 0.12]} />
-              <meshStandardMaterial color="#1e293b" metalness={0.92} roughness={0.18} />
-            </mesh>
-            {/* Lens Hood & Shroud */}
-            <mesh position={[0, 0, 0.075]} rotation={[Math.PI / 2, 0, 0]}>
-              <cylinderGeometry args={[0.040, 0.046, 0.08, 18]} />
-              <meshStandardMaterial color="#0f172a" metalness={0.96} roughness={0.1} />
-            </mesh>
-            {/* Multi-Coated Optical Lens Glass */}
-            <mesh position={[0, 0, 0.118]} rotation={[Math.PI / 2, 0, 0]}>
-              <sphereGeometry args={[0.026, 16, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
-              <meshStandardMaterial
-                color="#38bdf8"
-                emissive="#0284c7"
-                emissiveIntensity={1.4}
-                metalness={0.98}
-                roughness={0.05}
-              />
-            </mesh>
+            <mesh geometry={GEO_PANCAM_POD} material={MAT_DARK_ACTUATOR} />
+            <mesh geometry={GEO_LENS_HOOD} material={MAT_CAM_BARREL} position={[0, 0, 0.075]} rotation={[Math.PI / 2, 0, 0]} />
+            <mesh geometry={GEO_OPTICAL_LENS} material={MAT_OPTICAL_LENS} position={[0, 0, 0.118]} rotation={[Math.PI / 2, 0, 0]} />
           </group>
 
           {/* Right Panoramic Camera (Pancam) Pod */}
           <group position={[0.19, 0.01, 0.06]}>
-            <mesh castShadow>
-              <boxGeometry args={[0.10, 0.12, 0.12]} />
-              <meshStandardMaterial color="#1e293b" metalness={0.92} roughness={0.18} />
-            </mesh>
-            {/* Lens Hood & Shroud */}
-            <mesh position={[0, 0, 0.075]} rotation={[Math.PI / 2, 0, 0]}>
-              <cylinderGeometry args={[0.040, 0.046, 0.08, 18]} />
-              <meshStandardMaterial color="#0f172a" metalness={0.96} roughness={0.1} />
-            </mesh>
-            {/* Multi-Coated Optical Lens Glass */}
-            <mesh position={[0, 0, 0.118]} rotation={[Math.PI / 2, 0, 0]}>
-              <sphereGeometry args={[0.026, 16, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
-              <meshStandardMaterial
-                color="#38bdf8"
-                emissive="#0284c7"
-                emissiveIntensity={1.4}
-                metalness={0.98}
-                roughness={0.05}
-              />
-            </mesh>
+            <mesh geometry={GEO_PANCAM_POD} material={MAT_DARK_ACTUATOR} />
+            <mesh geometry={GEO_LENS_HOOD} material={MAT_CAM_BARREL} position={[0, 0, 0.075]} rotation={[Math.PI / 2, 0, 0]} />
+            <mesh geometry={GEO_OPTICAL_LENS} material={MAT_OPTICAL_LENS} position={[0, 0, 0.118]} rotation={[Math.PI / 2, 0, 0]} />
           </group>
 
           {/* Center Dual Navcams */}
           {[-0.055, 0.055].map((x) => (
             <group key={x} position={[x, -0.035, 0.06]}>
-              <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <cylinderGeometry args={[0.020, 0.024, 0.05, 14]} />
-                <meshStandardMaterial color="#1e293b" metalness={0.95} roughness={0.15} />
-              </mesh>
-              <mesh position={[0, 0, 0.028]} rotation={[Math.PI / 2, 0, 0]}>
-                <sphereGeometry args={[0.013, 14, 14]} />
-                <meshStandardMaterial
-                  color="#fbbf24"
-                  emissive="#f59e0b"
-                  emissiveIntensity={1.5}
-                />
-              </mesh>
+              <mesh geometry={GEO_NAVCAM_BODY} material={MAT_DARK_ACTUATOR} rotation={[Math.PI / 2, 0, 0]} />
+              <mesh geometry={GEO_NAVCAM_LENS} material={MAT_NAVCAM_LENS} position={[0, 0, 0.028]} rotation={[Math.PI / 2, 0, 0]} />
             </group>
           ))}
 
           {/* Top Sun Sight Indicator */}
-          <mesh position={[0, 0.085, 0]}>
-            <cylinderGeometry args={[0.022, 0.026, 0.06, 14]} />
-            <meshStandardMaterial color="#94a3b8" metalness={0.95} roughness={0.15} />
-          </mesh>
+          <mesh geometry={GEO_SUN_SIGHT} material={MAT_SUN_SIGHT} position={[0, 0.085, 0]} />
         </group>
       </group>
     </group>
@@ -500,64 +463,26 @@ function AntennaSystem({ dishRef }) {
       {/* Steerable High-Gain Parabolic Dish (HGA) on Right Rear Deck */}
       <group ref={dishRef} position={[0.46, 0.20, -0.40]}>
         {/* Gimbal Pedestal Base */}
-        <mesh position={[0, 0.07, 0]}>
-          <cylinderGeometry args={[0.055, 0.070, 0.14, 16]} />
-          <meshStandardMaterial color="#cbd5e1" metalness={0.92} roughness={0.18} />
-        </mesh>
-        <mesh position={[0, 0.17, 0]} rotation={[0.42, 0, 0]}>
-          <boxGeometry args={[0.045, 0.16, 0.045]} />
-          <meshStandardMaterial color="#475569" metalness={0.94} roughness={0.16} />
-        </mesh>
+        <mesh geometry={GEO_DISH_PEDESTAL} material={MAT_DISH_PEDESTAL} position={[0, 0.07, 0]} />
+        <mesh geometry={GEO_DISH_ARM} material={MAT_DISH_ARM} position={[0, 0.17, 0]} rotation={[0.42, 0, 0]} />
 
         {/* Tilted Open Parabolic Reflector Dish */}
         <group position={[0, 0.28, 0.04]} rotation={[-0.70, 0.22, 0]}>
           {/* Inner Gold Concave Dish */}
-          <mesh castShadow rotation={[Math.PI / 2, 0, 0]}>
-            <sphereGeometry args={[0.24, 32, 18, 0, Math.PI * 2, 0, Math.PI * 0.44]} />
-            <meshStandardMaterial
-              color="#d97706"
-              metalness={0.95}
-              roughness={0.20}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
+          <mesh geometry={GEO_PARABOLIC_DISH} material={MAT_PARABOLIC_GOLD} rotation={[Math.PI / 2, 0, 0]} />
           {/* Outer White Dish Lip Rim */}
-          <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.236, 0.012, 10, 32]} />
-            <meshStandardMaterial color="#f8fafc" metalness={0.88} roughness={0.2} />
-          </mesh>
-          {/* Center Sub-Reflector Feed Horn */}
-          <mesh position={[0, 0, 0.09]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.014, 0.028, 0.16, 14]} />
-            <meshStandardMaterial color="#f59e0b" metalness={0.96} roughness={0.12} />
-          </mesh>
-          <mesh position={[0, 0, 0.17]}>
-            <sphereGeometry args={[0.030, 16, 16]} />
-            <meshStandardMaterial
-              color="#ffedd5"
-              emissive="#ff9f1c"
-              emissiveIntensity={1.4}
-              metalness={0.92}
-              roughness={0.12}
-            />
-          </mesh>
+          <mesh geometry={GEO_DISH_RIM} material={MAT_DISH_LIP} rotation={[Math.PI / 2, 0, 0]} />
+          {/* Center Sub-Reflector Feed Horn & Feed Tip */}
+          <mesh geometry={GEO_FEED_HORN} material={MAT_FEED_HORN} position={[0, 0, 0.09]} rotation={[Math.PI / 2, 0, 0]} />
+          <mesh geometry={GEO_FEED_TIP} material={MAT_FEED_TIP} position={[0, 0, 0.17]} />
         </group>
       </group>
 
       {/* Low-Gain Omni-Directional Antenna Mast (LGA) */}
       <group position={[0.16, 0.18, -0.14]}>
-        <mesh position={[0, 0.05, 0]}>
-          <cylinderGeometry args={[0.04, 0.05, 0.10, 14]} />
-          <meshStandardMaterial color="#94a3b8" metalness={0.92} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, 0.46, 0]}>
-          <cylinderGeometry args={[0.012, 0.018, 0.74, 12]} />
-          <meshStandardMaterial color="#f8fafc" metalness={0.85} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, 0.84, 0]}>
-          <sphereGeometry args={[0.022, 12, 12]} />
-          <meshStandardMaterial color="#d97706" emissive="#f59e0b" emissiveIntensity={0.8} />
-        </mesh>
+        <mesh geometry={GEO_LGA_BASE} material={MAT_LGA_BASE} position={[0, 0.05, 0]} />
+        <mesh geometry={GEO_LGA_MAST} material={MAT_MAST_WHITE} position={[0, 0.46, 0]} />
+        <mesh geometry={GEO_LGA_TIP} material={MAT_LGA_TIP} position={[0, 0.84, 0]} />
       </group>
     </group>
   )
@@ -570,57 +495,27 @@ function RoboticArm({ armRef }) {
   return (
     <group ref={armRef} position={[-0.32, -0.16, 0.70]}>
       {/* Shoulder Azimuth/Elevation Joint */}
-      <mesh castShadow>
-        <cylinderGeometry args={[0.07, 0.07, 0.12, 16]} />
-        <meshStandardMaterial color="#475569" metalness={0.92} roughness={0.2} />
-      </mesh>
-      <mesh position={[0, 0.07, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.13, 14]} />
-        <meshStandardMaterial color="#334155" metalness={0.95} roughness={0.16} />
-      </mesh>
+      <mesh geometry={GEO_SHOULDER_A} material={MAT_SLATE_ACTUATOR} />
+      <mesh geometry={GEO_SHOULDER_B} material={MAT_DARK_PIVOT} position={[0, 0.07, 0]} rotation={[0, 0, Math.PI / 2]} />
 
       {/* Upper Arm Segment */}
       <group position={[0.02, -0.10, 0.16]} rotation={[0.42, -0.26, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.05, 0.06, 0.40]} />
-          <meshStandardMaterial color="#9cb3a8" metalness={0.7} roughness={0.4} />
-        </mesh>
+        <mesh geometry={GEO_UPPER_ARM} material={MAT_ARM_GREEN} />
 
         {/* Elbow Joint */}
         <group position={[0, 0, 0.22]}>
-          <mesh rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.045, 0.045, 0.10, 14]} />
-            <meshStandardMaterial color="#334155" metalness={0.92} roughness={0.2} />
-          </mesh>
+          <mesh geometry={GEO_ELBOW} material={MAT_DARK_PIVOT} rotation={[0, 0, Math.PI / 2]} />
 
           {/* Forearm Segment */}
           <group position={[-0.03, -0.12, 0.14]} rotation={[-0.65, 0.32, -0.18]}>
-            <mesh castShadow>
-              <boxGeometry args={[0.045, 0.05, 0.32]} />
-              <meshStandardMaterial color="#9cb3a8" metalness={0.7} roughness={0.4} />
-            </mesh>
+            <mesh geometry={GEO_FOREARM} material={MAT_ARM_GREEN} />
 
             {/* Wrist Sensor Turret */}
             <group position={[0, 0, 0.18]}>
-              <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <cylinderGeometry args={[0.068, 0.068, 0.10, 18]} />
-                <meshStandardMaterial color="#d99b26" metalness={0.90} roughness={0.28} />
-              </mesh>
-              {/* RAT Grinding Head */}
-              <mesh position={[0.05, 0.035, 0.05]} rotation={[0, 0.35, 0]}>
-                <cylinderGeometry args={[0.034, 0.038, 0.07, 16]} />
-                <meshStandardMaterial color="#0f172a" metalness={0.96} roughness={0.1} />
-              </mesh>
-              {/* APXS Spectrometer */}
-              <mesh position={[-0.05, -0.02, 0.05]} rotation={[0.25, -0.35, 0]}>
-                <cylinderGeometry args={[0.028, 0.028, 0.06, 14]} />
-                <meshStandardMaterial color="#cbd5e1" metalness={0.94} roughness={0.18} />
-              </mesh>
-              {/* Microscopic Imager Lens */}
-              <mesh position={[0, -0.05, 0.06]}>
-                <cylinderGeometry args={[0.022, 0.026, 0.05, 12]} />
-                <meshStandardMaterial color="#0284c7" emissive="#0369a1" emissiveIntensity={0.8} />
-              </mesh>
+              <mesh geometry={GEO_TURRET_HOUSING} material={MAT_TURRET_GOLD} rotation={[Math.PI / 2, 0, 0]} />
+              <mesh geometry={GEO_RAT_HEAD} material={MAT_RAT_HEAD} position={[0.05, 0.035, 0.05]} rotation={[0, 0.35, 0]} />
+              <mesh geometry={GEO_APXS} material={MAT_APXS} position={[-0.05, -0.02, 0.05]} rotation={[0.25, -0.35, 0]} />
+              <mesh geometry={GEO_MICROSCOPE} material={MAT_MICROSCOPE} position={[0, -0.05, 0.06]} />
             </group>
           </group>
         </group>
@@ -713,7 +608,6 @@ function MarsExplorationRover({ progressRef, reducedMotion }) {
       scale={0.92}
       // Side-profile: rover faces LEFT in 3D space so camera sees the RIGHT side
       // Y rotation of Math.PI/2 points the rover's nose out of screen-right
-      // Small X tilt keeps it grounded; slight Y offset for ground contact
       rotation={[0.04, Math.PI / 2 - 0.15, 0]}
       position={[0, -0.136, 0]}
     >
@@ -755,59 +649,110 @@ function MarsExplorationRover({ progressRef, reducedMotion }) {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   9. MAIN 3D ROADMAP CANVAS COMPONENT WITH MARS LIGHTING
+   9. MAIN 3D ROADMAP CANVAS COMPONENT WITH ZERO-NETWORK MARS LIGHTING
    ══════════════════════════════════════════════════════════════════ */
 export default function RoadmapRobot3D({ progressRef, reducedMotion = false }) {
+  const [ready, setReady] = useState(false)
+
   return (
     <div
-      className="h-full w-full"
+      className={`h-full w-full transition-opacity duration-300 ${ready ? 'opacity-100' : 'opacity-0'}`}
       aria-label="3D NASA Mars Exploration Rover tracking roadmap progress"
       role="img"
     >
       <Canvas
-        // Camera positioned to the side: slightly elevated, looking at the rover's right flank
-        // X slight offset reveals depth; Y elevated for a slight downward angle; Z close for presence
         camera={{ position: [0.5, 0.55, 4.8], fov: 40 }}
-        dpr={[1, 1.75]}
-        shadows
+        dpr={[1, 1.5]}
+        shadows={false}
         frameloop={reducedMotion ? 'demand' : 'always'}
-        gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+        gl={{
+          alpha: true,
+          antialias: true,
+          powerPreference: 'high-performance',
+          stencil: false,
+          depth: true,
+        }}
+        onCreated={({ gl }) => {
+          gl.toneMapping = THREE.ACESFilmicToneMapping
+          gl.toneMappingExposure = 1.05
+          setReady(true)
+        }}
       >
-        {/* Ambient fill — warm Martian sky */}
-        <ambientLight intensity={0.60} color="#ffe8c8" />
+        <Suspense fallback={null}>
+          {/* Ambient fill — warm Martian sky */}
+          <ambientLight intensity={0.65} color="#ffe8c8" />
 
-        {/* Main Martian sun: high-angle key light from upper-left of screen (the rover's front) */}
-        <directionalLight
-          position={[-5.0, 7.0, 3.0]}
-          intensity={4.0}
-          color="#fff3d0"
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-        />
+          {/* Main Martian sun: high-angle key light from upper-left */}
+          <directionalLight
+            position={[-5.0, 7.0, 3.0]}
+            intensity={4.0}
+            color="#fff3d0"
+          />
 
-        {/* Warm fill from front-right: illuminates the rover side facing camera */}
-        <pointLight position={[3.5, 1.5, 4.5]} intensity={2.8} color="#f59e0b" distance={9} />
+          {/* Warm fill from front-right: illuminates rover flank facing camera */}
+          <pointLight position={[3.5, 1.5, 4.5]} intensity={2.8} color="#f59e0b" distance={9} />
 
-        {/* Rust-red bounce from the ground — Martian regolith glow */}
-        <pointLight position={[0, -1.5, 1.0]} intensity={1.8} color="#c05c28" distance={5} />
+          {/* Rust-red bounce from ground — Martian regolith glow */}
+          <pointLight position={[0, -1.5, 1.0]} intensity={1.8} color="#c05c28" distance={5} />
 
-        {/* Cool backlight from behind to separate rover from any dark bg */}
-        <pointLight position={[-2, 2.0, -3.0]} intensity={1.0} color="#94a3b8" distance={8} />
+          {/* Cool backlight from behind */}
+          <pointLight position={[-2, 2.0, -3.0]} intensity={1.0} color="#94a3b8" distance={8} />
 
-        <Environment preset="warehouse" />
+          {/* 
+            ZERO-NETWORK PROCEDURAL MARS ENVIRONMENT
+            Replaces the external 1.7MB GitHub HDR download with instant local GPU lightformers.
+            Resolution 128 + frames 1 bakes in ~1ms on the GPU with 0 bytes downloaded over network.
+          */}
+          <Environment resolution={128} frames={1}>
+            <Lightformer
+              form="ring"
+              intensity={2.8}
+              color="#ffe0a0"
+              scale={12}
+              position={[0, 6, 2]}
+              target={[0, 0, 0]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={4.5}
+              color="#fff5dd"
+              scale={[5, 5]}
+              position={[-5, 7, 3]}
+              target={[0, 0, 0]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={2.2}
+              color="#c05c28"
+              scale={[12, 12]}
+              position={[0, -6, 0]}
+              rotation={[Math.PI / 2, 0, 0]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={1.2}
+              color="#94a3b8"
+              scale={[8, 3]}
+              position={[4, 2, -4]}
+              target={[0, 0, 0]}
+            />
+          </Environment>
 
-        {/* Mars Exploration Rover 3D Assembly */}
-        <MarsExplorationRover progressRef={progressRef} reducedMotion={reducedMotion} />
+          {/* Mars Exploration Rover 3D Assembly */}
+          <MarsExplorationRover progressRef={progressRef} reducedMotion={reducedMotion} />
 
-        {/* Ground Contact Shadows */}
-        <ContactShadows
-          position={[0, -0.92, 0]}
-          opacity={0.55}
-          scale={5.0}
-          blur={2.8}
-          far={2.8}
-          color="#3d1a08"
-        />
+          {/* Ground Contact Shadows — baked in 1 single frame at 256 resolution for instant init */}
+          <ContactShadows
+            position={[0, -0.92, 0]}
+            opacity={0.55}
+            scale={5.0}
+            blur={2.4}
+            far={2.8}
+            resolution={256}
+            frames={1}
+            color="#3d1a08"
+          />
+        </Suspense>
       </Canvas>
     </div>
   )

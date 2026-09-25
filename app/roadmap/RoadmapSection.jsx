@@ -2,7 +2,52 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import RoadmapRobot3D from './RoadmapRobot3D'
+import dynamic from 'next/dynamic'
+
+// Ultra-minimal high-tech Martian rover placeholder while WebGL initializes
+function RoverLoadingPlaceholder() {
+  return (
+    <div
+      className="relative w-full h-full flex items-center justify-center pointer-events-none select-none"
+      aria-hidden="true"
+    >
+      {/* Subtle pulsing telemetry ring */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-14 h-14 rounded-full border border-amber-400/25 animate-ping opacity-25" />
+        <div className="w-9 h-9 rounded-full border border-amber-500/30 animate-pulse bg-amber-500/10" />
+        <div className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse" />
+      </div>
+
+      {/* Cyber rover wireframe silhouette */}
+      <svg
+        viewBox="0 0 80 50"
+        className="w-20 h-12 opacity-35 text-amber-400 stroke-current fill-none stroke-[1.2]"
+      >
+        <line x1="30" y1="10" x2="30" y2="24" />
+        <circle cx="27" cy="10" r="2.5" />
+        <circle cx="33" cy="10" r="2.5" />
+        <polygon points="20,24 60,24 55,36 24,36" />
+        <line x1="26" y1="36" x2="16" y2="44" />
+        <line x1="40" y1="36" x2="40" y2="44" />
+        <line x1="54" y1="36" x2="64" y2="44" />
+        <circle cx="16" cy="44" r="4.5" />
+        <circle cx="40" cy="44" r="4.5" />
+        <circle cx="64" cy="44" r="4.5" />
+      </svg>
+    </div>
+  )
+}
+
+// Dynamically import RoadmapRobot3D with ssr: false for instant non-blocking hydration
+const RoadmapRobot3D = dynamic(() => import('./RoadmapRobot3D'), {
+  ssr: false,
+  loading: () => <RoverLoadingPlaceholder />,
+})
+
+// Eagerly preload the 3D rover chunk as soon as this module executes in the browser
+if (typeof window !== 'undefined') {
+  import('./RoadmapRobot3D')
+}
 
 // ── Straight horizontal ground rail in a 1200×700 SVG viewBox
 // Ground sits at Y=580 (82.9% from top), leaving ample sky for floating cards

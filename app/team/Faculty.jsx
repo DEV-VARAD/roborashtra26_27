@@ -72,7 +72,7 @@ function FacultyCard({ faculty, index }) {
 
           {/* Top Header & Faculty Portrait */}
           <div className="flex flex-col h-full justify-between">
-            <div>
+            <div className="flex flex-col flex-1">
               <div className="flex items-center justify-between mb-1 sm:mb-1.5">
                 <span className="font-mono text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9px] tracking-wider sm:tracking-widest uppercase px-2 py-0.5 rounded-full bg-amber/10 text-amber font-bold border border-amber/30 truncate shadow-[0_0_10px_rgba(255,159,28,0.12)]">
                   {faculty.badge}
@@ -80,7 +80,7 @@ function FacultyCard({ faculty, index }) {
               </div>
 
               {/* Faculty Portrait */}
-              <div className="relative w-full h-[135px] min-[360px]:h-[148px] min-[390px]:h-[158px] sm:h-[200px] md:h-[230px] rounded-lg sm:rounded-xl overflow-hidden mb-1.5 sm:mb-2 border border-white/15 bg-black/50 shadow-inner group/img">
+              <div className="relative w-full h-[135px] min-[360px]:h-[148px] min-[390px]:h-[158px] sm:h-[200px] md:h-[230px] rounded-lg sm:rounded-xl overflow-hidden mb-1 sm:mb-1.5 border border-white/15 bg-black/50 shadow-inner group/img">
                 <img
                   src={faculty.image}
                   alt={`Portrait of ${faculty.name}`}
@@ -90,10 +90,12 @@ function FacultyCard({ faculty, index }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#070a13]/80 via-transparent to-transparent opacity-60" />
               </div>
 
-              {/* Only Name Visible */}
-              <h3 className="font-serifEd text-[12px] min-[360px]:text-[13px] sm:text-lg md:text-xl text-ivory font-medium leading-tight group-hover:text-amber transition-colors line-clamp-1">
-                {faculty.name}
-              </h3>
+              {/* Centered & Prominent Faculty Name in the middle */}
+              <div className="flex-1 flex items-center justify-center px-1 py-1 sm:py-2 text-center">
+                <h3 className="font-serifEd text-[13.5px] min-[360px]:text-[15px] min-[390px]:text-[16px] sm:text-xl md:text-2xl lg:text-[1.65rem] text-ivory font-semibold leading-snug group-hover:text-amber transition-colors text-center">
+                  {faculty.name}
+                </h3>
+              </div>
             </div>
 
             {/* Bottom Interactive Flip Prompt */}

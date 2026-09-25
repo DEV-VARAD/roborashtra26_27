@@ -169,26 +169,26 @@ function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
               }}
               className={`w-[150px] sm:w-[170px] md:w-[195px] lg:w-[215px] h-[92px] sm:h-[102px] md:h-[114px] lg:h-[124px] rounded-2xl p-2 sm:p-4 md:p-3.5 flex flex-col justify-between cursor-pointer transition-all duration-300 ${
                 isActive
-                  ? 'bg-[#FF8A00] text-[#111111] shadow-[0_10px_35px_rgba(255,138,0,0.35)] border-2 border-[#FF8A00]'
-                  : 'bg-white text-[#111111] border border-black/8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:border-black/20 hover:shadow-[0_6px_26px_rgba(0,0,0,0.08)]'
+                  ? 'bg-[#FF8A00] text-[#FFFFFF] shadow-[0_10px_35px_rgba(255,138,0,0.35)] border-2 border-[#FF8A00]'
+                  : 'bg-black text-[#FFFFFF] border border-black/8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:border-golden/20 hover:shadow-[0_6px_26px_rgba(0,0,0,0.08)]'
               }`}
             >
               {/* Unit Number Header */}
               <div className="flex items-center justify-between">
                 <span
-                  className={`font-cinzel text-xs sm:text-sm tracking-widest font-bold ${
-                    isActive ? 'text-black/80' : 'text-[#777777]'
+                  className={`font-orbitron text-xs sm:text-sm tracking-widest font-bold ${
+                    isActive ? 'text-black/80' : 'text-[#FFFFFF]'
                   }`}
                 >
                   {unit.number || String(idx + 1).padStart(2, '0')}
                 </span>
               </div>
 
-              {/* Main Unit Title in CINZEL */}
+              {/* Main Unit Title */}
               <div className="my-auto">
                 <h4
-                  className={`font-cinzel font-bold text-sm sm:text-base md:text-lg uppercase tracking-wider leading-none ${
-                    isActive ? 'text-[#111111]' : 'text-[#111111]'
+                  className={`font-orbitron font-bold text-[10px] sm:text-[10px] md:text-[10px] lg:text-[10px] uppercase tracking-wider leading-none ${
+                    isActive ? 'text-[#FFFFFF]' : 'text-[#FFFFFF]'
                   }`}
                 >
                   {unit.shortName || unit.name}
@@ -222,7 +222,7 @@ function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
             <ChevronDown className="w-4 h-4" />
           </button>
         </div>
-        <span className="font-cinzel text-[10px] sm:text-[11px] tracking-widest uppercase text-[#555555] font-bold select-none">
+        <span className="font-orbitron text-[10px] sm:text-[11px] tracking-widest uppercase text-[#727272] font-bold select-none">
           NAVIGATE SQUADS
         </span>
       </div>
@@ -249,7 +249,7 @@ function InitialsAvatar({ name }) {
       }}
       aria-hidden="true"
     >
-      <span className="font-cinzel font-bold text-white text-2xl sm:text-3xl tracking-wider">
+      <span className="font-orbitron font-bold text-white text-2xl sm:text-3xl tracking-wider">
         {initials}
       </span>
     </div>
@@ -271,12 +271,13 @@ function HeadCard({ head, index }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.35, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
-      className="group bg-white rounded-xl sm:rounded-2xl p-2.5 min-[360px]:p-3 sm:p-4 border border-black/8 shadow-[0_3px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:border-[#FF8A00]/30 transition-all duration-300 flex flex-col justify-between select-none"
+      className="group relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 min-[360px]:p-3 sm:p-4 border border-[#FF8A00]/20 bg-[radial-gradient(circle_at_top,_rgba(255,138,0,0.12),_rgba(8,11,18,0.96)_45%,_rgba(2,4,8,1)_100%)] shadow-[0_0_24px_rgba(0,0,0,0.55)] hover:shadow-[0_0_28px_rgba(255,138,0,0.18)] hover:border-[#FF8A00]/45 transition-all duration-300 flex flex-col justify-between select-none"
     >
-      <div>
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.03),transparent_50%,rgba(255,138,0,0.05))] pointer-events-none" />
+      <div className="relative z-10">
 
         {/* Compact Responsive Portrait */}
-        <div className="relative aspect-[4/4] w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#F7F4ED] border border-black/5 shadow-inner">
+        <div className="relative aspect-[4/4] w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#0B1320] border border-[#FF8A00]/15 shadow-inner">
           <img
             src={head.image}
             alt={head.name}
@@ -286,24 +287,24 @@ function HeadCard({ head, index }) {
         </div>
 
         {/* Compact Head Info */}
-        <h4 className="font-serifEd text-[13px] min-[360px]:text-[15px] sm:text-lg md:text-xl font-semibold text-[#111111] leading-tight mb-0.5 group-hover:text-[#FF8A00] transition-colors line-clamp-1">
+        <h4 className="font-orbitron text-[13px] min-[360px]:text-[15px] sm:text-lg md:text-xl font-semibold text-[#F5F7FA] leading-tight mb-0.5 group-hover:text-[#FFB86C] transition-colors line-clamp-1">
           {head.name}
         </h4>
-        <p className="font-mono text-[7.5px] min-[360px]:text-[8.5px] sm:text-[10px] text-[#FF8A00] tracking-wider uppercase font-bold mb-1 sm:mb-1.5 line-clamp-1">
+        <p className="font-orbitron text-[7.5px] min-[360px]:text-[8.5px] sm:text-[10px] text-[#FF9F43] tracking-wider uppercase font-bold mb-1 sm:mb-1.5 line-clamp-1">
           {head.role}
         </p>
       </div>
 
       {/* Social / Contact Links */}
-      <div className="pt-1.5 sm:pt-2 border-t border-black/6 flex items-center justify-between text-[#555555]">
-        <span className="font-mono text-[7px] min-[360px]:text-[8px] sm:text-[9px] uppercase tracking-wider text-[#888888]">
+      <div className="relative z-10 pt-1.5 sm:pt-2 border-t border-[#FF8A00]/15 flex items-center justify-between text-[#D7DFEA]">
+        <span className="font-orbitron text-[7px] min-[360px]:text-[8px] sm:text-[9px] uppercase tracking-wider text-[#94A3B8]">
           CONNECT
         </span>
         <a
           href={head.socials?.linkedin || 'https://linkedin.com'}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#FAF8F5] hover:bg-[#FF8A00]/15 hover:text-[#FF8A00] flex items-center justify-center transition-colors"
+          className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-[#0F172A] hover:bg-[#FF8A00]/15 text-[#F8FAFC] hover:text-[#FFB86C] border border-[#FF8A00]/20 flex items-center justify-center transition-colors"
           aria-label={`${head.name} LinkedIn`}
         >
           <LinkedInIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -327,15 +328,15 @@ function MemberCard({ member, index }) {
         delay: 0.05 + index * 0.03,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="group w-full bg-white rounded-xl sm:rounded-2xl p-2 min-[360px]:p-2.5 sm:p-3 border border-black/6 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_6px_22px_rgba(0,0,0,0.06)] hover:border-[#FF8A00]/30 transition-all duration-200 flex items-center justify-between gap-2 select-none"
+      className="group w-full rounded-xl sm:rounded-2xl p-2 min-[360px]:p-2.5 sm:p-3 border border-[#FF8A00]/20 bg-[radial-gradient(circle_at_top,_rgba(255,138,0,0.1),_rgba(9,13,20,0.96)_35%,_rgba(3,5,10,1)_100%)] shadow-[0_0_18px_rgba(0,0,0,0.45)] hover:shadow-[0_0_24px_rgba(255,138,0,0.14)] hover:border-[#FF8A00]/35 transition-all duration-200 flex items-center justify-between gap-2 select-none"
     >
       {/* Member Details */}
       <div className="min-w-0 pr-1">
-        <h5 className="font-serifEd text-[13px] min-[360px]:text-[14.5px] sm:text-base md:text-lg font-medium text-[#111111] leading-snug truncate group-hover:text-[#FF8A00] transition-colors">
+        <h5 className="font-orbitron text-[13px] font-medium text-[#F5F7FA] leading-snug truncate group-hover:text-[#FFB86C] transition-colors">
           {member.name}
         </h5>
         {member.role && (
-          <p className="font-mono text-[7.5px] min-[360px]:text-[8px] sm:text-[9.5px] text-[#777777] tracking-wider uppercase truncate">
+          <p className="font-orbitron text-[7.5px] min-[360px]:text-[8px] sm:text-[9.5px] text-[#A8B3C6] tracking-wider uppercase truncate">
             {member.role}
           </p>
         )}
@@ -348,7 +349,7 @@ function MemberCard({ member, index }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`${member.name} LinkedIn`}
-          className="w-6 h-6 min-[360px]:w-7 min-[360px]:h-7 sm:w-8 sm:h-8 rounded-lg bg-[#FAF8F5] hover:bg-[#FF8A00]/15 hover:text-[#FF8A00] flex items-center justify-center transition-colors text-[#666666]"
+          className="w-6 h-6 min-[360px]:w-7 min-[360px]:h-7 sm:w-8 sm:h-8 rounded-lg border border-[#FF8A00]/20 bg-[#0F172A] hover:bg-[#FF8A00]/15 hover:text-[#FFB86C] flex items-center justify-center transition-colors text-[#E2E8F0]"
         >
           <LinkedInIcon className="w-3.5 h-3.5" />
         </a>
@@ -413,11 +414,40 @@ export default function Team() {
 
   return (
     <section
-      id="team"
-      ref={sectionRef}
-      aria-label="Roborashtra Crew Directory"
-      className="relative w-full bg-[#F7F4ED] text-[#111111] min-h-screen py-8 sm:py-12 lg:py-0 lg:h-[200vh]"
-    >
+  id="team"
+  ref={sectionRef}
+  aria-label="Roborashtra Crew Directory"
+  className="relative w-full text-white min-h-screen py-8 sm:py-12 lg:py-0 lg:h-[200vh]"
+>
+  {/* Injecting CSS Keyframes directly inside JSX */}
+  <style>{`
+    @keyframes spacePan {
+      from {
+        background-position: 0px 0px, 0px 0px;
+      }
+      to {
+        background-position: 600px 1200px, 300px 600px;
+      }
+    }
+    .jsx-moving-stars {
+      animation: spacePan 60s linear infinite;
+    }
+  `}</style>
+
+  {/* FIXED BACKGROUND LAYER: Moving, high-brightness stars */}
+  <div 
+    className="fixed inset-0 bg-[#020408] -z-10 pointer-events-none jsx-moving-stars"
+    style={{
+      backgroundImage: `
+        radial-gradient(circle at center, #ffffff 2px, transparent 2.5px),
+        radial-gradient(circle at center, #ffffff 1px, transparent 2px)
+      `,
+      backgroundSize: '120px 120px, 180px 180px',
+      filter: 'drop-shadow(0 0 1px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.4))'
+    }}
+  />
+
+
       {/* Sticky 100svh Viewport Container for desktop, natural container for mobile */}
       <div className="relative lg:sticky top-0 min-h-screen lg:h-[100svh] w-full overflow-visible lg:overflow-hidden flex flex-col justify-start lg:justify-center items-center py-4 lg:py-0 border-t border-b border-black/10">
         {/* Subtle Editorial Background Grid */}
@@ -438,11 +468,11 @@ export default function Team() {
             <div className="flex items-center justify-between px-2 mb-1.5">
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#FF8A00] animate-pulse" />
-                <span className="font-cinzel text-[9px] sm:text-[10px] tracking-widest text-[#FF8A00] font-bold uppercase">
+                <span className="font-orbitron text-[9px] sm:text-[10px] tracking-widest text-[#FF8A00] font-bold uppercase">
                   CREW SQUADS
                 </span>
               </div>
-              <span className="font-mono text-[8px] sm:text-[9px] text-[#777777] tracking-wider uppercase">
+              <span className="font-orbitron text-[8px] sm:text-[9px] text-[#777777] tracking-wider uppercase">
                 {allUnits.length} SQUADS ACTIVE
               </span>
             </div>
@@ -455,7 +485,7 @@ export default function Team() {
                     <button
                       key={unit.id}
                       onClick={() => setSelectedUnitId(unit.id)}
-                      className={`shrink-0 rounded-full px-3 py-1 font-cinzel text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] tracking-wider font-bold uppercase transition-all duration-200 min-h-[32px] sm:min-h-[36px] touch-manipulation ${
+                      className={`shrink-0 rounded-full px-3 py-1 font-orbitron text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] tracking-wider font-bold uppercase transition-all duration-200 min-h-[32px] sm:min-h-[36px] touch-manipulation ${
                         isActive
                           ? 'bg-[#FF8A00] text-[#111111] shadow-[0_4px_14px_rgba(255,138,0,0.35)]'
                           : 'bg-white text-[#111111] border border-black/8'
@@ -485,9 +515,9 @@ export default function Team() {
             {/* RIGHT: SELECTED TEAM CONTENT & MEMBER CARDS */}
             <div className="lg:col-span-7 xl:col-span-8 px-1.5 sm:px-4 md:px-8 lg:pr-10 lg:pl-2 w-full max-h-none overflow-visible overscroll-contain no-scrollbar">
               {/* Header Bar: Active Squad Title */}
-              <div className="relative lg:sticky top-0 z-30 bg-[#F7F4ED]/95 backdrop-blur-md pt-1 pb-2 sm:pb-3 mb-3 sm:mb-5 border-b border-black/8">
+              <div className="relative lg:sticky top-0 z-30 bg-black/95 backdrop-blur-md pt-1 pb-2 sm:pb-3 mb-3 sm:mb-5 border-b border-[#D4AF37]/40">
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="font-cinzel text-[10px] sm:text-xs font-bold text-[#FF8A00] tracking-widest px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-[#FF8A00]/10 border border-[#FF8A00]/20">
+                  <span className="font-orbitron text-[10px] sm:text-xs font-bold text-[#FF8A00] tracking-widest px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-[#FF8A00]/10 border border-[#FF8A00]/20">
                     {activeUnit.number || '01'}
                   </span>
                   <motion.h2
@@ -495,7 +525,7 @@ export default function Team() {
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="font-cinzel text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-[#111111] leading-none"
+                    className="font-orbitron text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-[#D4AF37] leading-none"
                   >
                     {activeUnit.name}
                   </motion.h2>
@@ -517,7 +547,7 @@ export default function Team() {
                   {activeUnit.heads && activeUnit.heads.length > 0 && (
                     <div>
                       <div className="flex items-center gap-3 mb-2.5 sm:mb-3.5">
-                        <span className="font-cinzel text-[10px] sm:text-xs tracking-widest uppercase text-[#111111] font-bold shrink-0">
+                        <span className="font-orbitron text-[10px] sm:text-xs tracking-widest uppercase text-[#FFA800] font-bold shrink-0">
                           {activeUnit.id === 'lead' ? 'EXECUTIVE LEADS' : 'UNIT HEADS'}
                         </span>
                         <div className="h-[1.5px] bg-[#FF8A00] flex-1 opacity-80" />
@@ -535,7 +565,7 @@ export default function Team() {
                   {activeUnit.id !== 'lead' && activeUnit.id !== 'cad' && (
                     <div>
                       <div className="flex items-center gap-3 mb-2.5 sm:mb-3.5">
-                        <span className="font-cinzel text-[10px] sm:text-xs tracking-widest uppercase text-[#111111] font-bold shrink-0">
+                        <span className="font-orbitron text-[10px] sm:text-xs tracking-widest uppercase text-[#FFA800] font-bold shrink-0">
                           UNIT MEMBERS
                         </span>
                         <div className="h-[1.5px] bg-[#FF8A00] flex-1 opacity-80" />
@@ -549,7 +579,7 @@ export default function Team() {
                         </div>
                       ) : (
                         <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-black/8 shadow-sm text-center">
-                          <p className="font-mono text-[10px] sm:text-xs tracking-widest uppercase text-[#777777]">
+                          <p className="font-orbitron text-[10px] sm:text-xs tracking-widest uppercase text-[#777777]">
                             [ UNIT RECRUITS CURRENTLY IN INDUCTION LAB ]
                           </p>
                         </div>

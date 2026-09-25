@@ -1,10 +1,15 @@
-import EventsStory from '@/app/event/EventsStory'
-import ProblemStatementComing from '@/app/event/ProblemStatementComing'
+﻿import PSComing from './PSComing'
 
-export default function EventPage() {
+export const metadata = {
+  title: 'Problem Statements — Coming Soon | Roborashtra',
+  description:
+    'Roborashtra 2026-27 Problem Statements and Arena Challenges.',
+}
+
+export default function ProblemStatementsPage() {
   return (
-    <div className="h-screen h-[100dvh] w-full overflow-hidden">
-      <ProblemStatementComing />
+    <div className="min-h-screen w-full">
+      <PSComing />
     </div>
   )
 }

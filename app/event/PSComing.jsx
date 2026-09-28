@@ -308,355 +308,72 @@ export default function PSComing() {
                     ? middleX
                     : rightX
 
-              const rotate =
-                index === 0
-                  ? leftRotate
-                  : index === 1
-                    ? middleRotate
-                    : rightRotate
-
-              /*
-               * Each card receives one third of the same
-               * combined artwork.
-               *
-               * Because the cards have zero gap and zero
-               * border initially, they appear as ONE image.
-               */
-
-              const combinedPosition =
-                index === 0
-                  ? '0% 50%'
-                  : index === 1
-                    ? '50% 50%'
-                    : '100% 50%'
-
-              return (
-                <motion.div
-                  key={event.id}
-                  className="relative h-[500px] min-w-0 flex-1"
-                  style={{
-                    x,
-                    rotate,
-                    scale: cardScale,
-                    zIndex:
-                      isHovered
-                        ? 30
-                        : 10,
-                  }}
-                  onMouseEnter={() =>
-                    setHoveredCard(event.id)
-                  }
-                  onMouseLeave={() =>
-                    setHoveredCard(null)
-                  }
-                >
-
-                  {/* ==================================================
-                      CARD
-                  ================================================== */}
-
-                  <motion.div
-                    className="relative h-full w-full"
-                    animate={{
-                      y:
-                        isHovered
-                          ? -7
-                          : 0,
-
-                      scale:
-                        isHovered
-                          ? 1.035
-                          : 1,
-                    }}
-                    transition={{
-                      duration: 0.35,
-                      ease: [
-                        0.22,
-                        1,
-                        0.36,
-                        1,
-                      ],
-                    }}
-                    style={{
-                      rotateY: cardFlipY,
-                      transformStyle:
-                        'preserve-3d',
-                    }}
-                  >
-
-                    {/* ==================================================
-                        FRONT
-                    ================================================== */}
-
-                    <div
-                      className="absolute inset-0 overflow-hidden bg-transparent"
-                      style={{
-                        /*
-                         * IMPORTANT:
-                         *
-                         * NO BORDER.
-                         *
-                         * At the beginning these three panels
-                         * must visually become one single image.
-                         */
-                        backfaceVisibility:
-                          'hidden',
-
-                        WebkitBackfaceVisibility:
-                          'hidden',
-                      }}
-                    >
-
-                      {/* ==================================================
-                          ONE COMBINED IMAGE
-                      ================================================== */}
-
-                      <div
-                        className="absolute inset-0 bg-no-repeat"
-                        style={{
-                          backgroundImage:
-                            `url(${COMBINED_IMAGE})`,
-
-                          /*
-                           * The source image spans the width
-                           * of all three cards combined.
-                           */
-
-                          backgroundSize:
-                            '300% 100%',
-
-                          /*
-                           * Each panel shows its respective
-                           * third of the same image.
-                           */
-
-                          backgroundPosition:
-                            combinedPosition,
-                        }}
-                      />
-
-                      {/* Very subtle atmospheric darkening */}
-
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/35 via-transparent to-transparent" />
-
-                    </div>
-
-                    {/* ==================================================
-                        BACK
-                    ================================================== */}
-
-                    <div
-                      className="absolute inset-0 overflow-hidden rounded-[4px] border border-cyan-300/20 bg-[#071426] p-6 lg:p-8"
-                      style={{
-                        backfaceVisibility:
-                          'hidden',
-
-                        WebkitBackfaceVisibility:
-                          'hidden',
-
-                        transform:
-                          'rotateY(180deg)',
-                      }}
-                    >
-
-                      <motion.div
-                        className="flex h-full flex-col"
-                        style={{
-                          opacity:
-                            backInfoOpacity,
-
-                          y:
-                            backInfoY,
-                        }}
-                      >
-
-                        {/* ==============================================
-                            BACK HEADER
-                        ============================================== */}
-
-                        <motion.div
-                          className="flex items-center justify-between"
-                          style={{
-                            opacity:
-                              backMetaOpacity,
-                          }}
-                        >
-
-                          <span className="font-mono text-[11px] tracking-[0.22em] text-cyan-300/75">
-                            {event.code}
-                          </span>
-
-                          <span className="font-mono text-[9px] tracking-[0.16em] text-white/40">
-                            MISSION BRIEF
-                          </span>
-
-                        </motion.div>
-
-                        {/* ==============================================
-                            INFORMATION
-                        ============================================== */}
-
-                        <div className="mt-8">
-
-                          <div className="mb-4 h-px w-10 bg-cyan-300/60" />
-
-                          <h2 className="font-orbitron text-2xl font-semibold tracking-tight text-white lg:text-[28px]">
-                            {event.title}
-                          </h2>
-
-                          <p className="mt-3 font-mono text-[11px] leading-relaxed tracking-[0.12em] text-cyan-200/70">
-                            {event.tagline}
-                          </p>
-
-                          <p className="mt-5 text-[13px] leading-[1.75] text-blue-100/75 lg:text-[14px]">
-                            {event.description}
-                          </p>
-
-                        </div>
-
-                        {/* ==============================================
-                            RULEBOOK
-                        ============================================== */}
-
-                        <div className="mt-auto">
-
-                          <div className="mb-3 font-mono text-[9px] tracking-[0.2em] text-white/40">
-                            OFFICIAL RULEBOOK
-                          </div>
-
-                          {event.rulebook ? (
-
-                            <a
-                              href={event.rulebook}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="flex h-11 items-center justify-between border border-cyan-300/30 px-4 font-mono text-[9px] tracking-[0.15em] text-cyan-200 transition-colors hover:border-cyan-300/60 hover:bg-cyan-300/[0.04]"
-                            >
-
-                              <span>
-                                VIEW RULEBOOK
-                              </span>
-
-                              <span>
-                                ↗
-                              </span>
-
-                            </a>
-
-                          ) : (
-
-                            <div className="flex h-11 items-center justify-between border border-white/[0.08] px-4 font-mono text-[9px] tracking-[0.1em] text-white/45">
-
-                              <span>
-                                AVAILABLE{' '}
-                                {event.availableFrom}
-                              </span>
-
-                              <span>
-                                LOCKED
-                              </span>
-
-                            </div>
-
-                          )}
-
-                          <div className="mt-3 w-full py-2 text-center font-mono text-[9px] tracking-[0.18em] text-white/25">
-                            SCROLL TO RETURN
-                          </div>
-
-                        </div>
-
-                      </motion.div>
-
-                    </div>
-
-                  </motion.div>
-
-                </motion.div>
-              )
-            })}
-
-          </div>
-
-        </div>
-
-        {/* ====================================================
-            MOBILE
-        ==================================================== */}
-
-        <div className="flex h-full flex-col justify-center gap-3 px-5 pb-10 pt-28 md:hidden">
-
-          {events.map((event, index) => (
-
-            <div
-              key={event.id}
-              className="relative h-[185px] w-full"
-            >
-
-              <div className="absolute inset-0 overflow-hidden rounded-[4px] border border-white/10">
-
-                <img
-                  src={[
-                    '/card1.png',
-                    '/card2.png',
-                    '/card3.png',
-                  ][index]}
-                  alt={event.title}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020817] to-transparent" />
-
-                <div className="absolute left-4 right-4 top-4 flex items-center justify-between">
-
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-cyan-200/70">
-                    {event.code}
-                  </span>
-
-                  <span className="font-mono text-[8px] tracking-[0.12em] text-white/30">
-                    OPENING
-                  </span>
-
-                </div>
-
-                <div className="absolute bottom-0 p-4">
-
-                  <h2 className="font-orbitron text-xl font-semibold text-white">
-                    {event.title}
-                  </h2>
-
-                  <p className="mt-2 font-mono text-[10px] leading-relaxed text-cyan-100/70">
-                    {event.tagline}
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
-
-        {/* ====================================================
-            FOOTER
-        ==================================================== */}
-
-        <div className="absolute bottom-5 left-5 right-5 z-50 flex items-center justify-between">
-
-          <span className="font-mono text-[8px] tracking-[0.2em] text-white/25">
-            ROBORASHTRA 2026 — 2027
-          </span>
-
-          <span className="hidden font-mono text-[8px] tracking-[0.2em] text-cyan-300/35 sm:block">
-            ENGINEERING / ROBOTICS / INNOVATION
-          </span>
-
-        </div>
-
-      </div>
-    </main>
+      {/* ── 2. INTERACTIVE FOREGROUND CONTENT ── */}
+      <motion.div
+        style={{
+          rotateX: reducedMotion ? 0 : textTiltX,
+          rotateY: reducedMotion ? 0 : textTiltY,
+          x: reducedMotion ? 0 : textShiftX,
+          y: reducedMotion ? 0 : textShiftY,
+          transformStyle: 'preserve-3d',
+        }}
+        className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center"
+      >
+        {/* ── Staggered Interactive 3D Typography ── */}
+        <motion.h2
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.15,
+              },
+            },
+          }}
+          className="font-mono font-black text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[0.08em] uppercase leading-[1.08] text-white"
+          style={{ transform: 'translateZ(40px)' }}
+        >
+          {words.map((word, i) => {
+            const isSoon = word.toLowerCase().includes('soon')
+            return (
+              <motion.span
+                key={i}
+                variants={{
+                  hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    transition: {
+                      duration: 0.9,
+                      ease: [0.16, 1, 0.3, 1],
+                    },
+                  },
+                }}
+                whileHover={{
+                  scale: 1.08,
+                  y: -8,
+                  color: isSoon ? '#FFB84D' : '#4FC3FF',
+                  textShadow: '0 0 25px rgba(79,195,255,0.75)',
+                  transition: { duration: 0.2 },
+                }}
+                className={`inline-block mr-[0.25em] last:mr-0 cursor-pointer transition-colors duration-200 ${
+                  isSoon
+                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#4FC3FF] via-[#7DD3FC] to-[#FF9F1C] drop-shadow-[0_0_20px_rgba(79,195,255,0.35)]'
+                    : ''
+                }`}
+              >
+                {word}
+              </motion.span>
+            )
+          })}
+        </motion.h2>
+      </motion.div>
+    </section>
   )
 }
 

@@ -802,11 +802,10 @@ export default function Hero() {
                   <div>
 
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      Welcome to RoboHawk, where innovation meets passion. Our student-driven Robotics Club at PCCOE&R under the guidance of Dr. Mahendra B. Salunke, is led by the dynamic leader Om Khare.
+                      Welcome to RoboHawk, where innovation meets passion. Our student-driven Robotics Club at PCCOE&amp;R under the guidance of Prof. Pallavi Kulkarni &amp; is led by the leader Shivraj Patil.
                     </p>
-
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      RoboHawk has executed diverse projects in 3D printing, drones, and robotics. It offers hands-on learning, collaboration, and innovation opportunities.
+                      RoboHawk has executed projects in robotics and have conducted several workshops. It offers hands-on learning, collaboration, and innovation opportunities.
                     </p>
 
                   </div>

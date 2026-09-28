@@ -464,7 +464,7 @@ export default function Team() {
 
         <div className="relative z-10 w-full max-w-[1600px] mx-auto px-2 sm:px-4">
           {/* MOBILE: Sticky Section Label & Horizontal scrollable unit pills (shown below lg) */}
-          <div className="lg:hidden sticky top-2 z-40 bg-[#F7F4ED]/95 backdrop-blur-md py-1.5 w-full mb-3 rounded-xl border border-black/5 shadow-xs">
+          <div className="lg:hidden sticky top-2 z-40 bg-black/95 backdrop-blur-md py-1.5 w-full mb-3 rounded-xl border border-white/10 shadow-lg">
             <div className="flex items-center justify-between px-2 mb-1.5">
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
@@ -472,7 +472,7 @@ export default function Team() {
                   CREW SQUADS
                 </span>
               </div>
-              <span className="font-mono text-[8px] sm:text-[9px] text-white/40 tracking-[0.18em] uppercase">
+              <span className="font-mono text-[8px] sm:text-[9px] text-white/50 tracking-[0.18em] uppercase">
                 {allUnits.length} SQUADS ACTIVE
               </span>
             </div>
@@ -488,7 +488,7 @@ export default function Team() {
                       className={`shrink-0 rounded-full px-3 py-1 font-mono text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] tracking-[0.18em] font-bold uppercase transition-all duration-200 min-h-[32px] sm:min-h-[36px] touch-manipulation ${
                         isActive
                           ? 'bg-[#22D3EE] text-[#050B14] shadow-[0_4px_14px_rgba(34,211,238,0.35)]'
-                          : 'bg-white text-[#111111] border border-black/8'
+                          : 'bg-black text-white/80 border border-white/15 hover:border-[#22D3EE]/40 hover:text-white'
                       }`}
                     >
                       {unit.shortName || unit.name}

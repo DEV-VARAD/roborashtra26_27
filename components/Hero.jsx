@@ -75,9 +75,7 @@ function ResponsiveRig({ children, isMobile }) {
     ? Math.min(1.0, Math.max(0.68, viewport.width / 3.6))
     : Math.min(1.15, Math.max(0.75, viewport.width / 4.4))
 
-  const posX = isNarrow
-    ? -Math.min(0.48, Math.max(0.28, viewport.width * 0.28))
-    : 0
+  const posX = isNarrow ? 0 : 0
 
   const posY = isNarrow ? 0.05 : 0
 
@@ -445,7 +443,7 @@ export default function Hero() {
           <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_16px_rgba(56,189,248,0.45)]">
 
             <Image
-              src="/logo/logo.png"
+              src="/logo/emblem-bright.png"
               alt="Roborashtra Emblem"
               fill
               className="object-contain"
@@ -604,7 +602,7 @@ export default function Hero() {
 
               <group
                 position={[
-                  0.25,
+                  isMobile ? 0 : 0.25,
                   0,
                   0,
                 ]}
@@ -804,14 +802,8 @@ export default function Hero() {
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
                       Welcome to RoboHawk, where innovation meets passion. Our student-driven Robotics Club at PCCOE&amp;R under the guidance of Prof. Pallavi Kulkarni &amp; is led by the leader Shivraj Patil.
                     </p>
-<<<<<<< HEAD
                     <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
                       RoboHawk has executed projects in robotics and have conducted several workshops. It offers hands-on learning, collaboration, and innovation opportunities.
-=======
-
-                    <p className="text-xs text-slate-300 leading-relaxed mt-1.5 font-tech">
-                      RoboHawk has executed diverse projects in 3D printing, drones, and robotics. It offers hands-on learning, collaboration, and innovation opportunities.
->>>>>>> fffa4f2a3f59b9aae6b3a725d7aeac6278f50114
                     </p>
 
                   </div>

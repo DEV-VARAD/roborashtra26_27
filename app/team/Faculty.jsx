@@ -3,16 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { facultyMembers } from '@/data/faculty'
-import { RotateCw, ExternalLink } from 'lucide-react'
-
-// Custom Crisp SVG Icons for Social Channels
-function LinkedInIcon({ className = 'w-4 h-4' }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.88 0-1.6.72-1.6 1.6s.72 1.6 1.6 1.6 1.6-.72 1.6-1.6-.72-1.6-1.6-1.6Z" />
-    </svg>
-  )
-}
+import { RotateCw, ExternalLink, Mail } from 'lucide-react'
 
 /**
  * 3D Flippable Faculty Member Card
@@ -47,7 +38,7 @@ function FacultyCard({ faculty, index }) {
       <motion.div
         role="button"
         tabIndex={0}
-        aria-label={`Faculty card for ${faculty.name}. Press Enter or Space to ${isFlipped ? 'view details' : 'view social connections'}.`}
+        aria-label={`Faculty card for ${faculty.name}. Press Enter or Space to ${isFlipped ? 'view details' : 'view contact details'}.`}
         aria-expanded={isFlipped}
         onClick={handleCardClick}
         onKeyDown={handleKeyDown}
@@ -172,27 +163,25 @@ function FacultyCard({ faculty, index }) {
             </div>
           </div>
 
-          {/* Clickable Social Media Links */}
+          {/* Clickable Email Contact */}
           <div className="space-y-1 my-auto pt-1 sm:pt-1.5">
             <a
-              href={faculty.socials?.linkedin || 'https://linkedin.com'}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`mailto:${faculty.email}`}
               onClick={(e) => e.stopPropagation()}
-              aria-label={`Connect with ${faculty.name} on LinkedIn`}
-              className="group/link flex items-center justify-between w-full p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/5 hover:bg-[#0A66C2]/20 border border-white/10 hover:border-[#0A66C2]/50 transition-all text-ivory"
+              aria-label={`Send email to ${faculty.name} (${faculty.email})`}
+              className="group/link flex items-center justify-between w-full p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/5 hover:bg-[#22D3EE]/15 border border-white/10 hover:border-[#22D3EE]/50 transition-all text-ivory"
             >
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-[#0A66C2]/20 text-[#0A66C2] flex items-center justify-center group-hover/link:bg-[#0A66C2] group-hover/link:text-white transition-colors">
-                  <LinkedInIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 rounded-md bg-[#22D3EE]/20 text-[#22D3EE] flex items-center justify-center group-hover/link:bg-[#22D3EE] group-hover/link:text-[#060A12] transition-colors">
+                  <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </div>
 
-                <span className="font-mono text-[8px] sm:text-[10px] tracking-wide">
-                  LinkedIn
+                <span className="font-mono text-[6.5px] min-[360px]:text-[7.5px] sm:text-[9.5px] tracking-tight truncate text-ivory group-hover/link:text-[#22D3EE] transition-colors">
+                  {faculty.email}
                 </span>
               </div>
 
-              <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-ivory/40 group-hover/link:text-ivory transition-colors" />
+              <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0 text-ivory/40 group-hover/link:text-ivory transition-colors" />
             </a>
           </div>
 

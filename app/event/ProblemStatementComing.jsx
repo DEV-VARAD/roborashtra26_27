@@ -1,7 +1,1 @@
-import PSComing from './PSComing'
-
-export default PSComing
-
-export function ProblemStatementComing() {
-  return <PSComing />
-}
+export { default, ProblemStatementComing } from './PSComing'

@@ -75,9 +75,7 @@ function ResponsiveRig({ children, isMobile }) {
     ? Math.min(1.0, Math.max(0.68, viewport.width / 3.6))
     : Math.min(1.15, Math.max(0.75, viewport.width / 4.4))
 
-  const posX = isNarrow
-    ? -Math.min(0.48, Math.max(0.28, viewport.width * 0.28))
-    : 0
+  const posX = isNarrow ? 0 : 0
 
   const posY = isNarrow ? 0.05 : 0
 
@@ -445,7 +443,7 @@ export default function Hero() {
           <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_16px_rgba(56,189,248,0.45)]">
 
             <Image
-              src="/logo/logo.png"
+              src="/logo/emblem-bright.png"
               alt="Roborashtra Emblem"
               fill
               className="object-contain"
@@ -604,7 +602,7 @@ export default function Hero() {
 
               <group
                 position={[
-                  0.25,
+                  isMobile ? 0 : 0.25,
                   0,
                   0,
                 ]}

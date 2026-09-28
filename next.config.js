@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['cobe'],
 
+  output: 'export',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         // Cloudinary CDN – used for all team portraits and gallery images

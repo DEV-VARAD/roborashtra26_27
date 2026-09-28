@@ -24,11 +24,7 @@ export const facultyMembers = [
     image: facultyPortrait('roborashtra/team/faculty/pallavikulkarni', '/team/pallavikulkarni.png'),
     badge: 'FACULTY DIRECTOR',
     credentials: 'Ph.D. Robotics (IITB) · IEEE Senior Member',
-    socials: {
-      linkedin: 'https://linkedin.com',
-      instagram: 'https://instagram.com',
-      twitter: 'https://x.com',
-    },
+    email: 'pallavi.kulkarni@pccoer.in',
   },
   {
     id: 'faculty-02',
@@ -41,11 +37,7 @@ export const facultyMembers = [
     image: facultyPortrait('roborashtra/team/faculty/vrushalideore', '/team/vrushalideore.png'),
     badge: 'CHIEF COORDINATOR',
     credentials: 'M.Tech AI & Automation · 8+ Years Industry Mentorship',
-    socials: {
-      linkedin: 'https://linkedin.com',
-      instagram: 'https://instagram.com',
-      twitter: 'https://x.com',
-    },
+    email: 'vrushali.deore@pccoer.in',
   },
 ]
 

@@ -1,306 +1,244 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-} from 'framer-motion'
-import { events } from '../../data/events'
+import { useState, useRef } from 'react'
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
+import MoonOrb from './MoonOrb'
 
-/*
- * ==========================================================
- * COMBINED ARTWORK
- * ==========================================================
- *
- * This single image is used for the entire front side.
- *
- * The three cards each display one third of this same image.
- */
+// Deterministic starfield for zero hydration mismatch
+const SPACE_STARS = Array.from({ length: 90 }, (_, i) => ({
+  id: i,
+  x: ((i * 137.508 + 23) % 100).toFixed(2),
+  y: ((i * 97.317 + 19) % 100).toFixed(2),
+  size: (((i * 17) % 3) * 0.6 + 0.8).toFixed(1),
+  opacity: (((i * 29) % 5) * 0.15 + 0.25).toFixed(2),
+  color: i % 4 === 0 ? '#4FC3FF' : i % 7 === 0 ? '#FF9F1C' : '#FFFFFF',
+  twinkleDuration: (((i * 13) % 4) + 2.5).toFixed(1),
+  twinkleDelay: (((i * 7) % 5) * 0.4).toFixed(1),
+}))
 
-const COMBINED_IMAGE = '/problem-combined.png'
+// Floating space particles
+const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  startX: ((i * 47) % 85 + 7.5).toFixed(1),
+  startY: ((i * 61) % 80 + 10).toFixed(1),
+  size: (i % 3 + 2).toFixed(0),
+  duration: 8 + (i % 6) * 2,
+  delay: (i % 4) * 1.2,
+}))
 
 export default function PSComing() {
-  const sectionRef = useRef(null)
+  const containerRef = useRef(null)
+  const reducedMotion = useReducedMotion()
+  const [isHovered, setIsHovered] = useState(false)
 
-  const [hoveredCard, setHoveredCard] = useState(null)
+  // Interactive mouse tracking
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Spring physics for weightless space floating
+  const springConfig = { damping: 25, stiffness: 85, mass: 0.6 }
+  const smoothX = useSpring(mouseX, springConfig)
+  const smoothY = useSpring(mouseY, springConfig)
+
+  // Parallax layers with varying depths
+  const bgStarsX = useTransform(smoothX, [-0.5, 0.5], [24, -24])
+  const bgStarsY = useTransform(smoothY, [-0.5, 0.5], [24, -24])
+
+  const planetX = useTransform(smoothX, [-0.5, 0.5], [-35, 35])
+  const planetY = useTransform(smoothY, [-0.5, 0.5], [-35, 35])
+
+  const textTiltX = useTransform(smoothY, [-0.5, 0.5], [10, -10])
+  const textTiltY = useTransform(smoothX, [-0.5, 0.5], [-12, 12])
+  const textShiftX = useTransform(smoothX, [-0.5, 0.5], [-18, 18])
+  const textShiftY = useTransform(smoothY, [-0.5, 0.5], [-18, 18])
+
+  const ringRotate = useTransform(smoothX, [-0.5, 0.5], [-8, 8])
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current || reducedMotion) return
+    const rect = containerRef.current.getBoundingClientRect()
+    // Normalized [-0.5 to 0.5] coordinates
+    const normX = (e.clientX - rect.left) / rect.width - 0.5
+    const normY = (e.clientY - rect.top) / rect.height - 0.5
+    mouseX.set(normX)
+    mouseY.set(normY)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+    setIsHovered(false)
+  }
+
   const words = ['The', 'Problem', 'Statements', 'Will', 'Come', 'Soon.']
-  const reducedMotion = false
-  const textTiltX = 0
-  const textTiltY = 0
-  const textShiftX = 0
-  const textShiftY = 0
-
-  /*
-   * ==========================================================
-   * SCROLL
-   * ==========================================================
-   */
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
-
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 25,
-    mass: 0.8,
-  })
-
-  /*
-   * ==========================================================
-   * CARD SPLIT
-   * ==========================================================
-   *
-   * The artwork stays exactly the same.
-   *
-   * Only the physical cards move apart.
-   *
-   * LEFT   → left
-   * MIDDLE → stays
-   * RIGHT  → right
-   */
-
-  const leftX = useTransform(
-    progress,
-    [0, 0.35, 0.7],
-    ['0%', '-4%', '-8%']
-  )
-
-  const middleX = useTransform(
-    progress,
-    [0, 0.7],
-    ['0%', '0%']
-  )
-
-  const rightX = useTransform(
-    progress,
-    [0, 0.35, 0.7],
-    ['0%', '4%', '8%']
-  )
-
-  /*
-   * Small outward tilt.
-   */
-
-  const leftRotate = useTransform(
-    progress,
-    [0, 0.7],
-    [0, -1.5]
-  )
-
-  const middleRotate = useTransform(
-    progress,
-    [0, 0.7],
-    [0, 0]
-  )
-
-  const rightRotate = useTransform(
-    progress,
-    [0, 0.7],
-    [0, 1.5]
-  )
-
-  /*
-   * Slight scale reduction while opening.
-   */
-
-  const cardScale = useTransform(
-    progress,
-    [0, 0.7],
-    [1, 0.94]
-  )
-
-  /*
-   * ==========================================================
-   * FLIP
-   * ==========================================================
-   *
-   * Cards remain the SAME combined artwork until the flip.
-   *
-   * 0.68 → beginning of flip
-   * 0.84 → fully flipped
-   */
-
-  const cardFlipY = useTransform(
-    progress,
-    [0.68, 0.84],
-    [0, 180]
-  )
-
-  /*
-   * ==========================================================
-   * INFORMATION REVEAL
-   * ==========================================================
-   *
-   * Starts after the cards have flipped.
-   */
-
-  const backMetaOpacity = useTransform(
-    progress,
-    [0.82, 0.90],
-    [0, 1]
-  )
-
-  const backInfoOpacity = useTransform(
-    progress,
-    [0.86, 0.97],
-    [0, 1]
-  )
-
-  const backInfoY = useTransform(
-    progress,
-    [0.86, 0.97],
-    [24, 0]
-  )
-
-  /*
-   * ==========================================================
-   * SCROLL HINT
-   * ==========================================================
-   */
-
-  const instructionOpacity = useTransform(
-    progress,
-    [0, 0.25],
-    [1, 0]
-  )
 
   return (
-    <main
-      ref={sectionRef}
-      className="relative h-[250vh] w-full bg-[#020817] text-white"
+    <section
+      id="events"
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="relative w-full h-screen h-[100dvh] min-h-[600px] text-[#F8FAFC] overflow-hidden flex items-center justify-center cursor-crosshair select-none"
+      style={{
+        background:
+          'radial-gradient(ellipse 90% 80% at 50% 30%, #0A1324 0%, #050811 65%, #020408 100%)',
+        perspective: '1200px',
+      }}
+      aria-label="Problem Statements Space Teaser"
     >
+      {/* Anchor point alias so #ps & #events both resolve */}
+      <span id="ps" className="sr-only">
+        Problem Statements
+      </span>
 
-      {/* ======================================================
-          STICKY ARENA
-      ====================================================== */}
+      {/* ── 1. DEEP SPACE COSMIC BACKGROUND ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Nebula cosmic dust clouds */}
+        <motion.div
+          animate={{
+            scale: [1, 1.12, 1],
+            opacity: [0.18, 0.28, 0.18],
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -top-20 left-1/4 w-[650px] h-[450px] bg-gradient-to-tr from-[#4FC3FF]/20 via-[#3A6EA5]/15 to-transparent rounded-full blur-[140px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1.1, 1, 1.1],
+            opacity: [0.12, 0.22, 0.12],
+          }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -bottom-20 right-1/4 w-[600px] h-[400px] bg-gradient-to-bl from-[#FF9F1C]/15 via-[#E4572E]/10 to-transparent rounded-full blur-[150px]"
+        />
 
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Parallax Starfield */}
+        <motion.div
+          style={{ x: reducedMotion ? 0 : bgStarsX, y: reducedMotion ? 0 : bgStarsY }}
+          className="absolute inset-0 sm:inset-[-40px] pointer-events-none overflow-hidden"
+        >
+          {SPACE_STARS.map((star) => (
+            <motion.div
+              key={star.id}
+              animate={{
+                opacity: [star.opacity, 0.9, star.opacity],
+                scale: [1, 1.25, 1],
+              }}
+              transition={{
+                duration: Number(star.twinkleDuration),
+                repeat: Infinity,
+                delay: Number(star.twinkleDelay),
+                ease: 'easeInOut',
+              }}
+              style={{
+                position: 'absolute',
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                width: `${star.size}px`,
+                height: `${star.size}px`,
+                borderRadius: '50%',
+                backgroundColor: star.color,
+                boxShadow: star.size > 1.4 ? `0 0 6px ${star.color}` : 'none',
+              }}
+            />
+          ))}
+        </motion.div>
 
-        {/* ====================================================
-            BACKGROUND ATMOSPHERE
-        ==================================================== */}
-
-        <div className="pointer-events-none absolute inset-0">
-
-          <div className="absolute left-[-15%] top-[-15%] h-[600px] w-[600px] rounded-full bg-blue-600/[0.08] blur-[140px]" />
-
-          <div className="absolute bottom-[-20%] right-[-10%] h-[650px] w-[650px] rounded-full bg-cyan-500/[0.06] blur-[150px]" />
-
-          <div
-            className="absolute inset-0 opacity-[0.1]"
+        {/* Floating zero-G cosmic dust motes */}
+        {PARTICLES.map((p) => (
+          <motion.div
+            key={p.id}
+            animate={{
+              y: [0, -35, 0],
+              x: [0, (p.id % 2 === 0 ? 15 : -15), 0],
+              opacity: [0.2, 0.7, 0.2],
+            }}
+            transition={{
+              duration: p.duration,
+              repeat: Infinity,
+              delay: p.delay,
+              ease: 'easeInOut',
+            }}
             style={{
-              backgroundImage: `
-                linear-gradient(
-                  rgba(56,189,248,0.18) 1px,
-                  transparent 1px
-                ),
-                linear-gradient(
-                  90deg,
-                  rgba(56,189,248,0.18) 1px,
-                  transparent 1px
-                )
-              `,
-              backgroundSize: '70px 70px',
-              maskImage:
-                'radial-gradient(circle at center, black 25%, transparent 85%)',
-              WebkitMaskImage:
-                'radial-gradient(circle at center, black 25%, transparent 85%)',
+              position: 'absolute',
+              left: `${p.startX}%`,
+              top: `${p.startY}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              borderRadius: '50%',
+              backgroundColor: p.id % 3 === 0 ? '#4FC3FF' : '#FF9F1C',
+              filter: 'blur(0.5px)',
             }}
           />
+        ))}
 
-          <div className="absolute left-1/2 top-1/2 h-[720px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/[0.05]" />
-
-          <div className="absolute left-1/2 top-1/2 h-[980px] w-[980px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-400/[0.035]" />
-
-          <div className="absolute left-[12%] top-[28%] h-1 w-1 rounded-full bg-cyan-300/40" />
-
-          <div className="absolute right-[18%] top-[25%] h-1 w-1 rounded-full bg-cyan-300/30" />
-
-          <div className="absolute bottom-[20%] left-[24%] h-1 w-1 rounded-full bg-blue-300/30" />
-
-        </div>
-
-        {/* ====================================================
-            HEADER
-        ==================================================== */}
-
-        <header className="absolute left-4 right-5 top-5 z-50 flex items-start justify-between sm:left-6 sm:right-8 lg:left-8 lg:right-10">
-
-          <div>
-
-            <div className="mb-1.5 flex items-center gap-2">
-
-              <span className="h-px w-5 bg-cyan-300/70" />
-
-              <span className="font-mono text-[8px] tracking-[0.28em] text-cyan-300/70">
-                MISSION ARCHIVE // 03
-              </span>
-
-            </div>
-
-            <h1 className="font-orbitron text-xl font-medium tracking-[-0.04em] text-white sm:text-2xl lg:text-3xl">
-              The Arena
-            </h1>
-
-            <p className="mt-1 text-[10px] text-blue-100/45">
-              Three challenges. One engineering spirit.
-            </p>
-
-          </div>
-
-          <div className="hidden text-right sm:block">
-
-            <div className="font-mono text-[8px] tracking-[0.25em] text-blue-200/40">
-              PROBLEM STATEMENTS
-            </div>
-
-            <div className="mt-1 font-mono text-[10px] tracking-[0.18em] text-cyan-300/65">
-              2026 — 2027
-            </div>
-
-          </div>
-
-        </header>
-
-        {/* ====================================================
-            DESKTOP
-        ==================================================== */}
-
-        <div className="hidden h-full items-center justify-center px-5 pt-8 md:flex">
-
-          {/* ==================================================
-              SCROLL HINT
-          ================================================== */}
-
+        {/* Interactive Deep Celestial Moon / Planet (Parallax Floating in Space) */}
+        <motion.div
+          style={{
+            x: reducedMotion ? 0 : planetX,
+            y: reducedMotion ? 0 : planetY,
+          }}
+          className="absolute top-12 right-[10%] md:right-[15%] pointer-events-none opacity-85"
+        >
           <motion.div
-            style={{
-              opacity: instructionOpacity,
+            animate={{
+              y: [-8, 8, -8],
+              rotate: [-2, 2, -2],
             }}
-            className="pointer-events-none absolute bottom-[10%] left-1/2 z-30 -translate-x-1/2 text-center"
+            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative"
           >
-
-            <div className="font-mono text-[8px] tracking-[0.28em] text-cyan-300/55">
-              SCROLL TO OPEN
-            </div>
-
-            <div className="mx-auto mt-3 h-8 w-px bg-gradient-to-b from-cyan-300/50 to-transparent" />
-
+            {/* Atmospheric Outer Corona Glow */}
+            <div className="absolute -inset-8 rounded-full bg-[#4FC3FF]/15 blur-2xl pointer-events-none" />
+            <MoonOrb size={120} tint="steel" craterSeed={2} className="hidden sm:block shadow-2xl" />
           </motion.div>
+        </motion.div>
 
-          {/* ==================================================
-              THREE PHYSICAL PANELS
-          ================================================== */}
-
-          <div
-            className="flex w-full max-w-[1120px] items-center justify-center gap-0"
-            style={{
-              perspective: '1600px',
-            }}
+        {/* Secondary distant amber moon */}
+        <motion.div
+          style={{
+            x: reducedMotion ? 0 : useTransform(smoothX, [-0.5, 0.5], [20, -20]),
+            y: reducedMotion ? 0 : useTransform(smoothY, [-0.5, 0.5], [20, -20]),
+          }}
+          className="absolute bottom-16 left-[8%] md:left-[12%] pointer-events-none opacity-60 hidden md:block"
+        >
+          <motion.div
+            animate={{ y: [6, -6, 6] }}
+            transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
           >
+            <MoonOrb size={70} tint="amber" craterSeed={1} />
+          </motion.div>
+        </motion.div>
+
+        {/* Interactive Elliptical Orbital Rings */}
+        <motion.div
+          style={{
+            rotate: reducedMotion ? 0 : ringRotate,
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] sm:w-[960px] h-[380px] sm:h-[460px] rounded-full border border-[#4FC3FF]/15 border-dashed pointer-events-none -rotate-12"
+        >
+          {/* Orbiting Telemetry Satellite Beacon */}
+          <motion.div
+            animate={{
+              offsetDistance: ['0%', '100%'],
+            }}
+            transition={{
+              duration: 32,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2"
+          >
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4FC3FF] opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#4FC3FF]" />
+            </span>
+          </motion.div>
+        </motion.div>
+
+        {/* Curved Lunar Limb Horizon at the bottom */}
+        <div className="absolute -bottom-36 left-1/2 -translate-x-1/2 w-[1600px] h-[220px] rounded-[100%] border-t border-[#4FC3FF]/30 bg-gradient-to-b from-[#4FC3FF]/5 to-transparent pointer-events-none shadow-[0_-20px_50px_rgba(79,195,255,0.08)]" />
+      </div>
 
       {/* ── 2. INTERACTIVE FOREGROUND CONTENT ── */}
       <motion.div
@@ -367,19 +305,9 @@ export default function PSComing() {
           })}
         </motion.h2>
       </motion.div>
-          </div>
-        </div>
-      </div>
-    </main>
+    </section>
   )
 }
 
-/*
- * ==========================================================
- * COMPATIBILITY EXPORT
- * ==========================================================
- */
-
-export function ProblemStatementComing() {
-  return <PSComing />
-}
+// Named alias export for compatibility
+export { PSComing as ProblemStatementComing }

@@ -3,13 +3,8 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Radio, Check } from 'lucide-react'
-import dynamic from 'next/dynamic'
 import FlipCountdown from '@/app/countdown/FlipCountdown'
-
-const GlobePulse = dynamic(
-  () => import('@/components/ui/cobe-globe-pulse').then((mod) => mod.GlobePulse),
-  { ssr: false }
-)
+import { GlobePulse } from '@/components/ui/cobe-globe-pulse'
 
 // Default championship event target: February 1, 2027, 00:00:00 IST
 const DEFAULT_EVENT_DATE = '2027-02-01T00:00:00+05:30'

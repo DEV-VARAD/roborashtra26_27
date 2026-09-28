@@ -302,15 +302,15 @@ export default function RoadmapSection() {
                 style={{
                   fontSize: 'clamp(3.8rem, 13vw, 13rem)',
                   color: 'transparent',
-                  WebkitTextStroke: '1px rgba(255,180,60,0.06)',
-                  textShadow: '0 0 40px rgba(255,150,30,0.03)',
+                  WebkitTextStroke: '1px rgba(255,180,60,0.14)',
+                  textShadow: '0 0 40px rgba(255,150,30,0.08)',
                 }}
               >
                 0{activeStep + 1}
               </div>
               <p
                 className="mt-0.5 font-mono text-[9px] sm:text-xs font-bold tracking-[0.35em] uppercase"
-                style={{ color: 'rgba(255,160,30,0.30)' }}
+                style={{ color: 'rgba(255,160,30,0.45)' }}
               >
                 {years[activeStep].phase}
               </p>
@@ -407,12 +407,20 @@ export default function RoadmapSection() {
             {years.map((item, index) => {
               if (index !== activeStep) return null
 
-              const nodeLeftPct = (NODE_XS[index] / 1200) * 100
               const cardWidthPct = 28
-              const clampedLeft = Math.max(
-                4,
-                Math.min(nodeLeftPct - cardWidthPct / 2, 96 - cardWidthPct)
-              )
+              // Step 1: Left flank (~6.8%) over Node 1
+              // Step 2: Right flank (62%) to ensure the center sky "02" watermark & rover are fully visible
+              // Step 3: Right flank (~65.2%) over Node 3
+              let clampedLeft
+              if (index === 1) {
+                clampedLeft = 62
+              } else {
+                const nodeLeftPct = (NODE_XS[index] / 1200) * 100
+                clampedLeft = Math.max(
+                  4,
+                  Math.min(nodeLeftPct - cardWidthPct / 2, 96 - cardWidthPct)
+                )
+              }
 
               return (
                 <motion.article

@@ -443,21 +443,21 @@ export const teamData = {
       heads: [
         {
           id: 'web-head-1',
-          name: 'Riddhi Sonawane',
-          role: 'Web & Systems Head',
-          image: portrait('roborashtra/team/web/riddhi'),
+          name: 'Yadnyesh Borole',
+          role: 'Web Development Head',
+          image: portrait('roborashtra/team/web/yadnesh'),
           socials: {
-            linkedin:
-              'https://www.linkedin.com/in/riddhisonawane?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+            linkedin: 'https://www.linkedin.com/in/yadnyesh-borole-51aa0532a/',
           },
         },
         {
           id: 'web-head-2',
-          name: 'Yadnesh Borole',
-          role: 'Web & Systems Co-Head',
-          image: portrait('roborashtra/team/web/yadnesh'),
+          name: 'Riddhi Sonawane',
+          role: 'Web Development Co-Head',
+          image: portrait('roborashtra/team/web/riddhi'),
           socials: {
-            linkedin: 'https://www.linkedin.com/in/yadnyesh-borole-51aa0532a/',
+            linkedin:
+              'https://www.linkedin.com/in/riddhisonawane?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],

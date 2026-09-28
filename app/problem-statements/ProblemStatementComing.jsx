@@ -1,1 +1,1 @@
-export { default, ProblemStatementComing } from './PSComing'
+export { default, ProblemStatementComing } from '../event/PSComing'

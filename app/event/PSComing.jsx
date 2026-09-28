@@ -25,6 +25,12 @@ export default function PSComing() {
   const sectionRef = useRef(null)
 
   const [hoveredCard, setHoveredCard] = useState(null)
+  const words = ['The', 'Problem', 'Statements', 'Will', 'Come', 'Soon.']
+  const reducedMotion = false
+  const textTiltX = 0
+  const textTiltY = 0
+  const textShiftX = 0
+  const textShiftY = 0
 
   /*
    * ==========================================================
@@ -296,18 +302,6 @@ export default function PSComing() {
             }}
           >
 
-            {events.map((event, index) => {
-
-              const isHovered =
-                hoveredCard === event.id
-
-              const x =
-                index === 0
-                  ? leftX
-                  : index === 1
-                    ? middleX
-                    : rightX
-
       {/* ── 2. INTERACTIVE FOREGROUND CONTENT ── */}
       <motion.div
         style={{
@@ -373,7 +367,10 @@ export default function PSComing() {
           })}
         </motion.h2>
       </motion.div>
-    </section>
+          </div>
+        </div>
+      </div>
+    </main>
   )
 }
 

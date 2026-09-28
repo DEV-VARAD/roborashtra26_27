@@ -137,14 +137,14 @@ export default function Navbar() {
                   className="h-9 sm:h-10 md:h-12 w-auto max-h-12 object-contain mix-blend-multiply transition-all duration-300 group-hover:scale-105 group-hover:opacity-90"
                 />
               </div>
-              <span className="font-serifEd text-base sm:text-lg md:text-xl tracking-wide text-textDark group-hover:text-rust transition-colors hidden min-[440px]:inline-block">
+              <span className="font-orbitron text-base sm:text-lg md:text-xl tracking-wide text-textDark group-hover:text-rust transition-colors hidden min-[440px]:inline-block">
                 Roborashtra
               </span>
             </Link>
           </div>
 
           {/* Center: Independently Centered Navigation */}
-          <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-8 font-mono text-[11px] tracking-widest2 text-textDark/80 whitespace-nowrap">
+          <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-8 font-orbitron font-semibold text-[11px] tracking-widest2 text-textDark/80 whitespace-nowrap">
             <Link href="/gallery" className="hover:text-rust transition-colors">
               GALLERY
             </Link>
@@ -168,7 +168,7 @@ export default function Navbar() {
               aria-label="Open menu"
               aria-haspopup="true"
               aria-expanded={open}
-              className="font-mono text-[10px] sm:text-[11px] tracking-widest2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-black/20 hover:border-rust hover:text-rust active:scale-95 text-textDark transition-all duration-200 shrink-0 select-none"
+              className="font-mono font-semibold text-[10px] sm:text-[11px] tracking-widest2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-black/20 hover:border-rust hover:text-rust active:scale-95 text-textDark transition-all duration-200 shrink-0 select-none"
             >
               MENU
             </button>

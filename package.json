@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build && wrangler pages deploy out --project-name roborashtra --branch veer"
+    "deploy": "next build && wrangler pages deploy --branch veer"
   },
   "dependencies": {
     "@fontsource/cinzel": "^5.3.0",

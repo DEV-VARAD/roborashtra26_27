@@ -793,11 +793,10 @@ export default function Hero() {
                     <span className="font-orbitron text-[18px] tracking-wider text-cyan-400 font-bold uppercase">
                       Robohawk
                     </span>
-
+                    {/*}
                     <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">
                       DRONES
-                    </span>
-
+                    </span>*/}
                   </div>
 
                   <div>

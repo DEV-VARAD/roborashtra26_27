@@ -379,7 +379,7 @@ export default function Faculty() {
 
         {/* CENTER STAGE: FACULTY MENTORSHIP TITLE & FACULTY PROFILE CARDS */}
         <div className="relative z-20 flex flex-col items-center justify-center w-full px-2 sm:px-4 mt-8 sm:mt-12 md:mt-14">
-          
+
           {/* Section Title — Positioned directly above the Faculty Cards */}
           <motion.div
             style={{

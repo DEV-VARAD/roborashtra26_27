@@ -61,11 +61,11 @@ export default function Gallery() {
       className="relative w-full h-screen h-[100dvh] min-h-[600px] bg-[#070b14] select-none overflow-hidden"
     >
 
-      
-        <div className="pointer-events-none absolute inset-0 z-10">
-          <LunarParticles />
-        </div>
-            
+
+      <div className="pointer-events-none absolute inset-0 z-10">
+        <LunarParticles />
+      </div>
+
       {/* Fullscreen 3D Stage */}
       <div className="relative h-full w-full overflow-hidden bg-[#070b14]">
 

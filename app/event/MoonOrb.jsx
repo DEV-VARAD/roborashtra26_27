@@ -3,8 +3,8 @@ export default function MoonOrb({ size = 140, tint = 'amber', craterSeed = 1, cl
     tint === 'amber'
       ? 'rgba(255, 159, 28, 0.35)'
       : tint === 'steel'
-      ? 'rgba(58, 110, 165, 0.35)'
-      : 'rgba(228, 87, 46, 0.3)'
+        ? 'rgba(58, 110, 165, 0.35)'
+        : 'rgba(228, 87, 46, 0.3)'
 
   const craterSets = {
     1: [

@@ -493,7 +493,7 @@ export const teamData = {
       id: 'content',
       name: 'CONTENT & SOCIAL MEDIA',
       shortName: 'CONTENT',
-  heads: [
+      heads: [
         {
           id: 'web-head-1',
           name: 'Yadnyesh Borole',

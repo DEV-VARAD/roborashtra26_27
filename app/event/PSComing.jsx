@@ -293,11 +293,10 @@ export default function PSComing() {
                   textShadow: '0 0 25px rgba(79,195,255,0.75)',
                   transition: { duration: 0.2 },
                 }}
-                className={`inline-block mr-[0.25em] last:mr-0 cursor-pointer transition-colors duration-200 ${
-                  isSoon
-                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#4FC3FF] via-[#7DD3FC] to-[#FF9F1C] drop-shadow-[0_0_20px_rgba(79,195,255,0.35)]'
-                    : ''
-                }`}
+                className={`inline-block mr-[0.25em] last:mr-0 cursor-pointer transition-colors duration-200 ${isSoon
+                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#4FC3FF] via-[#7DD3FC] to-[#FF9F1C] drop-shadow-[0_0_20px_rgba(79,195,255,0.35)]'
+                  : ''
+                  }`}
               >
                 {word}
               </motion.span>

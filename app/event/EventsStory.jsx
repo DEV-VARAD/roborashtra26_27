@@ -8,7 +8,7 @@ const HERO_IMAGE = '/robot.jpg'
 const BG_POSITIONS = ['0% 50%', '50% 50%', '100% 50%']
 
 // Inverted tilt: bottom angles inward toward the center, top flares slightly out
-const TILT_Z = [-3.5, 0, 3.5] 
+const TILT_Z = [-3.5, 0, 3.5]
 const TILT_Y_BACK = [174, 180, 186] // 3D card inward face angle
 const SPREAD_VW = [-3.8, 0, 3.8] // Clean card separation gap for larger cards
 
@@ -42,13 +42,13 @@ function Card({ index, progress, reduced }) {
   const outerStyle = reduced
     ? { transform: `translateX(${[-4, 0, 4][index]}%)`, perspective: 1600 }
     : {
-        x,
-        scale: cardScale,
-        rotateZ,
-        rotateX,
-        transformOrigin: '50% 100%',
-        perspective: 1600,
-      }
+      x,
+      scale: cardScale,
+      rotateZ,
+      rotateX,
+      transformOrigin: '50% 100%',
+      perspective: 1600,
+    }
 
   const innerStyle = reduced
     ? { transform: 'rotateY(180deg)', transformStyle: 'preserve-3d' }

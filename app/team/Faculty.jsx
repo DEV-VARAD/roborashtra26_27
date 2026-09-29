@@ -6,7 +6,18 @@ import { facultyMembers } from '@/data/faculty'
 import { RotateCw, ExternalLink, Mail } from 'lucide-react'
 
 /**
- * 3D Flippable Faculty Member Card
+ * app/team/Faculty.jsx
+ * ────────────────────
+ * Faculty Mentorship Showcase Section.
+ * Renders interactive 3D flippable faculty profile cards with:
+ * - Keyboard navigation (Space/Enter to flip, ARIA expanded state)
+ * - Front face: High-resolution portrait, title, and designation
+ * - Back face: Departmental biography, credentials, direct mail and profile actions
+ * - Kinetic scroll parallax and HUD targeting corner accents
+ *
+ * @param {Object} props
+ * @param {import('@/data/faculty').FacultyMember} props.faculty - Faculty member data
+ * @param {number} props.index - Card position index
  */
 function FacultyCard({ faculty, index }) {
   const [isFlipped, setIsFlipped] = useState(false)

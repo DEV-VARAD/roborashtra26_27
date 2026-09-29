@@ -1,10 +1,18 @@
 'use client'
 
+/**
+ * app/event/PSComing.jsx
+ * ──────────────────────
+ * Problem Statement "Coming Soon" Interactive Teaser.
+ * Features weightless space physics with cursor-coupled parallax layers,
+ * deterministic twinkle starfields, and spring-damped 3D perspective shifts.
+ */
+
 import { useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 import MoonOrb from './MoonOrb'
 
-// Deterministic starfield for zero hydration mismatch
+// Deterministic starfield array avoids SSR/client hydration differences
 const SPACE_STARS = Array.from({ length: 90 }, (_, i) => ({
   id: i,
   x: ((i * 137.508 + 23) % 100).toFixed(2),

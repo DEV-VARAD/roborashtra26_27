@@ -1,5 +1,18 @@
 'use client'
 
+/**
+ * app/team/Team.jsx
+ * ─────────────────
+ * Spatial Crew Directory & Radial Unit Selector.
+ *
+ * Architecture:
+ * - Left Edge Roulette: Polar coordinate wheel that anchors along the left edge,
+ *   calculating angular steps, responsive radii, and spring-interpolated rotation.
+ * - Right Stage: Displays active unit leadership portraits with Cloudinary delivery,
+ *   role badges, and social media connectivity.
+ * - Mobile Horizon: Collapses to horizontally scrollable pill tabs for touch ergonomics.
+ */
+
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence, useMotionValue, useSpring, animate, useScroll } from 'framer-motion'
@@ -26,7 +39,14 @@ function InstagramIcon({ className = 'w-3.5 h-3.5' }) {
 }
 
 /**
- * Left-Edge Half-Hidden Circular Wheel Component (Click & Step Navigation)
+ * Left-Edge Half-Hidden Circular Roulette Wheel.
+ * Computes polar coordinates `(x, y)` for each team unit card around an offset center.
+ *
+ * @param {Object} props
+ * @param {Array} props.units - Array of team squad units
+ * @param {string} props.selectedId - Currently selected unit ID
+ * @param {(id: string) => void} props.onSelectUnit - Selection handler
+ * @param {(step: number) => void} props.onStep - Increment/decrement step handler
  */
 function LeftEdgeRoulette({ units, selectedId, onSelectUnit, onStep }) {
   const numUnits = units.length

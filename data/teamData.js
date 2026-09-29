@@ -493,15 +493,24 @@ export const teamData = {
       id: 'content',
       name: 'CONTENT & SOCIAL MEDIA',
       shortName: 'CONTENT',
-      heads: [
+  heads: [
         {
-          id: 'content-head-2',
-          name: 'Tanaj Manyar',
-          role: 'Social Media Head',
-          image: portrait('roborashtra/team/content/tanaj'),
+          id: 'web-head-1',
+          name: 'Yadnyesh Borole',
+          role: 'Web Development Head',
+          image: portrait('roborashtra/team/web/yadnesh'),
+          socials: {
+            linkedin: 'https://www.linkedin.com/in/yadnyesh-borole-51aa0532a/',
+          },
+        },
+        {
+          id: 'web-head-2',
+          name: 'Riddhi Sonawane',
+          role: 'Web Development Co-Head',
+          image: portrait('roborashtra/team/web/riddhi'),
           socials: {
             linkedin:
-              'https://www.linkedin.com/in/tanaj-manyar-59a05932b?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+              'https://www.linkedin.com/in/riddhisonawane?utm_source=share_via&utm_content=profile&utm_medium=member_android',
           },
         },
       ],

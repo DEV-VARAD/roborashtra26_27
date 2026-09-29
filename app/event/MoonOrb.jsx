@@ -1,3 +1,16 @@
+/**
+ * app/event/MoonOrb.jsx
+ * ─────────────────────
+ * Procedural Lunar Orb Graphic.
+ * Renders a stylized celestial sphere with procedural crater clusters,
+ * ambient atmospheric glow, and directional rim lighting.
+ *
+ * @param {Object} props
+ * @param {number} [props.size=140] - Diameter in pixels
+ * @param {'amber'|'steel'|'coral'} [props.tint='amber'] - Atmospheric corona color theme
+ * @param {1|2|3} [props.craterSeed=1] - Seed index determining crater layout
+ * @param {string} [props.className=''] - Additional CSS classes
+ */
 export default function MoonOrb({ size = 140, tint = 'amber', craterSeed = 1, className = '' }) {
   const glow =
     tint === 'amber'

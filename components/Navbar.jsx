@@ -1,5 +1,17 @@
 'use client'
 
+/**
+ * components/Navbar.jsx
+ * ────────────────────
+ * Global Sticky & Floating Navigation Header.
+ *
+ * Behaviors:
+ * - Intro Sync: Waits for home intro animation (`intro-done` class or session token)
+ * - Auto-Hide: Hides when scrolling down past 80px, immediately reveals on scroll up
+ * - Route Persistence: Stays fixed without hiding on dedicated routes (/gallery, /event, etc.)
+ * - Fullscreen Drawer: Controls overlay menu state and body scroll locking
+ */
+
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'

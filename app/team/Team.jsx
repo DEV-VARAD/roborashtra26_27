@@ -13,6 +13,9 @@ import {
 import {
   ChevronUp,
   ChevronDown,
+  Phone,
+  Mail,
+  X,
 } from 'lucide-react'
 
 import { teamData } from '@/data/teamData'
@@ -131,14 +134,6 @@ function LeftEdgeRoulette({
 
   return (
     <div className="relative w-full flex flex-col justify-center select-none py-2">
-      {/* Orbitron font */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
-
-        .font-orbitron {
-          font-family: 'Orbitron', sans-serif;
-        }
-      `}</style>
 
       <div className="relative w-full h-[400px] sm:h-[440px] lg:h-[480px] flex items-center">
         {/* Circular guide */}
@@ -321,11 +316,26 @@ function InitialsAvatar({ name }) {
 
 function HeadCard({ head, index }) {
   const [imgError, setImgError] = useState(false)
+  const [showContact, setShowContact] = useState(false)
+  const cardRef = useRef(null)
 
   const hasImage = !!head.image && !imgError
 
+  // Close contact overlay when clicking outside
+  useEffect(() => {
+    if (!showContact) return
+    const handler = (e) => {
+      if (cardRef.current && !cardRef.current.contains(e.target)) {
+        setShowContact(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [showContact])
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
@@ -337,6 +347,61 @@ function HeadCard({ head, index }) {
       className="group relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 min-[360px]:p-3 sm:p-4 border border-[#22D3EE]/20 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.12),_rgba(8,11,18,0.96)_45%,_rgba(2,4,8,1)_100%)] shadow-[0_0_24px_rgba(0,0,0,0.55)] hover:shadow-[0_0_28px_rgba(34,211,238,0.18)] hover:border-[#22D3EE]/45 transition-all duration-300 flex flex-col justify-between select-none"
     >
       <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.03),transparent_50%,rgba(34,211,238,0.05))] pointer-events-none" />
+
+      {/* Contact overlay */}
+      <AnimatePresence>
+        {showContact && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 6 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 6 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 z-30 rounded-xl sm:rounded-2xl bg-[#020408]/95 backdrop-blur-md border border-[#22D3EE]/30 flex flex-col items-center justify-center gap-3 p-4"
+          >
+            {/* Close */}
+            <button
+              type="button"
+              onClick={() => setShowContact(false)}
+              className="absolute top-2.5 right-2.5 w-6 h-6 rounded-md bg-white/5 hover:bg-[#22D3EE]/15 text-white/50 hover:text-[#22D3EE] flex items-center justify-center transition-colors"
+              aria-label="Close contact"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+
+            <p className="font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-[#22D3EE] font-bold mb-1">
+              Contact
+            </p>
+
+            {/* Phone */}
+            {head.phone && (
+              <a
+                href={`tel:${head.phone}`}
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#0F172A] hover:bg-[#22D3EE]/10 border border-[#22D3EE]/15 hover:border-[#22D3EE]/40 transition-all group/link"
+                aria-label={`Call ${head.name}`}
+              >
+                <Phone className="w-3.5 h-3.5 text-[#22D3EE] shrink-0" />
+                <span className="font-mono text-[11px] sm:text-[12px] text-white/80 group-hover/link:text-white tracking-wide transition-colors truncate">
+                  {head.phone}
+                </span>
+              </a>
+            )}
+
+            {/* Email */}
+            {head.email && (
+              <a
+                href={`mailto:${head.email}`}
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#0F172A] hover:bg-[#22D3EE]/10 border border-[#22D3EE]/15 hover:border-[#22D3EE]/40 transition-all group/link"
+                aria-label={`Email ${head.name}`}
+              >
+                <Mail className="w-3.5 h-3.5 text-[#22D3EE] shrink-0" />
+                <span className="font-mono text-[9px] sm:text-[10px] text-white/80 group-hover/link:text-white tracking-wide transition-colors truncate">
+                  {head.email}
+                </span>
+              </a>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10">
         <div className="relative aspect-[4/4] w-full rounded-lg sm:rounded-xl overflow-hidden mb-2 sm:mb-3 bg-[#0B1320] border border-[#22D3EE]/15 shadow-inner">
@@ -363,9 +428,20 @@ function HeadCard({ head, index }) {
       </div>
 
       <div className="relative z-10 pt-1.5 sm:pt-2 border-t border-[#22D3EE]/15 flex items-center justify-between text-[#D7DFEA]">
-        <span className="font-mono text-[7px] min-[360px]:text-[8px] sm:text-[9px] uppercase tracking-[0.18em] text-white/40">
-          CONNECT
-        </span>
+        {/* Contact button */}
+        {(head.phone || head.email) && (
+          <button
+            type="button"
+            onClick={() => setShowContact(true)}
+            className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#22D3EE]/10 hover:bg-[#22D3EE]/20 border border-[#22D3EE]/25 hover:border-[#22D3EE]/50 text-[#22D3EE] transition-all duration-200 cursor-pointer"
+            aria-label={`Contact ${head.name}`}
+          >
+            <Phone className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+            <span className="font-mono text-[7px] sm:text-[8px] uppercase tracking-[0.15em] font-bold">
+              Contact
+            </span>
+          </button>
+        )}
 
         <a
           href={
